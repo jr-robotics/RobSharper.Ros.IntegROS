@@ -6,7 +6,7 @@ namespace RosComponentTesting
 {
     public class UnitTest1 : IDisposable
     {
-        private readonly IDisposable _executionContext;
+        private readonly RosNodeContext _executionContext;
 
         public UnitTest1()
         {

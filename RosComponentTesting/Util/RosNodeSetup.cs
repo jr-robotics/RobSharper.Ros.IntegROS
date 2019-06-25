@@ -26,10 +26,10 @@ namespace RosComponentTesting.Util
             return this;
         }
 
-        public IDisposable StartNode()
+        public RosNodeContext StartNode()
         {
             // TODO
-            throw new NotImplementedException();
+            return new RosNodeContext();
         }
     }
 }
