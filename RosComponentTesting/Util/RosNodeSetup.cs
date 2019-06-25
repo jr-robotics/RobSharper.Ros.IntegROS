@@ -1,0 +1,35 @@
+using System;
+
+namespace RosComponentTesting.Util
+{
+    public class RosNodeSetup
+    {
+        public RosNodeSetup Launch(string launchfile)
+        {
+            // TODO set launchfile
+            return this;
+        }
+
+        public RosNodeSetup Wait(TimeSpan duration)
+        {
+            // TODO
+            return this;
+        }
+
+        public RosNodeSetup WaitFor<T>(Action<ExpectationBuilder<T>> builderAction)
+        {
+            var builder = new ExpectationBuilder<T>();
+            builderAction(builder);
+            
+            // TODO: Apply builder
+
+            return this;
+        }
+
+        public IDisposable StartNode()
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
+    }
+}
