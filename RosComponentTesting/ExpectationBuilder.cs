@@ -6,7 +6,7 @@ namespace RosComponentTesting
     {
         private string _topicName;
         private Type _topicType;
-        private Func<TTopicType, bool> _matchExpression;
+        private Match<TTopicType> _matchExpression;
 
         public ExpectationBuilder<TTopicType> Topic(string topicName)
         {
@@ -16,8 +16,13 @@ namespace RosComponentTesting
 
         public ExpectationBuilder<TTopicType> Match(Func<TTopicType, bool> matchExpression)
         {
+            return Match(new Match<TTopicType>(matchExpression));
+        }
+
+        public ExpectationBuilder<TTopicType> Match(Match<TTopicType> match)
+        {
             _topicType = typeof(TTopicType);
-            _matchExpression = matchExpression;
+            _matchExpression = match;
 
             return this;
         }

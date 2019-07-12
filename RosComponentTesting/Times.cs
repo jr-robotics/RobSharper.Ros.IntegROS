@@ -4,24 +4,58 @@ namespace RosComponentTesting
 {
     public class Times
     {
-        public int Min { get; }
-        
-        public int Max { get; }
+        public static readonly Times Never = new Times(0, 0);
+        public static readonly Times Once = new Times(1, 1);
 
-        public Times(int min, int max)
+        public static Times AtLeast(int value)
+        {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "value must not be negative");
+            }
+            
+            return new Times((uint) value, uint.MaxValue);
+        }
+
+        public static Times AtMost(int value)
+        {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "value must not be negative");
+            }
+            
+            return new Times(0, (uint) value);
+        }
+        
+        
+        public uint Min { get; }
+        
+        public uint Max { get; }
+
+        public Times(uint min, uint max)
         {
             Min = min;
             Max = max;
         }
-        
-        public static Times Once()
+
+        public bool Evaluate(int value)
         {
-            return new Times(1, 1);
+            return Min <= value && Max >= value;
+        }
+        
+        public bool Evaluate(uint value)
+        {
+            return Min <= value && Max >= value;
         }
 
-        public static Times Never()
+        public bool Evaluate(long value)
         {
-            return new Times(0, 0);
+            return Min <= value && Max >= value;
+        }
+
+        public bool Evaluate(ulong value)
+        {
+            return Min <= value && Max >= value;
         }
     }
 }

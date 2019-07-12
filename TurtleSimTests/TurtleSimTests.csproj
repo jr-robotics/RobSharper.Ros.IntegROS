@@ -8,8 +8,19 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+        <PackageReference Include="ROS.Messages.common_msgs" Version="0.0.1" />
         <PackageReference Include="xunit" Version="2.4.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RosComponentTesting\RosComponentTesting.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="ROS.Messages.turtlesim_msgs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>..\lib\ROS.Messages.turtlesim_msgs.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

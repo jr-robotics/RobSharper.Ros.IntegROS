@@ -57,7 +57,7 @@ namespace RosComponentTestingTests
             
             new RosTestBuilder()
                 .Publish("AdvertiseTopic", message)
-                .Expect<ExpectedType>("SubscribeTopic", func: It.Matches<ExpectedType>(m => m.Value == "x"))
+                .Expect("SubscribeTopic", It.Matches<ExpectedType>(m => m.Value == "x"))
                 .Execute();
         }
 
@@ -85,7 +85,7 @@ namespace RosComponentTestingTests
                         .Topic("GoToTopic")
                         .Match(It.Matches<ExpectedType>(m => m.Value == "x"))
                         .Timeout(TimeSpan.FromSeconds(10))
-                        .Occurrences(Times.Once())
+                        .Occurrences(Times.Once)
                 )
                 .Execute();
         }
@@ -103,13 +103,13 @@ namespace RosComponentTestingTests
                     .Topic("GoToTopic")
                     .Match(It.Matches<ExpectedType>(m => m.Value == "x"))
                     .Callback(m => pos = m.Value)
-                    .Occurrences(Times.Once())
+                    .Occurrences(Times.Once)
                 )
                 .Expect<ExpectedType>(x => x
                     .DependsOn("GotoMessage")
                     .Topic("DestinationReachedTopic")
                     .Match(It.Matches<ExpectedType>(m => m.Value == pos))
-                    .Occurrences(Times.Once())
+                    .Occurrences(Times.Once)
                 )
                 .Execute();
         }
@@ -124,7 +124,7 @@ namespace RosComponentTestingTests
                     .Topic("GoToTopic")
                     .Match(It.Matches<ExpectedType>(m => m.Value == "x"))
                     .Timeout(TimeSpan.FromSeconds(10))
-                    .Occurrences(Times.Once())
+                    .Occurrences(Times.Once)
                 )
                 .Expect<ExpectedType>(x => x
                     .Name("PositionPrecondition")
@@ -137,7 +137,7 @@ namespace RosComponentTestingTests
                     .DependsOn("PositionPrecondition")
                     .Topic("DestinationReachedTopic")
                     .Match(It.Matches<ExpectedType>(m => m.Value == "x"))
-                    .Occurrences(Times.Once())
+                    .Occurrences(Times.Once)
                 )
                 .Execute();
         }
@@ -151,17 +151,17 @@ namespace RosComponentTestingTests
                     .Topic("GoToTopic")
                     .Match(It.Matches<ExpectedType>(m => m.Value == "x"))
                     .Timeout(TimeSpan.FromSeconds(10))
-                    .Occurrences(Times.Once())
+                    .Occurrences(Times.Once)
                 )
                 .Expect<ExpectedType>(x => x        // Reject all Publications on Topic "GoToTopic" (except value == x).
                     .Topic("GoToTopic")
                     .Match(It.Matches<ExpectedType>(m => m.Value != "x"))
-                    .Occurrences(Times.Never())
+                    .Occurrences(Times.Never)
                 )
                 .Expect<ExpectedType>(x => x        // Reject all Publications on Topic "OtherTopic"
                     .Topic("OtherTopic")
                     .Match(It.IsAny<ExpectedType>())
-                    .Occurrences(Times.Never())
+                    .Occurrences(Times.Never)
                 )
                 .Execute();
         }

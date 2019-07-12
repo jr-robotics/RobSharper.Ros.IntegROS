@@ -11,6 +11,12 @@ namespace RosComponentTesting
 
         public RosTestBuilder Expect<T>(string subscribeTopic, Func<T, bool> func)
         {
+            return Expect(subscribeTopic, new Match<T>(func));
+        }
+
+        public RosTestBuilder Expect<T>(string subscriberTopic, Match<T> match)
+        {
+            // TODO Expect
             return this;
         }
 
