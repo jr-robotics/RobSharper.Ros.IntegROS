@@ -1,4 +1,4 @@
-namespace RosComponentTesting.Util
+namespace RosComponentTestingTests.Util
 {
     public class ExpectedType
     {

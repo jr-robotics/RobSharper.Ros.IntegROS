@@ -1,8 +1,8 @@
 using System;
-using RosComponentTesting.Util;
+using RosComponentTestingTests.Util;
 using Xunit;
 
-namespace RosComponentTesting
+namespace RosComponentTestingTests
 {
     public class UnitTest1 : IDisposable
     {

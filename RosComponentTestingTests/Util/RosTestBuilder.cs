@@ -1,8 +1,6 @@
 using System;
-using System.Linq.Expressions;
-using Microsoft.VisualStudio.TestPlatform.Common.DataCollection;
 
-namespace RosComponentTesting.Util
+namespace RosComponentTestingTests.Util
 {
     public class RosTestBuilder
     {
