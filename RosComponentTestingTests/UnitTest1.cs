@@ -1,4 +1,5 @@
 using System;
+using RosComponentTesting;
 using RosComponentTestingTests.Util;
 using Xunit;
 

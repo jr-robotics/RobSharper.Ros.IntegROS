@@ -1,4 +1,5 @@
 using System;
+using RosComponentTesting;
 
 namespace RosComponentTestingTests.Util
 {

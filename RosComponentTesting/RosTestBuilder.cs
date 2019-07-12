@@ -1,6 +1,6 @@
 using System;
 
-namespace RosComponentTestingTests.Util
+namespace RosComponentTesting
 {
     public class RosTestBuilder
     {

@@ -1,4 +1,6 @@
-namespace RosComponentTestingTests.Util
+using System;
+
+namespace RosComponentTesting
 {
     public class Times
     {
