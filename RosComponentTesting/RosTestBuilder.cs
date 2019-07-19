@@ -49,9 +49,9 @@ namespace RosComponentTesting
             return new RosTestExecutor(_expectations);
         }
         
-        public void Execute()
+        public void Execute(TestExecutionOptions options = null)
         {
-            ToTestExecutor().Execute();
+            ToTestExecutor().Execute(options);
         }
     }
 }

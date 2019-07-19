@@ -1,13 +1,22 @@
 using System;
 using Messages.geometry_msgs;
 using RosComponentTesting;
+using Uml.Robotics.Ros;
 using Xunit;
+using Xunit.Abstractions;
 using Pose = Messages.turtlesim.Pose;
 
 namespace TurtleSimTests
 {
     public class HoldPositionTests
     {
+        private readonly ITestOutputHelper output;
+
+        public HoldPositionTests(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+        
         [Fact]
         public void TurtleIsNotMovingWithoutCommand()
         {
@@ -23,6 +32,23 @@ namespace TurtleSimTests
                     .Occurrences(Times.AtLeast(2))
                 )
                 .Execute();
+        }
+
+        [Fact (Skip = "Runs infinite")]
+        public void Test1()
+        {
+            ROS.ROS_MASTER_URI = "http://localhost:11311";
+            
+            ROS.ROS_MASTER_URI = "http://localhost:11311";
+            ROS.Init(new string[0], "TESTNODE");
+
+            var spinner = new AsyncSpinner();
+            spinner.Start();
+
+            var node = new NodeHandle();
+            node.Subscribe<Pose>("/turtle1/pose", 1, p => output.WriteLine(p.MessageType));
+            
+            ROS.WaitForShutdown();
         }
     }
 }

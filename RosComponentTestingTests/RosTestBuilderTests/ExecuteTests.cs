@@ -1,6 +1,7 @@
 using System;
 using Moq;
 using RosComponentTesting;
+using Uml.Robotics.Ros;
 using Xunit;
 
 namespace RosComponentTestingTests.RosTestBuilderTests

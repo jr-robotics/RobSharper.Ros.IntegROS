@@ -2,15 +2,27 @@ using System;
 
 namespace RosComponentTesting
 {
+    public class TopicExpectation<TTopic> : ITopicExpectation
+    { 
+        public string TopicName { get; set; }
+        public Type TopicType { get; set; }
+
+        public Match<TTopic> Match { get; set; }
+        
+        
+        public void OnReceiveMessage(object message)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    
     public class ExpectationBuilder<TTopicType>
     {
-        private string _topicName;
-        private Type _topicType;
-        private Match<TTopicType> _matchExpression;
+        private TopicExpectation<TTopicType> _expectation = new TopicExpectation<TTopicType>();
 
         public ExpectationBuilder<TTopicType> Topic(string topicName)
         {
-            _topicName = topicName;
+            _expectation.TopicName = topicName;
             return this;
         }
 
@@ -21,8 +33,8 @@ namespace RosComponentTesting
 
         public ExpectationBuilder<TTopicType> Match(Match<TTopicType> match)
         {
-            _topicType = typeof(TTopicType);
-            _matchExpression = match;
+            _expectation.TopicType = typeof(TTopicType);
+            _expectation.Match = match;
 
             return this;
         }
@@ -59,8 +71,7 @@ namespace RosComponentTesting
 
         public IExpectation ToExpectation()
         {
-            // TODO
-            throw new NotImplementedException();
+            return _expectation;
         }
     }
 }
