@@ -56,5 +56,11 @@ namespace RosComponentTesting
             // TODO
             return this;
         }
+
+        public IExpectation ToExpectation()
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
     }
 }
