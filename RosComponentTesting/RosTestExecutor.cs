@@ -142,7 +142,7 @@ namespace RosComponentTesting
             {
                 var m = new StringBuilder();
                 
-                m.AppendLine("Expectations not met:");
+                m.AppendLine($"{_errors.Count()} Expectations not met.");
 
                 foreach (var error in _errors)
                 {

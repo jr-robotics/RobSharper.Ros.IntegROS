@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.ExpectationProcessing
@@ -33,37 +34,37 @@ namespace RosComponentTesting.ExpectationProcessing
         public void Validate(ValidationContext context)
         {
             if (_times.IsValid(_counter)) return;
+
+            var errorMessage = new StringBuilder();
+
+            errorMessage.AppendLine("Occurrences() failure");
+            errorMessage.Append("Expected: ");
             
-            
-            string errorMessage;
-                
-            if (_times == Times.Never)
+            if (_times.Min == _times.Max)
             {
-                errorMessage = $"No messages expected, but received {_counter}.";
-            }
-            else if (_times == Times.Once)
-            {
-                errorMessage = $"One message expected, but received {_counter}.";
+                errorMessage.AppendLine($"{_times.Min}");
             }
             else if (_times.Min == 0) // at most
             {
-                errorMessage = $"At most {_times.Max} messages expected, but received {_counter}.";
+                errorMessage.AppendLine($"<= {_times.Max}");
             }
             else if (_times.Max == uint.MaxValue) // at least
             {
-                errorMessage = $"At least {_times.Min} messages expected, but received {_counter}.";
+                errorMessage.AppendLine($">= {_times.Min}");
             }
             else
             {
-                errorMessage = $"Expected between {_times.Min} and {_times.Max} messages, but received {_counter}.";
+                errorMessage.AppendLine($"{_times.Min} - {_times.Max}");
             }
+
+            errorMessage.AppendLine($"Actual:   {_counter}");
 
             if (CallerInfo != null)
             {
-                errorMessage += $" {CallerInfo}";
+                errorMessage .AppendLine($"  in {CallerInfo}");
             }
 
-            context.AddError(errorMessage);
+            context.AddError(errorMessage.ToString());
         }
     }
 }
