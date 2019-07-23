@@ -16,6 +16,5 @@ namespace RosComponentTesting
         }
 
         public TimeSpan Timeout { get; set; } = TimeSpan.FromSeconds(10);
-        public bool ContinueOnExpectationViolation { get; set; } = false;
     }
 }

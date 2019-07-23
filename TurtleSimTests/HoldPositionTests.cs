@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Messages.geometry_msgs;
 using RosComponentTesting;
 using Uml.Robotics.Ros;
@@ -34,19 +35,32 @@ namespace TurtleSimTests
                 .Execute();
         }
 
-        [Fact (Skip = "Runs infinite")]
+        [Fact]
         public void Test1()
         {
             ROS.ROS_MASTER_URI = "http://localhost:11311";
-            
-            ROS.ROS_MASTER_URI = "http://localhost:11311";
             ROS.Init(new string[0], "TESTNODE");
 
+            ROS.RegisterMessageAssembly(typeof(Pose).Assembly);
+            
             var spinner = new AsyncSpinner();
             spinner.Start();
 
+            var i = 15;
+
             var node = new NodeHandle();
-            node.Subscribe<Pose>("/turtle1/pose", 1, p => output.WriteLine(p.MessageType));
+            node.Subscribe<Pose>("/turtle1/pose", 1, p =>
+            {
+                output.WriteLine(p.MessageType);
+                i--;
+            });
+
+            while (i > 0)
+            {
+                Thread.Sleep(500);
+
+                ROS.Shutdown();
+            }
             
             ROS.WaitForShutdown();
         }

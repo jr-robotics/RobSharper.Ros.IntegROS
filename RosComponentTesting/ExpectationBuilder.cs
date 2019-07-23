@@ -9,7 +9,6 @@ namespace RosComponentTesting
 
         public Match<TTopic> Match { get; set; }
         
-        
         public void OnReceiveMessage(object message)
         {
             throw new NotImplementedException();
@@ -18,7 +17,9 @@ namespace RosComponentTesting
     
     public class ExpectationBuilder<TTopicType>
     {
-        private TopicExpectation<TTopicType> _expectation = new TopicExpectation<TTopicType>();
+        private readonly TopicExpectation<TTopicType> _expectation = new TopicExpectation<TTopicType>();
+
+        public TopicExpectation<TTopicType> Expectation => _expectation;
 
         public ExpectationBuilder<TTopicType> Topic(string topicName)
         {
@@ -67,11 +68,6 @@ namespace RosComponentTesting
         {
             // TODO
             return this;
-        }
-
-        public IExpectation ToExpectation()
-        {
-            return _expectation;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace RosComponentTesting
             var builder = new ExpectationBuilder<T>();
             builderAction(builder);
 
-            return Expect(builder.ToExpectation());
+            return Expect(builder.Expectation);
         }
 
         public RosTestBuilder Expect(IExpectation expectation)
