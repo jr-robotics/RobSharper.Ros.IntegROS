@@ -1,4 +1,5 @@
 using System;
+using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.ExpectationProcessing
 {
@@ -7,7 +8,11 @@ namespace RosComponentTesting.ExpectationProcessing
         private long _counter;
         private readonly Times _times;
 
-        public OccurrenceRule(Times times, int priority = 50) : base(priority)
+        public OccurrenceRule(Times times, int priority = 50) : this(times, null, priority)
+        {
+        }
+
+        public OccurrenceRule(Times times, CallerReference callerInfo, int priority = 50) : base(callerInfo, priority)
         {
             _times = times ?? throw new ArgumentNullException(nameof(times));
         }
@@ -52,7 +57,12 @@ namespace RosComponentTesting.ExpectationProcessing
             {
                 errorMessage = $"Expected between {_times.Min} and {_times.Max} messages, but received {_counter}.";
             }
-                
+
+            if (CallerInfo != null)
+            {
+                errorMessage += $" {CallerInfo}";
+            }
+
             context.AddError(errorMessage);
         }
     }

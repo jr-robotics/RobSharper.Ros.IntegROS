@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using RosComponentTesting.Debugging;
 using RosComponentTesting.ExpectationProcessing;
 
 namespace RosComponentTesting
@@ -47,11 +48,11 @@ namespace RosComponentTesting
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Occurrences(Times times)
+        public ExpectationBuilder<TTopicType> Occurrences(Times times, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             if (times == null) throw new ArgumentNullException(nameof(times));
 
-            var validator = new OccurrenceRule<TTopicType>(times);
+            var validator = new OccurrenceRule<TTopicType>(times, CallerReference.Create(callerFilePath, lineNumber));
             _expectation.AddExpectationRule(validator, true);
             
             return this;

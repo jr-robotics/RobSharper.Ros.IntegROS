@@ -149,10 +149,6 @@ namespace RosComponentTesting
                     m.AppendLine(error);
                 }
 
-                m.AppendLine();
-                m.AppendLine(
-                    " at bla bla /home/brg/dev/ros-component-testing/RosComponentTesting/RosTestExecutor.cs:line 102");
-                
                 return m.ToString();
             }
         }
