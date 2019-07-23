@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Uml.Robotics.Ros;
@@ -61,22 +62,47 @@ namespace RosComponentTesting
             {
                 await task;
             }
-            
+
+            foreach (var expectation in _expectations)
+            {
+                expectation.Activate();
+            }
             
             // TODO Publish Messages
 
             
             
             
-            // Wait until timeout expired or cancellation requested
+            // Wait until timeout expires or cancellation requested
             cancellationTokenSource.Token.WaitHandle.WaitOne(options.Timeout);
             
-            ROS.Shutdown();
-
-            if (errorHandler.Errors.Any())
+            foreach (var expectation in _expectations)
             {
-                var innerExceptions = errorHandler.Errors.Select(e => e.Exception).ToList();
-                throw new AggregateException("Execution was canceled", innerExceptions);
+                expectation.Deactivate();
+            }
+            
+            var shutdownTask = ROS.Shutdown();
+
+            try
+            {
+                // Check for unhandled exceptions
+                if (errorHandler.Errors.Any())
+                {
+                    var innerExceptions = errorHandler.Errors.Select(e => e.Exception).ToList();
+                    throw new AggregateException("Execution was canceled", innerExceptions);
+                }
+                
+                // Check expectation validations 
+                var validationErrors = _expectations.SelectMany(e => e.GetValidationErrors());
+
+                if (validationErrors.Any())
+                {
+                    throw new ValidationException(validationErrors);
+                }
+            }
+            finally
+            {
+                await shutdownTask;
             }
         }
 
@@ -94,11 +120,46 @@ namespace RosComponentTesting
 
             if (t == null)
             {
-                throw new NotSupportedException();
+                throw new NotSupportedException($"Expectation type {expectation.GetType()} is not supported.");
             }
-
             
             return t;
+        }
+    }
+
+    public class ValidationException : Exception
+    {
+        private readonly IEnumerable<string> _errors;
+
+        public ValidationException(IEnumerable<string> errors)
+        {
+            _errors = errors;
+        }
+
+        public override string Message
+        {
+            get
+            {
+                var m = new StringBuilder();
+                
+                m.AppendLine("Expectations not met:");
+
+                foreach (var error in _errors)
+                {
+                    m.AppendLine(error);
+                }
+
+                m.AppendLine();
+                m.AppendLine(
+                    " at bla bla /home/brg/dev/ros-component-testing/RosComponentTesting/RosTestExecutor.cs:line 102");
+                
+                return m.ToString();
+            }
+        }
+
+        public IEnumerable<string> Errors
+        {
+            get { return _errors; }
         }
     }
 

@@ -38,22 +38,12 @@ namespace RosComponentTesting
             Max = max;
         }
 
-        public bool Evaluate(int value)
-        {
-            return Min <= value && Max >= value;
-        }
-        
-        public bool Evaluate(uint value)
+        public bool IsValid(long value)
         {
             return Min <= value && Max >= value;
         }
 
-        public bool Evaluate(long value)
-        {
-            return Min <= value && Max >= value;
-        }
-
-        public bool Evaluate(ulong value)
+        public bool IsValid(ulong value)
         {
             return Min <= value && Max >= value;
         }

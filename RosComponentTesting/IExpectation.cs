@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 
 namespace RosComponentTesting
 {
     public interface IExpectation
     {
+        void Activate();
+        void Deactivate();
         
+        IEnumerable<string> GetValidationErrors();
     }
 
     public interface ITopicExpectation : IExpectation
@@ -13,10 +17,5 @@ namespace RosComponentTesting
         Type TopicType { get; }
 
         void OnReceiveMessage(object message);
-    }
-
-    public interface ICallbackHandler<T>
-    {
-        void Callback(T item);
     }
 }

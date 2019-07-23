@@ -5,6 +5,7 @@ using RosComponentTesting;
 using Uml.Robotics.Ros;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Sdk;
 using Pose = Messages.turtlesim.Pose;
 
 namespace TurtleSimTests
@@ -25,16 +26,18 @@ namespace TurtleSimTests
                 .Expect<Twist>(x => x
                     .Topic("/turtle1/cmd_vel")
                     .Match(It.IsAny<Twist>())
-                    .Occurrences(Times.Never)
+                    //.Occurrences(Times.Never)
+                    .Occurrences(Times.AtLeast(2))
                 )
                 .Expect<Pose>(x => x
                     .Topic("/turtle1/pose")
                     .Match(It.IsAny<Pose>())
-                    .Occurrences(Times.AtLeast(2))
+                    //.Occurrences(Times.AtLeast(2))
+                    .Occurrences(Times.Never)
                 )
                 .Execute();
         }
-
+        
         [Fact]
         public void Test1()
         {
@@ -63,6 +66,13 @@ namespace TurtleSimTests
             }
             
             ROS.WaitForShutdown();
+        }
+
+        [Fact]
+        public void Test2()
+        {
+            Assert.InRange(15, 3, 10);
+            Assert.True(false, "My User Message");
         }
     }
 }

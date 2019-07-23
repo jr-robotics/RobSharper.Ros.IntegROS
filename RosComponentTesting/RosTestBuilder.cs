@@ -37,7 +37,7 @@ namespace RosComponentTesting
         public RosTestBuilder Expect(IExpectation expectation)
         {
             if (expectation == null) throw new ArgumentNullException(nameof(expectation));
-            
+
             _expectations.Add(expectation);
             return this;
         }

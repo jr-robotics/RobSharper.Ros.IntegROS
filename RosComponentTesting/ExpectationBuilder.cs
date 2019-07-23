@@ -1,20 +1,9 @@
 using System;
+using System.Runtime.CompilerServices;
+using RosComponentTesting.ExpectationProcessing;
 
 namespace RosComponentTesting
 {
-    public class TopicExpectation<TTopic> : ITopicExpectation
-    { 
-        public string TopicName { get; set; }
-        public Type TopicType { get; set; }
-
-        public Match<TTopic> Match { get; set; }
-        
-        public void OnReceiveMessage(object message)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    
     public class ExpectationBuilder<TTopicType>
     {
         private readonly TopicExpectation<TTopicType> _expectation = new TopicExpectation<TTopicType>();
@@ -23,7 +12,7 @@ namespace RosComponentTesting
 
         public ExpectationBuilder<TTopicType> Topic(string topicName)
         {
-            _expectation.TopicName = topicName;
+            Expectation.TopicName = topicName;
             return this;
         }
 
@@ -34,8 +23,12 @@ namespace RosComponentTesting
 
         public ExpectationBuilder<TTopicType> Match(Match<TTopicType> match)
         {
-            _expectation.TopicType = typeof(TTopicType);
-            _expectation.Match = match;
+            if (match == null) throw new ArgumentNullException(nameof(match));
+            
+            Expectation.TopicType = typeof(TTopicType);
+
+            var validator = new MatchRule<TTopicType>(match);
+            _expectation.AddExpectationRule(validator, true);
 
             return this;
         }
@@ -46,15 +39,21 @@ namespace RosComponentTesting
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Timeout(TimeSpan fromSeconds)
+        public ExpectationBuilder<TTopicType> Timeout(TimeSpan timeout)
         {
-            // TODO
+            var validator = new TimeoutRule<TTopicType>(timeout);
+            _expectation.AddExpectationRule(validator, true);
+            
             return this;
         }
 
         public ExpectationBuilder<TTopicType> Occurrences(Times times)
         {
-            // TODO
+            if (times == null) throw new ArgumentNullException(nameof(times));
+
+            var validator = new OccurrenceRule<TTopicType>(times);
+            _expectation.AddExpectationRule(validator, true);
+            
             return this;
         }
 
