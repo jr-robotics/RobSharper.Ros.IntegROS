@@ -7,7 +7,7 @@ namespace RosComponentTesting
 {
     internal static class SubscribeOptionsFactory
     {
-        private class TopicExpectationCallbacProxy
+        private class TopicExpectationCallbackProxy
         {
             private static MethodInfo _callbackMethod;
             public static MethodInfo CallBackMethod
@@ -16,7 +16,7 @@ namespace RosComponentTesting
                 {
                     if (_callbackMethod == null)
                     {
-                        _callbackMethod = typeof(TopicExpectationCallbacProxy).GetMethod("Callback");
+                        _callbackMethod = typeof(TopicExpectationCallbackProxy).GetMethod("Callback");
                     }
                     
                     return _callbackMethod;
@@ -27,7 +27,7 @@ namespace RosComponentTesting
             private readonly ITopicExpectation _expectation;
             private readonly ExpectationErrorHandler _errorHandler;
 
-            public TopicExpectationCallbacProxy(ITopicExpectation expectation,
+            public TopicExpectationCallbackProxy(ITopicExpectation expectation,
                 ExpectationErrorHandler errorHandler)
             {
                 _expectation = expectation;
@@ -54,14 +54,14 @@ namespace RosComponentTesting
             ExpectationErrorHandler errorHandler)
         {
             var m = (RosMessage) Activator.CreateInstance(expectation.TopicType);
-            var callbackProxy = new TopicExpectationCallbacProxy(expectation, errorHandler);
+            var callbackProxy = new TopicExpectationCallbackProxy(expectation, errorHandler);
             
 
             var callbackHelperType = typeof(SubscriptionCallbackHelper<>).MakeGenericType(new[] {expectation.TopicType});
 
             var callbackDelegateType = typeof(CallbackDelegate<>).MakeGenericType(new[] {expectation.TopicType});
             var callbackDelegate = Delegate.CreateDelegate(callbackDelegateType, callbackProxy,
-                TopicExpectationCallbacProxy.CallBackMethod);
+                TopicExpectationCallbackProxy.CallBackMethod);
             
             var callbackHelper = Activator.CreateInstance(callbackHelperType, new object[] { m.MessageType, callbackDelegate }) as ISubscriptionCallbackHelper;
             
