@@ -32,7 +32,6 @@ namespace TurtleSimTests
                 .Expect<Pose>(x => x
                     .Topic("/turtle1/pose")
                     .Match(It.IsAny<Pose>())
-                    .Occurrences(Times.AtLeast(2))
                 )
                 .Execute();
         }
