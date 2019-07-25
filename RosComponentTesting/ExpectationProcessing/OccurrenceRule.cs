@@ -17,14 +17,6 @@ namespace RosComponentTesting.ExpectationProcessing
         {
             _times = times ?? throw new ArgumentNullException(nameof(times));
         }
-        
-        public override void OnActivateExpectation()
-        {
-        }
-
-        public override void OnDeactivateExpectation()
-        {
-        }
 
         public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using FluentAssertions;
 using Messages.geometry_msgs;
 using RosComponentTesting;
 using Uml.Robotics.Ros;
@@ -51,6 +52,25 @@ namespace TurtleSimTests
                     .Match(It.IsAny<Pose>())
                     //.Occurrences(Times.AtLeast(2))
                     .Occurrences(Times.Never)
+                )
+                .Execute();
+        }
+        
+        [Fact]
+        public void When_not_moving_velocity_is_zero()
+        {
+            new RosTestBuilder()
+                .Expect<Pose>(x => x
+                    .Topic("/turtle1/pose")
+                    .Match(It.IsAny<Pose>())
+                    .Occurrences(Times.AtLeast(1))
+                    .Callback(p =>
+                    {
+                        p.angular_velocity.Should().Be(0, "because turtle is not moving");
+                        p.linear_velocity.Should().Be(0, "because turtle is not moving");
+
+                        p.linear_velocity.Should().BeGreaterThan(0, "because we need a failing test");
+                    })
                 )
                 .Execute();
         }
