@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace RosComponentTesting
@@ -9,13 +8,5 @@ namespace RosComponentTesting
         void Deactivate();
         
         IEnumerable<string> GetValidationErrors();
-    }
-
-    public interface ITopicExpectation : IExpectation
-    {
-        string TopicName { get; }
-        Type TopicType { get; }
-
-        void OnReceiveMessage(object message);
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace RosComponentTesting
 {
-    public class It
+    public static class It
     {
         public static Match<T> IsAny<T>()
         {
