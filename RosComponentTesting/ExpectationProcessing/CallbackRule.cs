@@ -3,7 +3,7 @@ using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.ExpectationProcessing
 {
-    public class CallbackRule<TTopic> : ExpectationRule<TTopic>, IValidationRule
+    public class CallbackRule<TTopic> : ExpectationRule<TTopic>
     {
         private readonly Action<TTopic> _callback;
 
@@ -18,19 +18,7 @@ namespace RosComponentTesting.ExpectationProcessing
 
         public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
         {
-            try
-            {
-                _callback(message);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-        }
-
-        public void Validate(ValidationContext context)
-        {
-            // TODO
+            _callback(message);
         }
     }
 }

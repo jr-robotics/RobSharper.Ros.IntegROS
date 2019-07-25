@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RosComponentTesting.TestFrameworks;
 using Uml.Robotics.Ros;
 
 namespace RosComponentTesting
@@ -46,7 +47,7 @@ namespace RosComponentTesting
             
             
             var cancellationTokenSource = new CancellationTokenSource();
-            var errorHandler = new ExpectationErrorHandler(cancellationTokenSource);
+            var errorHandler = new ExpectationErrorHandler(cancellationTokenSource, _expectations);
 
             // Register Subscribers
             foreach (var expectation in _expectations)
@@ -82,22 +83,24 @@ namespace RosComponentTesting
             }
             
             var shutdownTask = ROS.Shutdown();
-
+            
             try
             {
                 // Check for unhandled exceptions
-                if (errorHandler.Errors.Any())
+                if (errorHandler.HasErrors)
                 {
-                    var innerExceptions = errorHandler.Errors.Select(e => e.Exception).ToList();
-                    throw new AggregateException("Execution was canceled", innerExceptions);
+                    errorHandler.Throw();
                 }
                 
                 // Check expectation validations 
-                var validationErrors = _expectations.SelectMany(e => e.GetValidationErrors());
+                var validationErrors = _expectations
+                    .SelectMany(e => e.GetValidationErrors())
+                    .ToList();
 
                 if (validationErrors.Any())
                 {
-                    throw new ValidationException(validationErrors);
+                    var errorMessage = BuildErrorMessage(validationErrors);
+                    TestFrameworkProvider.Framework.Throw(errorMessage);
                 }
             }
             finally
@@ -125,73 +128,20 @@ namespace RosComponentTesting
             
             return t;
         }
-    }
 
-    public class ValidationException : Exception
-    {
-        private readonly IEnumerable<string> _errors;
-
-        public ValidationException(IEnumerable<string> errors)
+        private static string BuildErrorMessage(IEnumerable<string> errors)
         {
-            _errors = errors;
-        }
+            var m = new StringBuilder();
 
-        public override string Message
-        {
-            get
+            m.AppendLine($"{errors.Count()} Expectations not met.");
+            m.AppendLine();
+
+            foreach (var error in errors)
             {
-                var m = new StringBuilder();
-                
-                m.AppendLine($"{_errors.Count()} Expectations not met.");
-
-                foreach (var error in _errors)
-                {
-                    m.AppendLine(error);
-                }
-
-                return m.ToString();
+                m.AppendLine(error);
             }
-        }
 
-        public IEnumerable<string> Errors
-        {
-            get { return _errors; }
-        }
-    }
-
-    public class ExpectationErrorHandler
-    {
-        private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly List<ExpectationError> _errors;
-
-        public IEnumerable<ExpectationError> Errors => _errors.AsReadOnly();
-
-        public ExpectationErrorHandler(CancellationTokenSource cancellationTokenSource)
-        {
-            _cancellationTokenSource = cancellationTokenSource;
-            _errors = new List<ExpectationError>();
-        }
-
-        public void AddError(ExpectationError error)
-        {
-            _errors.Add(error);
-        }
-
-        public void Cancel()
-        {
-            _cancellationTokenSource.Cancel();
-        }
-    }
-
-    public class ExpectationError
-    {
-        public IExpectation Expectation { get; }
-        public Exception Exception { get; }
-
-        public ExpectationError(IExpectation expectation, Exception exception)
-        {
-            Expectation = expectation;
-            Exception = exception;
+            return m.ToString();
         }
     }
 }
