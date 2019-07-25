@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosComponentTesting", "RosComponentTesting\RosComponentTesting.csproj", "{C5D446EB-9E0E-45FD-AC1B-D21970665064}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosComponentTestingTests", "RosComponentTestingTests\RosComponentTestingTests.csproj", "{C5D446EB-9E0E-45FD-AC1B-D21970665064}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurtleSimTests", "TurtleSimTests\TurtleSimTests.csproj", "{3EE72D72-88A6-48A5-8E49-40E9B9C84856}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RosComponentTesting", "RosComponentTesting\RosComponentTesting.csproj", "{1C08F7A9-CB23-4607-92B3-CC5EE2026350}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +16,13 @@ Global
 		{C5D446EB-9E0E-45FD-AC1B-D21970665064}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5D446EB-9E0E-45FD-AC1B-D21970665064}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5D446EB-9E0E-45FD-AC1B-D21970665064}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EE72D72-88A6-48A5-8E49-40E9B9C84856}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EE72D72-88A6-48A5-8E49-40E9B9C84856}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EE72D72-88A6-48A5-8E49-40E9B9C84856}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EE72D72-88A6-48A5-8E49-40E9B9C84856}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C08F7A9-CB23-4607-92B3-CC5EE2026350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C08F7A9-CB23-4607-92B3-CC5EE2026350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C08F7A9-CB23-4607-92B3-CC5EE2026350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C08F7A9-CB23-4607-92B3-CC5EE2026350}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

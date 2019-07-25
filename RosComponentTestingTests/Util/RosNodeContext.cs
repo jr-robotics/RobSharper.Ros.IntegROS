@@ -1,6 +1,6 @@
 using System;
 
-namespace RosComponentTesting.Util
+namespace RosComponentTestingTests.Util
 {
     public class RosNodeContext : IDisposable
     {

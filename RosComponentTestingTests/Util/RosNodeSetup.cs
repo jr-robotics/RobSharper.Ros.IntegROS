@@ -1,6 +1,7 @@
 using System;
+using RosComponentTesting;
 
-namespace RosComponentTesting.Util
+namespace RosComponentTestingTests.Util
 {
     public class RosNodeSetup
     {
