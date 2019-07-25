@@ -45,7 +45,6 @@ namespace RosComponentTesting
                 {
                     _errorHandler.AddError(new ExpectationError(_expectation, e));
                     _errorHandler.Cancel();
-                    throw;
                 }
             }
         }

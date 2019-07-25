@@ -34,9 +34,13 @@ namespace RosComponentTesting
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Callback(Action<TTopicType> func)
+        public ExpectationBuilder<TTopicType> Callback(Action<TTopicType> callback, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
-            // TODO
+            if (callback == null) throw new ArgumentNullException(nameof(callback));
+
+            var validator = new CallbackRule<TTopicType>(callback, CallerReference.Create(callerFilePath, lineNumber));
+            _expectation.AddExpectationRule(validator);
+            
             return this;
         }
 

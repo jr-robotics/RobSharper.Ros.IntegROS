@@ -17,10 +17,6 @@ namespace RosComponentTesting.ExpectationProcessing
             _timedOutAt = DateTime.Now + _timeout;
         }
 
-        public override void OnDeactivateExpectation()
-        {
-        }
-
         public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
         {
             context.Continue = _timedOutAt >= DateTime.Now;

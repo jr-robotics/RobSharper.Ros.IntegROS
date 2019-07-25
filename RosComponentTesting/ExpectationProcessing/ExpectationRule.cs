@@ -18,8 +18,16 @@ namespace RosComponentTesting.ExpectationProcessing
             CallerInfo = callerInfo;
         }
 
-        public abstract void OnActivateExpectation();
-        public abstract void OnDeactivateExpectation();
+        public virtual void OnActivateExpectation()
+        {
+            // Nothing to do in the default implementation
+        }
+
+        public virtual void OnDeactivateExpectation()
+        {
+            // Nothing to do in the default implementation
+        }
+        
         public abstract void OnHandleMessage(TTopic message, ExpectationRuleContext context);
     }
 }
