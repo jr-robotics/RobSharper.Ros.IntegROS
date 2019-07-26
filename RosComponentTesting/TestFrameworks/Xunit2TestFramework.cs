@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace RosComponentTesting.TestFrameworks
 {
-    internal class Xunit2TestFramework : ITestFramework
+    public class Xunit2TestFramework : ITestFramework
     {
         private static Assembly _testFrameworkAssembly;
         private static Type _exceptionType;
@@ -47,11 +47,6 @@ namespace RosComponentTesting.TestFrameworks
                 
                 return _exceptionType;
             }
-        }
-
-        public bool IsTestException(Exception e)
-        {
-            return ExceptionType.IsInstanceOfType(e);
         }
 
         public void Throw(string errorMessage)
