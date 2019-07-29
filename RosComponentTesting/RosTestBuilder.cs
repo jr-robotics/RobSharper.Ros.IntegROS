@@ -8,10 +8,23 @@ namespace RosComponentTesting
     public class RosTestBuilder
     {
         private readonly ICollection<IExpectation> _expectations = new List<IExpectation>();
+        private readonly PublicationCollection _publications = new PublicationCollection();
 
         public RosTestBuilder Publish(string advertiseTopic, object message)
         {
-            // TODO add publisher
+            if (message == null) throw new ArgumentNullException(nameof(message));
+            
+            var topic = new TopicDescriptor(advertiseTopic, message.GetType());
+            var publication = new Publication(topic, message);
+            
+            Publish(publication);
+            
+            return this;
+        }
+
+        public RosTestBuilder Publish(IPublication publication)
+        {
+            _publications.Add(publication);
             return this;
         }
 
@@ -48,9 +61,7 @@ namespace RosComponentTesting
 
         public RosTestExecutor ToTestExecutor()
         {
-            if (!_expectations.Any()) throw new InvalidOperationException("No expectations defined");
-            
-            return new RosTestExecutor(_expectations);
+            return new RosTestExecutor(_expectations, _publications);
         }
         
         public void Execute(TestExecutionOptions options = null)

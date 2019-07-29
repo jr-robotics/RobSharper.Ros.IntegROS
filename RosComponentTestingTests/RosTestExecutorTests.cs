@@ -9,7 +9,7 @@ namespace RosComponentTestingTests
         [Fact()]
         public void Cannot_initialize_with_null_expectations()
         {
-            Assert.Throws<ArgumentNullException>(() => new RosTestExecutor(null));
+            Assert.Throws<ArgumentNullException>(() => new RosTestExecutor(null, null));
         }
     }
 }

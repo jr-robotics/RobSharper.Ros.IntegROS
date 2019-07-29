@@ -7,24 +7,19 @@ namespace RosComponentTesting
         public static readonly Times Never = new Times(0, 0);
         public static readonly Times Once = new Times(1, 1);
 
-        public static Times AtLeast(int value)
+        public static Times AtLeast(uint value)
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "value must not be negative");
-            }
-            
             return new Times((uint) value, uint.MaxValue);
         }
 
-        public static Times AtMost(int value)
+        public static Times AtMost(uint value)
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "value must not be negative");
-            }
-            
-            return new Times(0, (uint) value);
+            return new Times(0, value);
+        }
+
+        public static Times Exactly(uint value)
+        {
+            return new Times(value, value);
         }
         
         

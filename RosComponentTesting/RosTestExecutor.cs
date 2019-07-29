@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +14,17 @@ namespace RosComponentTesting
     public class RosTestExecutor
     {
         private readonly IEnumerable<IExpectation> _expectations;
+        private readonly PublicationCollection _publications;
+        
+        private readonly Dictionary<TopicDescriptor, IRosPublisher> _rosPublishers = new Dictionary<TopicDescriptor, IRosPublisher>();
 
-        public RosTestExecutor(IEnumerable<IExpectation> expectations)
+        public RosTestExecutor(IEnumerable<IExpectation> expectations, PublicationCollection publications)
         {
             if (expectations == null) throw new ArgumentNullException(nameof(expectations));
+            if (publications == null) throw new ArgumentNullException(nameof(publications));
 
             _expectations = expectations;
+            _publications = publications;
         }
 
         public void Execute(TestExecutionOptions options = null)
@@ -56,10 +62,14 @@ namespace RosComponentTesting
                 var t = RegisterSubscribers(expectation, node, errorHandler);
                 awaitableRosRegistrationTasks.Add(t);
             }
+
+            // Register Publishers
+            foreach (var topic in _publications.Topics)
+            {
+                var t = RegisterPublisher(topic, node, errorHandler);
+                awaitableRosRegistrationTasks.Add(t);
+            }
             
-            // TODO Register Publishers
-
-
             foreach (var task in awaitableRosRegistrationTasks)
             {
                 await task;
@@ -70,10 +80,14 @@ namespace RosComponentTesting
                 expectation.Activate();
             }
             
-            // TODO Publish Messages
+            Thread.Sleep(1000);
+            
 
-            
-            
+            // Publish Messages
+            foreach (var publication in _publications)
+            {
+                _rosPublishers[publication.Topic].Publish(publication.Message);
+            }
             
             // Wait until timeout expires or cancellation requested
             cancellationTokenSource.Token.WaitHandle.WaitOne(options.Timeout);
@@ -129,6 +143,31 @@ namespace RosComponentTesting
             
             return t;
         }
+        
+        private Task RegisterPublisher(TopicDescriptor topic, NodeHandle node, ExpectationErrorHandler errorHandler)
+        {
+            var messageType = topic.Type;
+
+            var advertiseMethod = node
+                .GetType()
+                .GetMethod("Advertise", new[] {typeof(string), typeof(int)})
+                ?.MakeGenericMethod(messageType);
+            
+            if (advertiseMethod == null)
+            {
+                throw new NotSupportedException("Could not retrieve AdvertiseAsync method");
+            }
+            
+            var t = Task.Run(() =>
+            {
+                var rosPublisher = advertiseMethod.Invoke(node, new object[] {topic.Topic, 1});
+                var publisherProxy = RosPublisherProxy.Create(topic, rosPublisher);
+
+                _rosPublishers.Add(topic, publisherProxy);
+            });
+            
+            return t;
+        }
 
         private static string BuildErrorMessage(List<ValidationError> errors)
         {
@@ -144,5 +183,44 @@ namespace RosComponentTesting
 
             return m.ToString();
         }
+    }
+
+    internal class RosPublisherProxy : IRosPublisher
+    {
+
+        public static RosPublisherProxy Create(TopicDescriptor topic, object rosPublisher)
+        {
+            if (topic == null) throw new ArgumentNullException(nameof(topic));
+            if (rosPublisher == null) throw new ArgumentNullException(nameof(rosPublisher));
+            
+            var publishMethod = typeof(Publisher<>)
+                .MakeGenericType(topic.Type)
+                .GetMethod("Publish");
+
+            return new RosPublisherProxy(topic, publishMethod, rosPublisher);
+        }
+
+
+        private readonly MethodInfo _publishMethod;
+        private readonly object _rosPublisher;
+
+        public TopicDescriptor Topic { get; }
+
+        private RosPublisherProxy(TopicDescriptor topic, MethodInfo publishMethod, object rosPublisher)
+        {
+            Topic = topic;
+            _publishMethod = publishMethod;
+            _rosPublisher = rosPublisher;
+        }
+
+        public void Publish(object msg)
+        {
+            _publishMethod.Invoke(_rosPublisher, new[] {msg});
+        }
+    }
+
+    internal interface IRosPublisher
+    {
+        void Publish(object msg);
     }
 }
