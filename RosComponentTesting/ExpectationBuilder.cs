@@ -28,8 +28,8 @@ namespace RosComponentTesting
             
             Expectation.TopicType = typeof(TTopicType);
 
-            var validator = new MatchRule<TTopicType>(match);
-            _expectation.AddExpectationRule(validator, true);
+            var handler = new MatchMessageHandler<TTopicType>(match);
+            _expectation.AddMessageHandler(handler, true);
 
             return this;
         }
@@ -38,16 +38,16 @@ namespace RosComponentTesting
         {
             if (callback == null) throw new ArgumentNullException(nameof(callback));
 
-            var validator = new CallbackRule<TTopicType>(callback, CallerReference.Create(callerFilePath, lineNumber));
-            _expectation.AddExpectationRule(validator);
+            var handler = new CallbackMessageHandler<TTopicType>(callback, CallerReference.Create(callerFilePath, lineNumber));
+            _expectation.AddMessageHandler(handler);
             
             return this;
         }
 
         public ExpectationBuilder<TTopicType> Timeout(TimeSpan timeout)
         {
-            var validator = new TimeoutRule<TTopicType>(timeout);
-            _expectation.AddExpectationRule(validator, true);
+            var handler = new TimeoutMessageHandler<TTopicType>(timeout);
+            _expectation.AddMessageHandler(handler, true);
             
             return this;
         }
@@ -56,8 +56,8 @@ namespace RosComponentTesting
         {
             if (times == null) throw new ArgumentNullException(nameof(times));
 
-            var validator = new OccurrenceRule<TTopicType>(times, CallerReference.Create(callerFilePath, lineNumber));
-            _expectation.AddExpectationRule(validator, true);
+            var handler = new OccurrenceMessageHandler<TTopicType>(times, CallerReference.Create(callerFilePath, lineNumber));
+            _expectation.AddMessageHandler(handler, true);
             
             return this;
         }

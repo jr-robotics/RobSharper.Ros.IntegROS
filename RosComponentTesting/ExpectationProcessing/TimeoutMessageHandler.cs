@@ -2,12 +2,12 @@ using System;
 
 namespace RosComponentTesting.ExpectationProcessing
 {
-    public class TimeoutRule<TTopic> : ExpectationRule<TTopic>
+    public class TimeoutMessageHandler<TTopic> : ExpectationMessageHandler<TTopic>
     {
         private readonly TimeSpan _timeout;
         private DateTime _timedOutAt;
 
-        public TimeoutRule(TimeSpan timeout, int priority = 100) : base(priority)
+        public TimeoutMessageHandler(TimeSpan timeout, int priority = 100) : base(priority)
         {
             _timeout = timeout;
         }

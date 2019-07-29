@@ -2,11 +2,11 @@ using System;
 
 namespace RosComponentTesting.ExpectationProcessing
 {
-    public class MatchRule<TTopic> : ExpectationRule<TTopic>
+    public class MatchMessageHandler<TTopic> : ExpectationMessageHandler<TTopic>
     {
         private readonly Match<TTopic> _match;
 
-        public MatchRule(Match<TTopic> match, int priority = 100) : base(priority)
+        public MatchMessageHandler(Match<TTopic> match, int priority = 100) : base(priority)
         {
             _match = match ?? throw new ArgumentNullException(nameof(match));
         }

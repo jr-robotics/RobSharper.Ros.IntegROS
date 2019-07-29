@@ -19,7 +19,7 @@ namespace RosComponentTesting
         
         public StateValue State { get; private set; }
 
-        private List<ExpectationRule<TTopic>> _validators = new List<ExpectationRule<TTopic>>();
+        private readonly List<ExpectationMessageHandler<TTopic>> _handlers = new List<ExpectationMessageHandler<TTopic>>();
 
         public void ThrowIfNotInitialized()
         {
@@ -31,13 +31,13 @@ namespace RosComponentTesting
         {
             if (State == StateValue.Active) return;
             
-            lock (_validators)
+            lock (_handlers)
             {
                 if (State == StateValue.Active) return;
                 
-                foreach (var validator in _validators)
+                foreach (var handler in _handlers)
                 {
-                    validator.OnActivateExpectation();
+                    handler.OnActivateExpectation();
                 }
 
                 State = StateValue.Active;
@@ -48,13 +48,13 @@ namespace RosComponentTesting
         {
             if (State == StateValue.Inactive) return;
 
-            lock (_validators)
+            lock (_handlers)
             {
                 if (State == StateValue.Inactive) return;
                 
-                foreach (var validator in _validators)
+                foreach (var handler in _handlers)
                 {
-                    validator.OnDeactivateExpectation();
+                    handler.OnDeactivateExpectation();
                 }
 
                 State = StateValue.Inactive;
@@ -72,11 +72,11 @@ namespace RosComponentTesting
         {
             var context = new ExpectationRuleContext();
             
-            lock (_validators)
+            lock (_handlers)
             {
-                foreach (var validator in _validators)
+                foreach (var handler in _handlers)
                 {
-                    validator.OnHandleMessage(message, context);
+                    handler.OnHandleMessage(message, context);
 
                     if (!context.Continue)
                         break;
@@ -87,9 +87,9 @@ namespace RosComponentTesting
         public IEnumerable<string> GetValidationErrors()
         {
             var context = new ValidationContext();
-            lock (_validators)
+            lock (_handlers)
             {
-                foreach (var validationRule in _validators.OfType<IValidationRule>())
+                foreach (var validationRule in _handlers.OfType<IValidationRule>())
                 {
                     validationRule.Validate(context);
                 }
@@ -98,18 +98,18 @@ namespace RosComponentTesting
             return context.Errors;
         }
 
-        public void AddExpectationRule(ExpectationRule<TTopic> rule, bool isSingleton = false)
+        public void AddMessageHandler(ExpectationMessageHandler<TTopic> messageHandler, bool isSingleton = false)
         {
-            if (rule == null) throw new ArgumentNullException(nameof(rule));
+            if (messageHandler == null) throw new ArgumentNullException(nameof(messageHandler));
 
-            lock (_validators)
+            lock (_handlers)
             {
                 if (isSingleton)
                 {
-                    _validators.RemoveAll(v => v.GetType() == rule.GetType());
+                    _handlers.RemoveAll(v => v.GetType() == messageHandler.GetType());
                 }
 
-                _validators.Add(rule);
+                _handlers.Add(messageHandler);
             }
         }
     }

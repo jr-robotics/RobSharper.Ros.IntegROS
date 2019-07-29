@@ -2,17 +2,17 @@ using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.ExpectationProcessing
 {
-    public abstract class ExpectationRule<TTopic>
+    public abstract class ExpectationMessageHandler<TTopic>
     {
         public int Priority { get; }
 
         public CallerReference CallerInfo { get;}
 
-        public ExpectationRule(int priority) : this(null, priority)
+        public ExpectationMessageHandler(int priority) : this(null, priority)
         {
         }
 
-        protected ExpectationRule(CallerReference callerInfo, int priority)
+        protected ExpectationMessageHandler(CallerReference callerInfo, int priority)
         {
             Priority = priority;
             CallerInfo = callerInfo;

@@ -4,16 +4,16 @@ using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.ExpectationProcessing
 {
-    public class OccurrenceRule<TTopic> : ExpectationRule<TTopic>, IValidationRule
+    public class OccurrenceMessageHandler<TTopic> : ExpectationMessageHandler<TTopic>, IValidationRule
     {
         private long _counter;
         private readonly Times _times;
 
-        public OccurrenceRule(Times times, int priority = 50) : this(times, null, priority)
+        public OccurrenceMessageHandler(Times times, int priority = 50) : this(times, null, priority)
         {
         }
 
-        public OccurrenceRule(Times times, CallerReference callerInfo, int priority = 50) : base(callerInfo, priority)
+        public OccurrenceMessageHandler(Times times, CallerReference callerInfo, int priority = 50) : base(callerInfo, priority)
         {
             _times = times ?? throw new ArgumentNullException(nameof(times));
         }
