@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RosComponentTesting.ExpectationProcessing;
 
 namespace RosComponentTesting
 {
@@ -7,6 +8,6 @@ namespace RosComponentTesting
         void Activate();
         void Deactivate();
         
-        IEnumerable<string> GetValidationErrors();
+        IEnumerable<ValidationError> GetValidationErrors();
     }
 }

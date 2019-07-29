@@ -56,7 +56,7 @@ namespace RosComponentTesting.ExpectationProcessing
                 errorMessage .AppendLine($"  in {CallerInfo}");
             }
 
-            context.AddError(errorMessage.ToString());
+            context.AddError(errorMessage.ToString(), CallerInfo);
         }
     }
 }

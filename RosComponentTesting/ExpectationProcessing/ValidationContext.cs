@@ -1,19 +1,23 @@
-using System;
 using System.Collections.Generic;
+using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.ExpectationProcessing
 {
     public class ValidationContext
     {
-        private readonly List<string> _errors = new List<string>();
+        private readonly List<ValidationError> _errors = new List<ValidationError>();
 
-        public IEnumerable<string> Errors => _errors.AsReadOnly();
+        public IEnumerable<ValidationError> Errors => _errors.AsReadOnly();
 
         public void AddError(string errorMessage)
         {
-            if (errorMessage == null) throw new ArgumentNullException(nameof(errorMessage));
+            AddError(errorMessage, null);
+        }
 
-            _errors.Add(errorMessage);
+        public void AddError(string errorMessage, CallerReference callerInfo)
+        {
+            var error = new ValidationError(errorMessage, callerInfo);            
+            _errors.Add(error);
         }
     }
 }

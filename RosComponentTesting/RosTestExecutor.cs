@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using RosComponentTesting.ExpectationProcessing;
 using RosComponentTesting.TestFrameworks;
 using Uml.Robotics.Ros;
 
@@ -129,7 +130,7 @@ namespace RosComponentTesting
             return t;
         }
 
-        private static string BuildErrorMessage(IEnumerable<string> errors)
+        private static string BuildErrorMessage(List<ValidationError> errors)
         {
             var m = new StringBuilder();
 
@@ -138,7 +139,7 @@ namespace RosComponentTesting
 
             foreach (var error in errors)
             {
-                m.AppendLine(error);
+                m.AppendLine(error.ToString());
             }
 
             return m.ToString();

@@ -84,7 +84,7 @@ namespace RosComponentTesting
             }
         }
 
-        public IEnumerable<string> GetValidationErrors()
+        public IEnumerable<ValidationError> GetValidationErrors()
         {
             var context = new ValidationContext();
             lock (_handlers)
