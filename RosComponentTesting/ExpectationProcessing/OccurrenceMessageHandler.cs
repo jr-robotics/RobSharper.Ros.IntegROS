@@ -51,11 +51,6 @@ namespace RosComponentTesting.ExpectationProcessing
 
             errorMessage.AppendLine($"Actual:   {_counter}");
 
-            if (CallerInfo != null)
-            {
-                errorMessage .AppendLine($"  in {CallerInfo}");
-            }
-
             context.AddError(errorMessage.ToString(), CallerInfo);
         }
     }
