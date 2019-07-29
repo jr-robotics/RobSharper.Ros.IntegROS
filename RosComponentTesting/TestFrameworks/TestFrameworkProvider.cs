@@ -7,8 +7,7 @@ namespace RosComponentTesting.TestFrameworks
     {
         private static readonly List<ITestFramework> _frameworks = new List<ITestFramework>()
         {
-            new Xunit2TestFramework(),
-            new FallbackTestFramework()
+            new Xunit2TestFramework()
         };
         
         private static ITestFramework _instance;
@@ -23,7 +22,7 @@ namespace RosComponentTesting.TestFrameworks
                     {
                         if (_instance == null)
                         {
-                            _instance = GetTestFramework();
+                            _instance = GetTestFramework() ?? new FallbackTestFramework();
                         }
                     }
                 }
@@ -42,7 +41,7 @@ namespace RosComponentTesting.TestFrameworks
                 }
             }
 
-            throw new NotSupportedException("No valid test framework found.");
+            return null;
         }
 
         /// <summary>
@@ -54,9 +53,7 @@ namespace RosComponentTesting.TestFrameworks
         {
             if (framework == null) throw new ArgumentNullException(nameof(framework));
 
-            var insertIndex = Math.Max(0, _frameworks.Count - 1);
-            _frameworks.Insert(insertIndex, framework);
-
+            _frameworks.Add(framework);
             _instance = null;
         }
     }
