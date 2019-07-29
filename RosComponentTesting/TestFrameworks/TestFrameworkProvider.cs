@@ -5,6 +5,9 @@ namespace RosComponentTesting.TestFrameworks
 {
     public class TestFrameworkProvider
     {
+        /// <summary>
+        /// Built in list of supported test frameworks.
+        /// </summary>
         private static readonly List<ITestFramework> _frameworks = new List<ITestFramework>()
         {
             new Xunit2TestFramework()
@@ -12,6 +15,10 @@ namespace RosComponentTesting.TestFrameworks
         
         private static ITestFramework _instance;
 
+        /// <summary>
+        /// Returns the actual active test framework or a Fallback test framework if
+        /// the test framework could not be detected.
+        /// </summary>
         public static ITestFramework Framework
         {
             get
