@@ -100,6 +100,7 @@ namespace TurtleSimTests
 
             new RosTestBuilder()
                 .Publish("/turtle1/cmd_vel", move1)
+                .Wait(TimeSpan.FromSeconds(5))
                 .Publish("/turtle1/cmd_vel", move2)
                 .Expect<Twist>(x => x
                     .Topic("/turtle1/cmd_vel")

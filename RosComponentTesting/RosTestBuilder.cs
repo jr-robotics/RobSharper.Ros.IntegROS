@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
+using RosComponentTesting.TestSteps;
 
 namespace RosComponentTesting
 {
     public class RosTestBuilder
     {
         private readonly ICollection<IExpectation> _expectations = new List<IExpectation>();
-        private readonly PublicationCollection _publications = new PublicationCollection();
+        private readonly ICollection<ITestStep> _steps = new List<ITestStep>();
 
         public RosTestBuilder Publish(string advertiseTopic, object message)
         {
@@ -24,7 +24,9 @@ namespace RosComponentTesting
 
         public RosTestBuilder Publish(IPublication publication)
         {
-            _publications.Add(publication);
+            var step = new PublicationStep(publication);
+            _steps.Add(step);
+            
             return this;
         }
 
@@ -59,9 +61,17 @@ namespace RosComponentTesting
             return this;
         }
 
+        public RosTestBuilder Wait(TimeSpan duration)
+        {
+            var step = new WaitStep(duration);
+            _steps.Add(step);
+
+            return this;
+        }
+
         public RosTestExecutor ToTestExecutor()
         {
-            return new RosTestExecutor(_expectations, _publications);
+            return new RosTestExecutor(_steps, _expectations);
         }
         
         public void Execute(TestExecutionOptions options = null)

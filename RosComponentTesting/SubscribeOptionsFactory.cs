@@ -25,13 +25,13 @@ namespace RosComponentTesting
             
             
             private readonly ITopicExpectation _expectation;
-            private readonly ExpectationErrorHandler _errorHandler;
+            private readonly ExceptionDispatcher _exceptionDispatcher;
 
             public TopicExpectationCallbackProxy(ITopicExpectation expectation,
-                ExpectationErrorHandler errorHandler)
+                ExceptionDispatcher exceptionDispatcher)
             {
                 _expectation = expectation;
-                _errorHandler = errorHandler;
+                _exceptionDispatcher = exceptionDispatcher;
             }
             
             // ReSharper disable once UnusedMember.Local
@@ -43,17 +43,19 @@ namespace RosComponentTesting
                 }
                 catch (Exception e)
                 {
-                    _errorHandler.AddError(new ExpectationError(_expectation, e));
-                    _errorHandler.Cancel();
+                    // ROS has implemented the try/catch/ignore pattern.
+                    // We have to intercept the callback and forward the exception to someone who 
+                    // is caring about it
+                    _exceptionDispatcher.Dispatch(e);
                 }
             }
         }
         
         public static SubscribeOptions Create(ITopicExpectation expectation,
-            ExpectationErrorHandler errorHandler)
+            ExceptionDispatcher exceptionDispatcher)
         {
             var m = (RosMessage) Activator.CreateInstance(expectation.TopicType);
-            var callbackProxy = new TopicExpectationCallbackProxy(expectation, errorHandler);
+            var callbackProxy = new TopicExpectationCallbackProxy(expectation, exceptionDispatcher);
             
 
             var callbackHelperType = typeof(SubscriptionCallbackHelper<>).MakeGenericType(new[] {expectation.TopicType});
