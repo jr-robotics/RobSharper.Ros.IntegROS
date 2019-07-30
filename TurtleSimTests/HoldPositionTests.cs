@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using FluentAssertions;
 using Messages.geometry_msgs;
@@ -7,6 +8,7 @@ using Uml.Robotics.Ros;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
+using Int32 = Messages.std_msgs.Int32;
 using Pose = Messages.turtlesim.Pose;
 
 namespace TurtleSimTests
@@ -18,6 +20,10 @@ namespace TurtleSimTests
         public HoldPositionTests(ITestOutputHelper output)
         {
             this.output = output;
+            
+
+            ROS.ROS_MASTER_URI = "http://localhost:11311";
+            ROS.Init(new string[0], "TESTNODE");
         }
         
         [Fact]
@@ -72,6 +78,86 @@ namespace TurtleSimTests
                     })
                 )
                 .Execute();
+        }
+
+        [Fact]
+        public void Publish_test()
+        {
+            var move1 = new Twist
+            {
+                linear =
+                {
+                    x = 1,
+                }
+            };
+            var move2 = new Twist
+            {
+                linear =
+                {
+                    x = -1,
+                }
+            };
+
+            new RosTestBuilder()
+                .Publish("/turtle1/cmd_vel", move1)
+                .Publish("/turtle1/cmd_vel", move2)
+                .Expect<Twist>(x => x
+                    .Topic("/turtle1/cmd_vel")
+                    .Match(It.IsAny<Twist>())
+                    .Occurrences(Times.Exactly(2))
+                )
+                .Execute();
+        }
+
+        [Fact]
+        public void PublishTest()
+        {
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            ROS.ROS_MASTER_URI = "http://localhost:11311";
+            ROS.Init(new string[0], "TESTNODE");
+            NodeHandle node = new NodeHandle();
+            
+            var intPublisher = node.Advertise<Messages.std_msgs.Int32>("/x/int/", 1);
+            
+            var intMsg = new Int32();
+
+            while (ROS.OK)
+            {
+                Thread.Sleep(1000);
+                intMsg.data++;
+                
+                intPublisher.Publish(intMsg);
+            }
+            
+            ROS.Shutdown();
+        }
+
+        [Fact]
+        public void PublishTwistTest()
+        {
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            ROS.ROS_MASTER_URI = "http://localhost:11311";
+            ROS.Init(new string[0], "TESTNODE");
+            
+            var spinner = new SingleThreadSpinner();
+            NodeHandle node = new NodeHandle();
+
+            var intPublisher = node.Advertise<Twist>("/turtle1/cmd_vel", 
+                1, 
+                publisher => { this.output.WriteLine("TODO"); },
+                publisher => { this.output.WriteLine("TODO"); });
+
+            var msg = new Twist();
+
+            while (ROS.OK)
+            {
+                Thread.Sleep(1000);
+                msg.linear.x += 1.0;
+                
+                intPublisher.Publish(msg);
+            }
+            
+            ROS.Shutdown();
         }
 
         [Fact]

@@ -40,12 +40,6 @@ namespace RosComponentTesting
                 options = TestExecutionOptions.Default;
             }
 
-            // TODO: remove static master uri - make it configurable!
-            ROS.ROS_MASTER_URI = "http://localhost:11311";
-            
-            // TODO: Initialization shoud be done somewhere else
-            ROS.Init(new string[0], "TESTNODE");
-
             var spinner = new AsyncSpinner();
             spinner.Start();
 
@@ -79,8 +73,6 @@ namespace RosComponentTesting
             {
                 expectation.Activate();
             }
-            
-            Thread.Sleep(1000);
             
 
             // Publish Messages
@@ -163,7 +155,14 @@ namespace RosComponentTesting
                 var rosPublisher = advertiseMethod.Invoke(node, new object[] {topic.Topic, 1});
                 var publisherProxy = RosPublisherProxy.Create(topic, rosPublisher);
 
-                _rosPublishers.Add(topic, publisherProxy);
+                // Give all subscribers in the ROS network a chance to subscribe before
+                // publishing starts 
+                Thread.Sleep(1000);
+                
+                lock (_rosPublishers)
+                {
+                    _rosPublishers.Add(topic, publisherProxy);
+                }
             });
             
             return t;
