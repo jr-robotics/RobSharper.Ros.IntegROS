@@ -15,7 +15,7 @@ namespace RosComponentTesting.TestSteps
             Publication = publication;
         }
 
-        public void Execute(IServiceProvider serviceProvider, CancellationTokenSource cancellationTokenSource)
+        public void Execute(IServiceProvider serviceProvider)
         {
             serviceProvider
                 .GetRequiredService<IRosPublisherResolver>()

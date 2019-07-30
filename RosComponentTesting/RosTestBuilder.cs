@@ -68,6 +68,20 @@ namespace RosComponentTesting
 
             return this;
         }
+        
+        public RosTestBuilder WaitFor<T>(Action<ExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        {
+            var expectation = new WaitForExpectation<T>();
+            var builder = new ExpectationBuilder<T>(expectation)
+                .Occurrences(Times.AtLeast(1), callerFilePath, lineNumber);
+
+            builderAction(builder);
+
+            var step = new WaitForExpectationStep<T>(expectation);
+            _steps.Add(step);
+            
+            return this;
+        }
 
         public RosTestExecutor ToTestExecutor()
         {

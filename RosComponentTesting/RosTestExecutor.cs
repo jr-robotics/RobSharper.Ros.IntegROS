@@ -58,7 +58,12 @@ namespace RosComponentTesting
             try
             {
                 // Register Subscribers
-                foreach (var expectation in _expectations)
+                var expectations = _steps
+                    .OfType<IExpectationStep>()
+                    .Select(s => s.Expectation)
+                    .Union(_expectations);
+                
+                foreach (var expectation in expectations)
                 {
                     var t = RegisterSubscribers(expectation, node, errorHandler);
                     awaitableRosRegistrationTasks.Add(t);
@@ -94,7 +99,7 @@ namespace RosComponentTesting
                     await Task.Run(() =>
                     {
                         var stepExecutor = stepExecutionFactory.CreateExecutor(step);
-                        stepExecutor.Execute(serviceProvider, cancellationTokenSource);
+                        stepExecutor.Execute(serviceProvider);
                     }, cancellationTokenSource.Token);
                 }
             

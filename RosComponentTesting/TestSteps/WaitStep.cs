@@ -12,9 +12,9 @@ namespace RosComponentTesting.TestSteps
             _duration = duration;
         }
 
-        public void Execute(IServiceProvider serviceProvider, CancellationTokenSource cancellationTokenSource)
+        public void Execute(IServiceProvider serviceProvider)
         {
-            cancellationTokenSource.Token.WaitHandle.WaitOne(_duration);
+            Thread.Sleep(_duration);
         }
     }
 }

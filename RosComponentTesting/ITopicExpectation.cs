@@ -1,12 +1,16 @@
 using System;
+using RosComponentTesting.ExpectationProcessing;
 
 namespace RosComponentTesting
 {
     public interface ITopicExpectation : IExpectation
     {
         string TopicName { get; }
+        
         Type TopicType { get; }
 
-        void OnReceiveMessage(object message);
+        void HandleMessage(object message);
+
+        event EventHandler<MessageReceivedArgs> OnMessageHandeled;
     }
 }

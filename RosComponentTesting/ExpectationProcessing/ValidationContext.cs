@@ -7,6 +7,8 @@ namespace RosComponentTesting.ExpectationProcessing
     {
         private readonly List<ValidationError> _errors = new List<ValidationError>();
 
+        public bool IsValid => _errors.Count == 0;
+        
         public IEnumerable<ValidationError> Errors => _errors.AsReadOnly();
 
         public void AddError(string errorMessage)

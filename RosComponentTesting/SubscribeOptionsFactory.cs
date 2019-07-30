@@ -39,7 +39,7 @@ namespace RosComponentTesting
             {
                 try
                 {
-                    _expectation.OnReceiveMessage(message);
+                    _expectation.HandleMessage(message);
                 }
                 catch (Exception e)
                 {

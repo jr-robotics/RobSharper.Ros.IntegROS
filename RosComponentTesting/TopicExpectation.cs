@@ -7,71 +7,67 @@ namespace RosComponentTesting
 {
     public class TopicExpectation<TTopic> : ITopicExpectation
     {
-        public enum StateValue
+        public bool Active { get; private set; }
+
+        public virtual bool IsValid
         {
-            Inactive,
-            Active
-        };
-        
+            get { return Validate().IsValid; }
+        }
+
         public string TopicName { get; set; }
         
         public Type TopicType { get; set; }
-        
-        public StateValue State { get; private set; }
+
+        public event EventHandler<MessageReceivedArgs> OnMessageHandeled;
 
         private readonly List<ExpectationMessageHandler<TTopic>> _handlers = new List<ExpectationMessageHandler<TTopic>>();
 
-        public void ThrowIfNotInitialized()
-        {
-            if (string.IsNullOrEmpty(TopicName)) throw new InvalidOperationException("Topic name not set");
-            if (TopicType == null) throw new InvalidOperationException("Topic type not set");
-        }
-
         public virtual void Activate()
         {
-            if (State == StateValue.Active) return;
+            if (Active) return;
             
             lock (_handlers)
             {
-                if (State == StateValue.Active) return;
+                if (Active) return;
                 
                 foreach (var handler in _handlers)
                 {
                     handler.OnActivateExpectation();
                 }
 
-                State = StateValue.Active;
+                Active = true;
             }
         }
 
         public virtual void Deactivate()
         {
-            if (State == StateValue.Inactive) return;
+            if (!Active) return;
 
             lock (_handlers)
             {
-                if (State == StateValue.Inactive) return;
+                if (!Active) return;
                 
                 foreach (var handler in _handlers)
                 {
                     handler.OnDeactivateExpectation();
                 }
 
-                State = StateValue.Inactive;
+                Active = false;
             }
         }
 
-        public void OnReceiveMessage(object message)
+        public void HandleMessage(object message)
         {
-            if (State != StateValue.Active) return;
+            if (!Active) return;
             
-            HandleMessage((TTopic) message);;
+            HandleMessageInternal((TTopic)message);
+            OnMessageHandeled?.Invoke(this, new MessageReceivedArgs(message));
         }
-        
-        protected virtual void HandleMessage(TTopic message)
+
+        protected virtual void HandleMessageInternal(TTopic message)
         {
             var context = new ExpectationRuleContext();
-            
+
             lock (_handlers)
             {
                 foreach (var handler in _handlers)
@@ -86,18 +82,12 @@ namespace RosComponentTesting
 
         public IEnumerable<ValidationError> GetValidationErrors()
         {
-            var context = new ValidationContext();
-            lock (_handlers)
-            {
-                foreach (var validationRule in _handlers.OfType<IValidationRule>())
-                {
-                    validationRule.Validate(context);
-                }
-            }
-
+            var context = Validate();
             return context.Errors;
         }
-
+        
+        public bool AllMessageHandlersProcessed { get; private set; }
+        
         public void AddMessageHandler(ExpectationMessageHandler<TTopic> messageHandler, bool isSingleton = false)
         {
             if (messageHandler == null) throw new ArgumentNullException(nameof(messageHandler));
@@ -111,6 +101,20 @@ namespace RosComponentTesting
 
                 _handlers.Add(messageHandler);
             }
+        }
+
+        private ValidationContext Validate()
+        {
+            var context = new ValidationContext();
+            lock (_handlers)
+            {
+                foreach (var validationRule in _handlers.OfType<IValidationRule>())
+                {
+                    validationRule.Validate(context);
+                }
+            }
+
+            return context;
         }
     }
 }

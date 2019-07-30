@@ -7,7 +7,17 @@ namespace RosComponentTesting
 {
     public class ExpectationBuilder<TTopicType>
     {
-        private readonly TopicExpectation<TTopicType> _expectation = new TopicExpectation<TTopicType>();
+        private readonly TopicExpectation<TTopicType> _expectation;
+
+        public ExpectationBuilder()
+        {
+            _expectation = new TopicExpectation<TTopicType>();
+        }
+        
+        public ExpectationBuilder(TopicExpectation<TTopicType> expectation)
+        {
+            _expectation = expectation;
+        }
 
         public TopicExpectation<TTopicType> Expectation => _expectation;
 

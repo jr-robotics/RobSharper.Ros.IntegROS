@@ -99,14 +99,18 @@ namespace TurtleSimTests
             };
 
             new RosTestBuilder()
-                .Publish("/turtle1/cmd_vel", move1)
-                .Wait(TimeSpan.FromSeconds(5))
-                .Publish("/turtle1/cmd_vel", move2)
-                .Expect<Twist>(x => x
-                    .Topic("/turtle1/cmd_vel")
-                    .Match(It.IsAny<Twist>())
-                    .Occurrences(Times.Exactly(2))
+                .WaitFor<Pose>(x => x
+                    .Topic("/turtle1/pose")
+                    .Match(It.Matches<Pose>(m => m.x > 5))
                 )
+//                .Publish("/turtle1/cmd_vel", move1)
+//                .Wait(TimeSpan.FromSeconds(5))
+//                .Publish("/turtle1/cmd_vel", move2)
+//                .Expect<Twist>(x => x
+//                    .Topic("/turtle1/cmd_vel")
+//                    .Match(It.IsAny<Twist>())
+//                    .Occurrences(Times.Exactly(2))
+//                )
                 .Execute();
         }
 
