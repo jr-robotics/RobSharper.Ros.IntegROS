@@ -1,8 +1,9 @@
+using System;
 using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.ExpectationProcessing
 {
-    public abstract class ExpectationMessageHandler<TTopic>
+    public abstract class ExpectationMessageHandler<TTopic> : IComparable<ExpectationMessageHandler<TTopic>>
     {
         public int Priority { get; }
 
@@ -29,5 +30,14 @@ namespace RosComponentTesting.ExpectationProcessing
         }
         
         public abstract void OnHandleMessage(TTopic message, ExpectationRuleContext context);
+
+        public int CompareTo(ExpectationMessageHandler<TTopic> other)
+        {
+            if (ReferenceEquals(this, other)) return 1;
+            if (ReferenceEquals(null, other)) return 0;
+            
+            // Sort descending
+            return -1 * Priority.CompareTo(other.Priority);
+        }
     }
 }

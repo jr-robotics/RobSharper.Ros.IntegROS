@@ -18,6 +18,7 @@ namespace RosComponentTesting.TestSteps
         {
             _expectation.Activate();
             _expectation.WaitHandle.WaitOne();
+            _expectation.Deactivate();
         }
     }
 }

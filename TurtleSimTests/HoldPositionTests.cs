@@ -103,9 +103,13 @@ namespace TurtleSimTests
                     .Topic("/turtle1/pose")
                     .Match(It.Matches<Pose>(m => m.x > 5))
                 )
-//                .Publish("/turtle1/cmd_vel", move1)
+                .Publish("/turtle1/cmd_vel", move1)
+                .WaitFor<Pose>(x => x
+                    .Topic("/turtle1/pose")
+                    .Match(It.Matches<Pose>(m => m.x < 4.555))
+                )
 //                .Wait(TimeSpan.FromSeconds(5))
-//                .Publish("/turtle1/cmd_vel", move2)
+                .Publish("/turtle1/cmd_vel", move2)
 //                .Expect<Twist>(x => x
 //                    .Topic("/turtle1/cmd_vel")
 //                    .Match(It.IsAny<Twist>())

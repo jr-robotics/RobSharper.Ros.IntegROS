@@ -100,6 +100,7 @@ namespace RosComponentTesting
                 }
 
                 _handlers.Add(messageHandler);
+                _handlers.Sort();
             }
         }
 
