@@ -57,7 +57,6 @@ namespace RosComponentTesting
             
             try
             {
-                // Register Subscribers
                 var expectations = _steps
                     .OfType<IExpectationStep>()
                     .Select(s => s.Expectation)
@@ -65,6 +64,10 @@ namespace RosComponentTesting
                 
                 foreach (var expectation in expectations)
                 {
+                    // Add Cancel callback
+                    cancellationTokenSource.Token.Register(expectation.Cancel);
+                        
+                    // Register Subscriber
                     var t = RegisterSubscribers(expectation, node, errorHandler);
                     awaitableRosRegistrationTasks.Add(t);
                 }
@@ -86,6 +89,7 @@ namespace RosComponentTesting
                     await task;
                 }
             
+                // Wait until timeout expires or cancellation requested
                 cancellationTokenSource.CancelAfter(options.Timeout);
             
                 foreach (var expectation in _expectations)
@@ -102,9 +106,6 @@ namespace RosComponentTesting
                         stepExecutor.Execute(serviceProvider);
                     }, cancellationTokenSource.Token);
                 }
-            
-                // Wait until timeout expires or cancellation requested
-                cancellationTokenSource.Token.WaitHandle.WaitOne(options.Timeout);
             
                 foreach (var expectation in _expectations)
                 {

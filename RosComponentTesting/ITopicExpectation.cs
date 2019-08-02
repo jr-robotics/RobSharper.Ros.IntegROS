@@ -10,7 +10,5 @@ namespace RosComponentTesting
         Type TopicType { get; }
 
         void HandleMessage(object message);
-
-        event EventHandler<MessageReceivedArgs> OnMessageHandeled;
     }
 }

@@ -23,9 +23,29 @@ namespace RosComponentTesting.ExpectationProcessing
             _counter++;
         }
 
+        public bool IsValid
+        {
+            get { return _times.IsValid(_counter); }
+        }
+
+        public ValidationState ValidationState
+        {
+            get
+            {
+                if (_counter > _times.Max)
+                {
+                    // State will always be invalid because counter is larger than max
+                    // and future increments will not validate again
+                    return ValidationState.Stable;
+                }
+
+                return ValidationState.NotYetDetermined;
+            }
+        }
+
         public void Validate(ValidationContext context)
         {
-            if (_times.IsValid(_counter)) return;
+            if (IsValid) return;
 
             var errorMessage = new StringBuilder();
 

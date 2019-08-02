@@ -12,8 +12,8 @@ namespace RosComponentTesting.ExpectationProcessing
         public ValidationError(string errorMessage, CallerReference caller)
         {
             if (errorMessage == null) throw new ArgumentNullException(nameof(errorMessage));
-            
-            Message = errorMessage;
+
+            Message = RemoveTrailingNewLine(errorMessage);
             Caller = caller;
         }
 
@@ -27,6 +27,13 @@ namespace RosComponentTesting.ExpectationProcessing
             {
                 return $"{Message}{Environment.NewLine}  in {Caller}{Environment.NewLine}";
             }
+        }
+
+        private static string RemoveTrailingNewLine(string errorMessage)
+        {
+            return errorMessage.EndsWith(Environment.NewLine)
+                ? errorMessage.Substring(0, errorMessage.Length - Environment.NewLine.Length)
+                : errorMessage;
         }
     }
 }

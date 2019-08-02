@@ -5,22 +5,21 @@ using RosComponentTesting.ExpectationProcessing;
 
 namespace RosComponentTesting
 {
+    
     public class TopicExpectation<TTopic> : ITopicExpectation
     {
-        public bool Active { get; private set; }
+        private readonly List<ExpectationMessageHandler<TTopic>> _handlers = new List<ExpectationMessageHandler<TTopic>>();
 
-        public virtual bool IsValid
-        {
-            get { return Validate().IsValid; }
-        }
+        public bool Active { get; private set; }
 
         public string TopicName { get; set; }
         
         public Type TopicType { get; set; }
 
-        public event EventHandler<MessageReceivedArgs> OnMessageHandeled;
-
-        private readonly List<ExpectationMessageHandler<TTopic>> _handlers = new List<ExpectationMessageHandler<TTopic>>();
+        public virtual bool IsValid
+        {
+            get { return Validate().IsValid; }
+        }
 
         public virtual void Activate()
         {
@@ -55,28 +54,29 @@ namespace RosComponentTesting
                 Active = false;
             }
         }
-
+        
         public void HandleMessage(object message)
         {
             if (!Active) return;
             
-            HandleMessageInternal((TTopic)message);
-            OnMessageHandeled?.Invoke(this, new MessageReceivedArgs(message));
-        }
-
-        protected virtual void HandleMessageInternal(TTopic message)
-        {
-            var context = new ExpectationRuleContext();
-
+            
             lock (_handlers)
             {
-                foreach (var handler in _handlers)
-                {
-                    handler.OnHandleMessage(message, context);
+                HandleMessageInternal((TTopic) message, _handlers);
+            }
+        }
 
-                    if (!context.Continue)
-                        break;
-                }
+        protected virtual void HandleMessageInternal(TTopic message,
+            IEnumerable<ExpectationMessageHandler<TTopic>> handlers)
+        {
+            var context = new ExpectationRuleContext();
+                
+            foreach (var handler in handlers)
+            {
+                handler.OnHandleMessage(message, context);
+
+                if (!context.Continue)
+                    break;
             }
         }
 
@@ -85,8 +85,6 @@ namespace RosComponentTesting
             var context = Validate();
             return context.Errors;
         }
-        
-        public bool AllMessageHandlersProcessed { get; private set; }
         
         public void AddMessageHandler(ExpectationMessageHandler<TTopic> messageHandler, bool isSingleton = false)
         {
@@ -116,6 +114,11 @@ namespace RosComponentTesting
             }
 
             return context;
+        }
+
+        public virtual void Cancel()
+        {
+            Deactivate();
         }
     }
 }

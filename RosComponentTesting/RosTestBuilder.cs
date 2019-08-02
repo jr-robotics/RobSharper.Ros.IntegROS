@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using RosComponentTesting.Debugging;
 using RosComponentTesting.TestSteps;
 
 namespace RosComponentTesting
@@ -77,7 +78,7 @@ namespace RosComponentTesting
 
             builderAction(builder);
 
-            var step = new WaitForExpectationStep<T>(expectation);
+            var step = new WaitForExpectationStep<T>(expectation, CallerReference.Create(callerFilePath, lineNumber));
             _steps.Add(step);
             
             return this;

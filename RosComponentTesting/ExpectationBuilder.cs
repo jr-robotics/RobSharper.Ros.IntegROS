@@ -54,9 +54,9 @@ namespace RosComponentTesting
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Timeout(TimeSpan timeout)
+        public ExpectationBuilder<TTopicType> Timeout(TimeSpan timeout, TimeoutBehaviour behaviour = TimeoutBehaviour.ThrowValidationError, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
-            var handler = new TimeoutMessageHandler<TTopicType>(timeout);
+            var handler = new TimeoutMessageHandler<TTopicType>(timeout, behaviour, CallerReference.Create(callerFilePath, lineNumber));
             _expectation.AddMessageHandler(handler, true);
             
             return this;
@@ -83,5 +83,11 @@ namespace RosComponentTesting
             // TODO
             return this;
         }
+    }
+
+    public enum TimeoutBehaviour
+    {
+        ThrowValidationError,
+        DisableRule
     }
 }

@@ -1,45 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using RosComponentTesting.ExpectationProcessing;
 
 namespace RosComponentTesting
 {
+    
     public class WaitForExpectation<TTopic> : TopicExpectation<TTopic>
     {
-        private class SignalMessageHandler : ExpectationMessageHandler<TTopic>
-        {
-            public bool Signal { get; set; }
-            
-            public SignalMessageHandler() : base(int.MinValue)
-            {
-            }
-
-            public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
-            {
-                Signal = true;
-            }
-        }
-        
-        private readonly SignalMessageHandler _signalMessageHandler;
         private readonly AutoResetEvent _waitHandle;
-        private object _gate = new object();
 
         public WaitHandle WaitHandle => _waitHandle;
 
         public WaitForExpectation()
         {
-            _signalMessageHandler = new SignalMessageHandler();
             _waitHandle = new AutoResetEvent(false);
+        }
+
+        protected override void HandleMessageInternal(TTopic message, IEnumerable<ExpectationMessageHandler<TTopic>> handlers)
+        {
+            var context = new ExpectationRuleContext();
+            var calledHandlers = 0;
+                
+            foreach (var handler in handlers)
+            {
+                handler.OnHandleMessage(message, context);
+                calledHandlers++;
+
+                if (!context.Continue)
+                    break;
+            }
+
+            var allHandlersCalled = calledHandlers == handlers.Count();
             
-            AddMessageHandler(_signalMessageHandler);
+            // Signal if expectation met
+            if (allHandlersCalled && IsValid)
+            {
+                _waitHandle.Set();
+            }
+            
+            // Signal if expectation can't be met any more
+            if (handlers
+                .OfType<IValidationRule>()
+                .Any(h => h.ValidationState == ValidationState.Stable && !h.IsValid))
+            {
+                _waitHandle.Set();
+            }
         }
         
-        protected override void HandleMessageInternal(TTopic message)
-        {
-            _signalMessageHandler.Signal = false;
-            base.HandleMessageInternal(message);
 
-            if (_signalMessageHandler.Signal && IsValid)
+        public override void Cancel()
+        {
+            try
             {
+                base.Cancel();
+            }
+            finally
+            {
+                // Signal if expectation canceled
                 _waitHandle.Set();
             }
         }
