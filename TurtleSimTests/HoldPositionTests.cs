@@ -99,11 +99,12 @@ namespace TurtleSimTests
             };
 
             new RosTestBuilder()
-                .WaitFor<Pose>(x => x
-                    .Topic("/turtle1/pose")
-                    .Match(It.Matches<Pose>(m => m.x < 5))
-                    .Timeout(TimeSpan.FromSeconds(3))
-                )
+//                .WaitFor<Pose>(x => x
+//                    .Topic("/turtle1/pose")
+//                    .Match(It.Matches<Pose>(m => m.x > 5))
+//                    .Timeout(TimeSpan.FromSeconds(3))
+//                )
+                .Wait(TimeSpan.FromSeconds(12))
 //                .Publish("/turtle1/cmd_vel", move1)
 //                .WaitFor<Pose>(x => x
 //                    .Topic("/turtle1/pose")

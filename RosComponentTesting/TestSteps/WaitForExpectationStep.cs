@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using RosComponentTesting.Debugging;
 using RosComponentTesting.ExpectationProcessing;
 using RosComponentTesting.TestFrameworks;
 
@@ -10,21 +8,15 @@ namespace RosComponentTesting.TestSteps
 {
     public class WaitForExpectationStep<TTopic> : ITestStep, ITestStepExecutor, IExpectationStep
     {
-        private CallerReference _caller;
         private readonly WaitForExpectation<TTopic> _expectation;
         
         public IExpectation Expectation => _expectation;
 
-        public WaitForExpectationStep(WaitForExpectation<TTopic> expectation) : this(expectation, null)
-        {
-        }
-
-        public WaitForExpectationStep(WaitForExpectation<TTopic> expectation, CallerReference callerInfo)
+        public WaitForExpectationStep(WaitForExpectation<TTopic> expectation)
         {
             if (expectation == null) throw new ArgumentNullException(nameof(expectation));
 
             _expectation = expectation;
-            _caller = callerInfo;
         }
 
         public void Execute(IServiceProvider serviceProvider)
@@ -45,10 +37,11 @@ namespace RosComponentTesting.TestSteps
             var m = new StringBuilder();
 
             m.AppendLine($"Wait for step failed");
-            m.AppendLine();
 
             if (errors != null)
             {
+                m.AppendLine();
+                
                 foreach (var error in errors)
                 {
                     m.AppendLine(error.ToString());

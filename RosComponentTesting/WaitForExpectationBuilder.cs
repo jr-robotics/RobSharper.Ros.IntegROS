@@ -39,16 +39,6 @@ namespace RosComponentTesting
             return this;
         }
 
-        public WaitForExpectationBuilder<TTopicType> Callback(Action<TTopicType> callback, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
-        {
-            if (callback == null) throw new ArgumentNullException(nameof(callback));
-
-            var handler = new CallbackMessageHandler<TTopicType>(callback, CallerReference.Create(callerFilePath, lineNumber));
-            _expectation.AddMessageHandler(handler);
-            
-            return this;
-        }
-
         public WaitForExpectationBuilder<TTopicType> Timeout(TimeSpan timeout, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             var handler = new ValidatingTimeoutMessageHandler<TTopicType>(timeout, CallerReference.Create(callerFilePath, lineNumber));
@@ -60,6 +50,10 @@ namespace RosComponentTesting
         public WaitForExpectationBuilder<TTopicType> Occurrences(Times times, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             if (times == null) throw new ArgumentNullException(nameof(times));
+            if (times.Max < uint.MaxValue)
+            {
+                throw new ArgumentException("Upper bound for occurrences is not supported in a WaitFor step", nameof(times));
+            }
 
             var handler = new OccurrenceMessageHandler<TTopicType>(times, CallerReference.Create(callerFilePath, lineNumber));
             _expectation.AddMessageHandler(handler, true);
