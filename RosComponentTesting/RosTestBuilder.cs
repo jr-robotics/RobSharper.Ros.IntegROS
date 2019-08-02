@@ -44,9 +44,9 @@ namespace RosComponentTesting
                 callerFilePath, lineNumber);
         }
 
-        public RosTestBuilder Expect<T>(Action<ExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public RosTestBuilder Expect<T>(Action<TopicExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
-            var builder = new ExpectationBuilder<T>()
+            var builder = new TopicExpectationBuilder<T>()
                 .Occurrences(Times.AtLeast(1), callerFilePath, lineNumber);
             
             builderAction(builder);
@@ -70,14 +70,14 @@ namespace RosComponentTesting
             return this;
         }
         
-        public RosTestBuilder WaitFor<T>(Action<ExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public RosTestBuilder WaitFor<T>(Action<WaitForExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
-            var expectation = new WaitForExpectation<T>();
-            var builder = new ExpectationBuilder<T>(expectation)
+            var builder = new WaitForExpectationBuilder<T>()
                 .Occurrences(Times.AtLeast(1), callerFilePath, lineNumber);
 
             builderAction(builder);
 
+            var expectation = builder.Expectation;
             var step = new WaitForExpectationStep<T>(expectation, CallerReference.Create(callerFilePath, lineNumber));
             _steps.Add(step);
             

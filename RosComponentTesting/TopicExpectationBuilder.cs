@@ -5,34 +5,29 @@ using RosComponentTesting.ExpectationProcessing;
 
 namespace RosComponentTesting
 {
-    public class ExpectationBuilder<TTopicType>
+    public class TopicExpectationBuilder<TTopicType>
     {
         private readonly TopicExpectation<TTopicType> _expectation;
 
-        public ExpectationBuilder()
+        public TopicExpectationBuilder()
         {
             _expectation = new TopicExpectation<TTopicType>();
-        }
-        
-        public ExpectationBuilder(TopicExpectation<TTopicType> expectation)
-        {
-            _expectation = expectation;
         }
 
         public TopicExpectation<TTopicType> Expectation => _expectation;
 
-        public ExpectationBuilder<TTopicType> Topic(string topicName)
+        public TopicExpectationBuilder<TTopicType> Topic(string topicName)
         {
             Expectation.TopicName = topicName;
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Match(Func<TTopicType, bool> matchExpression)
+        public TopicExpectationBuilder<TTopicType> Match(Func<TTopicType, bool> matchExpression)
         {
             return Match(new Match<TTopicType>(matchExpression));
         }
 
-        public ExpectationBuilder<TTopicType> Match(Match<TTopicType> match)
+        public TopicExpectationBuilder<TTopicType> Match(Match<TTopicType> match)
         {
             if (match == null) throw new ArgumentNullException(nameof(match));
             
@@ -44,7 +39,7 @@ namespace RosComponentTesting
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Callback(Action<TTopicType> callback, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public TopicExpectationBuilder<TTopicType> Callback(Action<TTopicType> callback, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             if (callback == null) throw new ArgumentNullException(nameof(callback));
 
@@ -54,15 +49,15 @@ namespace RosComponentTesting
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Timeout(TimeSpan timeout, TimeoutBehaviour behaviour = TimeoutBehaviour.ThrowValidationError, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public TopicExpectationBuilder<TTopicType> Timeout(TimeSpan timeout, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
-            var handler = new TimeoutMessageHandler<TTopicType>(timeout, behaviour, CallerReference.Create(callerFilePath, lineNumber));
+            var handler = new TimeoutMessageHandler<TTopicType>(timeout);
             _expectation.AddMessageHandler(handler, true);
             
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Occurrences(Times times, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public TopicExpectationBuilder<TTopicType> Occurrences(Times times, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             if (times == null) throw new ArgumentNullException(nameof(times));
 
@@ -72,22 +67,16 @@ namespace RosComponentTesting
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> Name(string expectationName)
+        public TopicExpectationBuilder<TTopicType> Name(string expectationName)
         {
             // TODO
             return this;
         }
 
-        public ExpectationBuilder<TTopicType> DependsOn(string referencedExpectationName)
+        public TopicExpectationBuilder<TTopicType> DependsOn(string referencedExpectationName)
         {
             // TODO
             return this;
         }
-    }
-
-    public enum TimeoutBehaviour
-    {
-        ThrowValidationError,
-        DisableRule
     }
 }

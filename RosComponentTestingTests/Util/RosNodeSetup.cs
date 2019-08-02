@@ -17,9 +17,9 @@ namespace RosComponentTestingTests.Util
             return this;
         }
 
-        public RosNodeSetup WaitFor<T>(Action<ExpectationBuilder<T>> builderAction)
+        public RosNodeSetup WaitFor<T>(Action<TopicExpectationBuilder<T>> builderAction)
         {
-            var builder = new ExpectationBuilder<T>();
+            var builder = new TopicExpectationBuilder<T>();
             builderAction(builder);
             
             // TODO: Apply builder
