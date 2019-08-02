@@ -32,6 +32,11 @@ namespace RosComponentTesting.TestSteps
             }
         }
 
+        public void Cancel()
+        {
+            Expectation.Cancel();
+        }
+
         private static string BuildErrorMessage(IEnumerable<ValidationError> errors)
         {
             var m = new StringBuilder();

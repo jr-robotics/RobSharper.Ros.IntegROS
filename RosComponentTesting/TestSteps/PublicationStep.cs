@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace RosComponentTesting.TestSteps
@@ -21,6 +20,11 @@ namespace RosComponentTesting.TestSteps
                 .GetRequiredService<IRosPublisherResolver>()
                 .GetPublisherFor(Publication.Topic)
                 .Publish(Publication.Message);
+        }
+
+        public void Cancel()
+        {
+            
         }
     }
 }

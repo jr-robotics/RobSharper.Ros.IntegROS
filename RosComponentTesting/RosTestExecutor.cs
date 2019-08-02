@@ -15,8 +15,27 @@ namespace RosComponentTesting
 {
     public class RosTestExecutor
     {
+        public enum RosTestExecutionState
+        {
+            NotStarted,
+            Setup,
+            Running,
+            TearDown,
+            Finished,
+            Canceled
+        }
+        
         private readonly ICollection<ITestStep> _steps;
         private readonly IEnumerable<IExpectation> _expectations;
+        
+        private Task _rosShutdownTask;
+        private CancellationTokenSource _cancellationTokenSource;
+        private RosPublisherCollection _publisherCollection;
+        private ExceptionDispatcher _exceptionDispatcher;
+        private NodeHandle _nodeHandle;
+        private AsyncSpinner _spinner;
+
+        public RosTestExecutionState State { get; private set; }
 
         public RosTestExecutor(ICollection<ITestStep> steps, IEnumerable<IExpectation> expectations)
         {
@@ -35,111 +54,186 @@ namespace RosComponentTesting
 
         public async Task ExecuteAsync(TestExecutionOptions options = null)
         {
+            if (State != RosTestExecutionState.NotStarted)
+            {
+                throw new InvalidOperationException("Executor is not in a valid state.");
+            }
+
             if (options == null)
             {
                 options = TestExecutionOptions.Default;
             }
 
-            var spinner = new AsyncSpinner();
-            spinner.Start();
-
-            var node = new NodeHandle();
-            var awaitableRosRegistrationTasks = new List<Task>();
-            
-            var cancellationTokenSource = new CancellationTokenSource();
-            var errorHandler = new ExceptionDispatcher(cancellationTokenSource);
-
-            var publisherCollection = new RosPublisherCollection();
-            var stepExecutionFactory = new StepExecutorFactory();
-            var serviceProvider = BuildServiceProvider(publisherCollection);
-
-            Task rosShutdownTask = null;
-            
             try
             {
-                var expectations = _steps
-                    .OfType<IExpectationStep>()
-                    .Select(s => s.Expectation)
-                    .Union(_expectations);
+                State = RosTestExecutionState.Setup;
                 
-                foreach (var expectation in expectations)
-                {
-                    // Add Cancel callback
-                    cancellationTokenSource.Token.Register(expectation.Cancel);
-                        
-                    // Register Subscriber
-                    var t = RegisterSubscribers(expectation, node, errorHandler);
-                    awaitableRosRegistrationTasks.Add(t);
-                }
+                Setup();
+                await RegisterRosComponents(_nodeHandle);
 
-                // Register Publishers
-                var publicationTopics = _steps
-                    .OfType<PublicationStep>()
-                    .Select(s => s.Publication.Topic)
-                    .Distinct();
-            
-                foreach (var topic in publicationTopics)
-                {
-                    var t = RegisterPublisher(topic, node, publisherCollection, errorHandler);
-                    awaitableRosRegistrationTasks.Add(t);
-                }
-            
-                foreach (var task in awaitableRosRegistrationTasks)
-                {
-                    await task;
-                }
-            
                 // Wait until timeout expires or cancellation requested
-                cancellationTokenSource.CancelAfter(options.Timeout);
-            
-                foreach (var expectation in _expectations)
-                {
-                    expectation.Activate();
-                }
-            
+                _cancellationTokenSource.CancelAfter(options.Timeout);
+
                 // Execute Steps
-                foreach (var step in _steps)
-                {
-                    await Task.Run(() =>
-                    {
-                        var stepExecutor = stepExecutionFactory.CreateExecutor(step);
-                        stepExecutor.Execute(serviceProvider);
-                    }, cancellationTokenSource.Token);
-                }
-            
-                foreach (var expectation in _expectations)
-                {
-                    expectation.Deactivate();
-                }
-            
-                rosShutdownTask = ROS.Shutdown();
-
-                // Check for unhandled exception
-                if (errorHandler.HasError)
-                {
-                    errorHandler.Throw();
-                }
+                State = RosTestExecutionState.Running;
+                await ExecuteSteps();
                 
-                // Check expectation validations 
-                var validationErrors = _expectations
-                    .SelectMany(e => e.GetValidationErrors())
-                    .ToList();
+                State = RosTestExecutionState.TearDown;
+                
+                // No Cancellation from this point on
+                _cancellationTokenSource.Dispose();
+                
+                // Start ROS shutdown in background
+                InitiateRosShutdown();
 
-                if (validationErrors.Any())
-                {
-                    var errorMessage = BuildErrorMessage(validationErrors);
-                    TestFrameworkProvider.Framework.Throw(errorMessage);
-                }
+                VerifyExecution();
             }
             finally
             {
-                if (rosShutdownTask == null)
+                await Shutdown();
+
+                if (_cancellationTokenSource.IsCancellationRequested)
                 {
-                    rosShutdownTask = ROS.Shutdown();
+                    State = RosTestExecutionState.Canceled;
                 }
-                
-                await rosShutdownTask;
+                else
+                {
+                    State = RosTestExecutionState.Finished;
+                }
             }
+        }
+
+        private void Setup()
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+            _exceptionDispatcher = new ExceptionDispatcher(_cancellationTokenSource);
+            _publisherCollection = new RosPublisherCollection();
+
+            RegisterCancellationCallbacks();
+          
+            // ROS Specific setup
+
+            ROS.Init(new string[0], "TESTNODE");
+                
+            _spinner = new AsyncSpinner();
+            _spinner.Start();
+
+            _nodeHandle = new NodeHandle();
+        }
+
+        private void RegisterCancellationCallbacks()
+        {
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            foreach (var expectation in _expectations)
+            {
+                cancellationToken.Register(expectation.Cancel);
+            }
+        }
+
+        private async Task RegisterRosComponents(NodeHandle node)
+        {
+            var awaitableRosRegistrationTasks = new List<Task>();
+            var expectations = _steps
+                .OfType<IExpectationStep>()
+                .Select(s => s.Expectation)
+                .Union(_expectations);
+
+            // Register Subscribers
+            foreach (var expectation in expectations)
+            {
+                var t = RegisterSubscribers(expectation, node, _exceptionDispatcher);
+                awaitableRosRegistrationTasks.Add(t);
+            }
+
+            // Register Publishers
+            var publicationTopics = _steps
+                .OfType<PublicationStep>()
+                .Select(s => s.Publication.Topic)
+                .Distinct();
+
+            foreach (var topic in publicationTopics)
+            {
+                var t = RegisterPublisher(topic, node, _publisherCollection);
+                awaitableRosRegistrationTasks.Add(t);
+            }
+
+            foreach (var task in awaitableRosRegistrationTasks)
+            {
+                await task;
+            }
+        }
+
+        private async Task ExecuteSteps()
+        {
+            var stepExecutionFactory = new StepExecutorFactory();
+            var serviceProvider = BuildServiceProvider(_publisherCollection);
+            var cancellationToken = _cancellationTokenSource.Token;
+
+            foreach (var expectation in _expectations)
+            {
+                expectation.Activate();
+            }
+
+            foreach (var step in _steps)
+            {
+                await Task.Run(() =>
+                {
+                    var stepExecutor = stepExecutionFactory.CreateExecutor(step);
+                    cancellationToken.Register(stepExecutor.Cancel);
+                    
+                    stepExecutor.Execute(serviceProvider);
+                }, cancellationToken);
+            }
+
+            foreach (var expectation in _expectations)
+            {
+                expectation.Deactivate();
+            }
+        }
+
+        private void VerifyExecution()
+        {
+            // Check if execution was canceled
+            if (_cancellationTokenSource.IsCancellationRequested)
+            {
+                TestFrameworkProvider.Framework.Throw("The execution timed out");
+            }
+
+            // Check for unhandled exception
+            if (_exceptionDispatcher.HasError)
+            {
+                _exceptionDispatcher.Throw();
+            }
+
+            ValidateExpectations();
+        }
+
+        private void ValidateExpectations()
+        {
+            var validationErrors = _expectations
+                .SelectMany(e => e.GetValidationErrors())
+                .ToList();
+
+            if (validationErrors.Any())
+            {
+                var errorMessage = BuildErrorMessage(validationErrors);
+                TestFrameworkProvider.Framework.Throw(errorMessage);
+            }
+        }
+
+        private void InitiateRosShutdown()
+        {
+            if (_rosShutdownTask == null)
+            {
+                _rosShutdownTask = ROS.Shutdown();
+            }
+        }
+
+        private async Task Shutdown()
+        {
+            InitiateRosShutdown();
+            await _rosShutdownTask;
         }
 
         private IServiceProvider BuildServiceProvider(IRosPublisherResolver publisherResolver)
@@ -174,7 +268,7 @@ namespace RosComponentTesting
         }
         
         private Task RegisterPublisher(TopicDescriptor topic, NodeHandle node,
-            RosPublisherCollection publisherCollection, ExceptionDispatcher exceptionDispatcher)
+            RosPublisherCollection publisherCollection)
         {
             var messageType = topic.Type;
 
