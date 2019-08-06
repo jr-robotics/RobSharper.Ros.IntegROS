@@ -69,14 +69,14 @@ namespace RosComponentTesting
                 State = RosTestExecutionState.Setup;
                 
                 Setup();
-                await RegisterRosComponents(_nodeHandle);
+                await RegisterRosComponentsAsync(_nodeHandle);
 
                 // Wait until timeout expires or cancellation requested
                 _cancellationTokenSource.CancelAfter(options.Timeout);
 
                 // Execute Steps
                 State = RosTestExecutionState.Running;
-                await ExecuteSteps();
+                ExecuteSteps();
                 
                 State = RosTestExecutionState.TearDown;
                 
@@ -90,7 +90,7 @@ namespace RosComponentTesting
             }
             finally
             {
-                await Shutdown();
+                await ShutdownAsync();
 
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
@@ -131,7 +131,7 @@ namespace RosComponentTesting
             }
         }
 
-        private async Task RegisterRosComponents(NodeHandle node)
+        private async Task RegisterRosComponentsAsync(NodeHandle node)
         {
             var awaitableRosRegistrationTasks = new List<Task>();
             var expectations = _steps
@@ -142,7 +142,7 @@ namespace RosComponentTesting
             // Register Subscribers
             foreach (var expectation in expectations)
             {
-                var t = RegisterSubscribers(expectation, node, _exceptionDispatcher);
+                var t = RegisterSubscribersAsync(expectation, node, _exceptionDispatcher);
                 awaitableRosRegistrationTasks.Add(t);
             }
 
@@ -158,13 +158,10 @@ namespace RosComponentTesting
                 awaitableRosRegistrationTasks.Add(t);
             }
 
-            foreach (var task in awaitableRosRegistrationTasks)
-            {
-                await task;
-            }
+            await Task.WhenAll(awaitableRosRegistrationTasks).ConfigureAwait(false);
         }
 
-        private async Task ExecuteSteps()
+        private void ExecuteSteps()
         {
             var stepExecutionFactory = new StepExecutorFactory();
             var serviceProvider = BuildServiceProvider(_publisherCollection);
@@ -177,13 +174,10 @@ namespace RosComponentTesting
 
             foreach (var step in _steps)
             {
-                await Task.Run(() =>
-                {
-                    var stepExecutor = stepExecutionFactory.CreateExecutor(step);
-                    cancellationToken.Register(stepExecutor.Cancel);
-                    
-                    stepExecutor.Execute(serviceProvider);
-                }, cancellationToken);
+                var stepExecutor = stepExecutionFactory.CreateExecutor(step);
+                cancellationToken.Register(stepExecutor.Cancel);
+
+                stepExecutor.Execute(serviceProvider);
             }
 
             foreach (var expectation in _expectations)
@@ -194,16 +188,17 @@ namespace RosComponentTesting
 
         private void VerifyExecution()
         {
-            // Check if execution was canceled
-            if (_cancellationTokenSource.IsCancellationRequested)
-            {
-                TestFrameworkProvider.Framework.Throw("The execution timed out");
-            }
-
             // Check for unhandled exception
             if (_exceptionDispatcher.HasError)
             {
                 _exceptionDispatcher.Throw();
+            }
+            
+            // If the execution wa cancelled and exception dispatcher has no exception,
+            // the cancellation was caused by a timeout
+            if (_cancellationTokenSource.IsCancellationRequested)
+            {
+                TestFrameworkProvider.Framework.Throw("The execution timed out");
             }
 
             ValidateExpectations();
@@ -230,10 +225,10 @@ namespace RosComponentTesting
             }
         }
 
-        private async Task Shutdown()
+        private async Task ShutdownAsync()
         {
             InitiateRosShutdown();
-            await _rosShutdownTask;
+            await _rosShutdownTask.ConfigureAwait(false);
         }
 
         private IServiceProvider BuildServiceProvider(IRosPublisherResolver publisherResolver)
@@ -247,27 +242,22 @@ namespace RosComponentTesting
             return serviceCollection.BuildServiceProvider();
         }
 
-        private Task RegisterSubscribers(IExpectation expectation, NodeHandle node,
+        private async Task RegisterSubscribersAsync(IExpectation expectation, NodeHandle node,
             ExceptionDispatcher exceptionDispatcher)
         {
-            Task t = null;
-            
             if (expectation is ITopicExpectation topicExpectation)
             {
                 ROS.RegisterMessageAssembly(topicExpectation.TopicType.Assembly);
                 
-                t = node.SubscribeAsync(SubscribeOptionsFactory.Create(topicExpectation, exceptionDispatcher));
+                await node.SubscribeAsync(SubscribeOptionsFactory.Create(topicExpectation, exceptionDispatcher));
             }
-
-            if (t == null)
+            else
             {
                 throw new NotSupportedException($"Expectation type {expectation.GetType()} is not supported.");
             }
-            
-            return t;
         }
         
-        private Task RegisterPublisher(TopicDescriptor topic, NodeHandle node,
+        private async Task RegisterPublisher(TopicDescriptor topic, NodeHandle node,
             RosPublisherCollection publisherCollection)
         {
             var messageType = topic.Type;
@@ -282,19 +272,19 @@ namespace RosComponentTesting
                 throw new NotSupportedException("Could not retrieve AdvertiseAsync method");
             }
             
-            var t = Task.Run(() =>
+            var t = Task.Run(async () =>
             {
                 var rosPublisher = advertiseMethod.Invoke(node, new object[] {topic.Topic, 1});
                 var publisherProxy = RosPublisherProxy.Create(topic, rosPublisher);
 
                 // Give all subscribers in the ROS network a chance to subscribe before
                 // publishing starts 
-                Thread.Sleep(1000);
+                await Task.Delay(1000).ConfigureAwait(false);
                 
                 publisherCollection.Add(topic, publisherProxy);
             });
             
-            return t;
+            await t;
         }
 
         private static string BuildErrorMessage(List<ValidationError> errors)
