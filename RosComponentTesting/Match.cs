@@ -4,7 +4,7 @@ namespace RosComponentTesting
 {
     public class Match<T>
     {
-        private Func<T, bool> _f;
+        private readonly Func<T, bool> _f;
         
         public Match(Func<T, bool> evaluationFunc)
         {
