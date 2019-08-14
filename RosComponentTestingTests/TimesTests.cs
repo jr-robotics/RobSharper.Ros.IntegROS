@@ -8,7 +8,7 @@ namespace RosComponentTestingTests
 {
     public class TimesTests
     {
-        public class ValidationTests
+        public class TimesValidationTests
         {
             public static IEnumerable<object[]> Data => new List<object[]>
             {
@@ -82,7 +82,29 @@ namespace RosComponentTestingTests
             }
             
         }
-        
+
+        public class TimesEqualityTests
+        {
+            [Fact]
+            public void Times_with_same_min_and_max_are_equal()
+            {
+                var a = Times.Between(1, 3);
+                var b = Times.Between(1, 3);
+
+                a.Equals(b).Should().BeTrue();
+                b.Equals(a).Should().BeTrue();
+            }
+            
+            [Fact]
+            public void Times_with_different_min_and_max_are_not_equal()
+            {
+                var a = Times.Between(1, 3);
+                var b = Times.Between(2, 5);
+
+                a.Equals(b).Should().BeFalse();
+                b.Equals(a).Should().BeFalse();
+            }
+        }
         public class NeverTests
         {
             [Fact]

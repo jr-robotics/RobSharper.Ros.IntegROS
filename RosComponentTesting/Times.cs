@@ -79,5 +79,25 @@ namespace RosComponentTesting
         {
             return Min <= value && Max >= value;
         }
+        protected bool Equals(Times other)
+        {
+            return Min == other.Min && Max == other.Max;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Times) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((int) Min * 397) ^ (int) Max;
+            }
+        }
     }
 }
