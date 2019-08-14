@@ -2,9 +2,9 @@ using System;
 using System.Text;
 using RosComponentTesting.Debugging;
 
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
-    public class OccurrenceMessageHandler<TTopic> : ExpectationMessageHandler<TTopic>, IValidationRule
+    public class OccurrenceMessageHandler<TTopic> : MessageHandlerBase<TTopic>, IValidationMessageHandler
     {
         private long _counter;
         private readonly Times _times;
@@ -18,7 +18,7 @@ namespace RosComponentTesting.ExpectationProcessing
             _times = times ?? throw new ArgumentNullException(nameof(times));
         }
 
-        public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
+        protected override void HandleMessageInternal(TTopic message, MessageHandlingContext context)
         {
             _counter++;
         }

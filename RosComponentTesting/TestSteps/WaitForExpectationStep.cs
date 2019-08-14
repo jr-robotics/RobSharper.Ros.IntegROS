@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using RosComponentTesting.ExpectationProcessing;
+using RosComponentTesting.MessageHandling;
 using RosComponentTesting.TestFrameworks;
 
 namespace RosComponentTesting.TestSteps

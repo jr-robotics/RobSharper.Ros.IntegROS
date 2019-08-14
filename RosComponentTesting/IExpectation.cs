@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using RosComponentTesting.ExpectationProcessing;
+using RosComponentTesting.MessageHandling;
 
 namespace RosComponentTesting
 {

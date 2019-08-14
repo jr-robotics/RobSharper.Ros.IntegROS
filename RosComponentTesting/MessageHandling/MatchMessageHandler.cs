@@ -1,8 +1,8 @@
 using System;
 
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
-    public class MatchMessageHandler<TTopic> : ExpectationMessageHandler<TTopic>
+    public class MatchMessageHandler<TTopic> : MessageHandlerBase<TTopic>
     {
         private readonly Match<TTopic> _match;
 
@@ -11,15 +11,15 @@ namespace RosComponentTesting.ExpectationProcessing
             _match = match ?? throw new ArgumentNullException(nameof(match));
         }
         
-        public override void OnActivateExpectation()
+        public override void Activate()
         {
         }
 
-        public override void OnDeactivateExpectation()
+        public override void Deactivate()
         {
         }
 
-        public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
+        protected override void HandleMessageInternal(TTopic message, MessageHandlingContext context)
         {
             context.Continue = _match.Evaluate(message);
         }

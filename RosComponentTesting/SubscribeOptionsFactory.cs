@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Threading;
 using Uml.Robotics.Ros;
 
 namespace RosComponentTesting

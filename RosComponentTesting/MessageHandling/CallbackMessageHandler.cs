@@ -1,9 +1,9 @@
 using System;
 using RosComponentTesting.Debugging;
 
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
-    public class CallbackMessageHandler<TTopic> : ExpectationMessageHandler<TTopic>
+    public class CallbackMessageHandler<TTopic> : MessageHandlerBase<TTopic>
     {
         private readonly Action<TTopic> _callback;
 
@@ -16,7 +16,7 @@ namespace RosComponentTesting.ExpectationProcessing
             _callback = callback ?? throw new ArgumentNullException(nameof(callback));
         }
 
-        public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
+        protected override void HandleMessageInternal(TTopic message, MessageHandlingContext context)
         {
             _callback(message);
         }

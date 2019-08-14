@@ -1,9 +1,8 @@
 using System;
-using RosComponentTesting.Debugging;
 
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
-    public class TimeoutMessageHandler<TTopic> : ExpectationMessageHandler<TTopic>
+    public class TimeoutMessageHandler<TTopic> : MessageHandlerBase<TTopic>
     {
         private readonly TimeSpan _timeout;
         private DateTime _timedOutAt;
@@ -13,12 +12,12 @@ namespace RosComponentTesting.ExpectationProcessing
             _timeout = timeout;
         }
         
-        public override void OnActivateExpectation()
+        public override void Activate()
         {
             _timedOutAt = DateTime.Now + _timeout;
         }
 
-        public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
+        protected override void HandleMessageInternal(TTopic message, MessageHandlingContext context)
         {
             context.Continue = _timedOutAt < DateTime.Now;
         }

@@ -1,6 +1,6 @@
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
-    public interface IValidationRule
+    public interface IValidationMessageHandler
     {
         bool IsValid { get; }
         

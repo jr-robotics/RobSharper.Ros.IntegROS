@@ -1,5 +1,4 @@
 using System;
-using RosComponentTesting.ExpectationProcessing;
 
 namespace RosComponentTesting
 {

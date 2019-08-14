@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using RosComponentTesting.ExpectationProcessing;
+using RosComponentTesting.MessageHandling;
 using RosComponentTesting.TestFrameworks;
 using RosComponentTesting.TestSteps;
 using Uml.Robotics.Ros;

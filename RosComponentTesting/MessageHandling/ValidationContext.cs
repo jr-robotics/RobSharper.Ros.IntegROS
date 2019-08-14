@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using RosComponentTesting.Debugging;
 
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
     public class ValidationContext
     {
@@ -11,12 +11,7 @@ namespace RosComponentTesting.ExpectationProcessing
         
         public IEnumerable<ValidationError> Errors => _errors.AsReadOnly();
 
-        public void AddError(string errorMessage)
-        {
-            AddError(errorMessage, null);
-        }
-
-        public void AddError(string errorMessage, CallerReference callerInfo)
+        public void AddError(string errorMessage, CallerReference callerInfo = null)
         {
             var error = new ValidationError(errorMessage, callerInfo);            
             _errors.Add(error);

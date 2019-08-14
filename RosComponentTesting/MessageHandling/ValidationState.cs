@@ -1,4 +1,4 @@
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
     public enum ValidationState
     {

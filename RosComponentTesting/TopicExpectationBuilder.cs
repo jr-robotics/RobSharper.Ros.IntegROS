@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using RosComponentTesting.Debugging;
-using RosComponentTesting.ExpectationProcessing;
+using RosComponentTesting.MessageHandling;
 
 namespace RosComponentTesting
 {

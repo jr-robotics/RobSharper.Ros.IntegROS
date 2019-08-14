@@ -9,8 +9,8 @@ namespace RosComponentTesting
 
         public TopicDescriptor(string topic, Type type)
         {
-            Topic = topic;
-            Type = type;
+            Topic = topic ?? throw new ArgumentNullException(nameof(topic));
+            Type = type ?? throw new ArgumentNullException(nameof(type));
         }
 
         protected bool Equals(TopicDescriptor other)

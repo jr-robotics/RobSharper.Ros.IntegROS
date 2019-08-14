@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using RosComponentTesting.Debugging;
 
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
-    public class ValidatingTimeoutMessageHandler<TTopic> : ExpectationMessageHandler<TTopic>, IValidationRule
+    public class ValidatingTimeoutMessageHandler<TTopic> : MessageHandlerBase<TTopic>, IValidationMessageHandler
     {
         private readonly TimeSpan _timeout;
 
@@ -21,7 +21,7 @@ namespace RosComponentTesting.ExpectationProcessing
             _timeout = timeout;
         }
         
-        public override void OnActivateExpectation()
+        public override void Activate()
         {
             _timedOut = false;
             _cancellationTokenSource = new CancellationTokenSource();
@@ -37,13 +37,13 @@ namespace RosComponentTesting.ExpectationProcessing
             }, token);
         }
 
-        public override void OnDeactivateExpectation()
+        public override void Deactivate()
         {
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = null;
         }
 
-        public override void OnHandleMessage(TTopic message, ExpectationRuleContext context)
+        protected override void HandleMessageInternal(TTopic message, MessageHandlingContext context)
         {
             context.Continue = !_timedOut;
         }

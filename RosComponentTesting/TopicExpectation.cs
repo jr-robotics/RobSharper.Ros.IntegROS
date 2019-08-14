@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using RosComponentTesting.ExpectationProcessing;
+using RosComponentTesting.MessageHandling;
 
 namespace RosComponentTesting
 {
     
     public class TopicExpectation<TTopic> : ITopicExpectation
     {
-        private readonly List<ExpectationMessageHandler<TTopic>> _handlers = new List<ExpectationMessageHandler<TTopic>>();
+        private readonly List<MessageHandlerBase<TTopic>> _handlers = new List<MessageHandlerBase<TTopic>>();
 
         public bool IsActive { get; private set; }
 
@@ -31,7 +31,7 @@ namespace RosComponentTesting
                 
                 foreach (var handler in _handlers)
                 {
-                    handler.OnActivateExpectation();
+                    handler.Activate();
                 }
 
                 IsActive = true;
@@ -48,7 +48,7 @@ namespace RosComponentTesting
                 
                 foreach (var handler in _handlers)
                 {
-                    handler.OnDeactivateExpectation();
+                    handler.Deactivate();
                 }
 
                 IsActive = false;
@@ -67,13 +67,13 @@ namespace RosComponentTesting
         }
 
         protected virtual void HandleMessageInternal(TTopic message,
-            IEnumerable<ExpectationMessageHandler<TTopic>> handlers)
+            IEnumerable<MessageHandlerBase<TTopic>> handlers)
         {
-            var context = new ExpectationRuleContext();
+            var context = new MessageHandlingContext();
                 
             foreach (var handler in handlers)
             {
-                handler.OnHandleMessage(message, context);
+                handler.HandleMessage(message, context);
 
                 if (!context.Continue)
                     break;
@@ -86,7 +86,7 @@ namespace RosComponentTesting
             return context.Errors;
         }
         
-        public void AddMessageHandler(ExpectationMessageHandler<TTopic> messageHandler, bool isSingleton = false)
+        public void AddMessageHandler(MessageHandlerBase<TTopic> messageHandler, bool isSingleton = false)
         {
             if (messageHandler == null) throw new ArgumentNullException(nameof(messageHandler));
 
@@ -107,7 +107,7 @@ namespace RosComponentTesting
             var context = new ValidationContext();
             lock (_handlers)
             {
-                foreach (var validationRule in _handlers.OfType<IValidationRule>())
+                foreach (var validationRule in _handlers.OfType<IValidationMessageHandler>())
                 {
                     validationRule.Validate(context);
                 }

@@ -1,7 +1,7 @@
 using System;
 using RosComponentTesting.Debugging;
 
-namespace RosComponentTesting.ExpectationProcessing
+namespace RosComponentTesting.MessageHandling
 {
     public class ValidationError
     {
