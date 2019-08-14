@@ -5,18 +5,18 @@ using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.MessageHandling
 {
-    public class ValidatingTimeoutMessageHandler<TTopic> : MessageHandlerBase<TTopic>, IValidationMessageHandler
+    public class ValidatingTimeoutMessageHandler<TTopic> : ValidationMessageHandlerBase<TTopic>
     {
         private readonly TimeSpan _timeout;
 
         private CancellationTokenSource _cancellationTokenSource;
         private bool _timedOut;
 
-        public ValidatingTimeoutMessageHandler(TimeSpan timeout, int priority = 100) : this(timeout, null, priority)
+        public ValidatingTimeoutMessageHandler(TimeSpan timeout) : this(timeout, null)
         {
         }
         
-        public ValidatingTimeoutMessageHandler(TimeSpan timeout, CallerReference callerInfo, int priority = 100) : base(callerInfo, priority)
+        public ValidatingTimeoutMessageHandler(TimeSpan timeout, CallerReference callerInfo) : base(callerInfo)
         {
             _timeout = timeout;
         }
@@ -52,12 +52,12 @@ namespace RosComponentTesting.MessageHandling
             context.Continue = !_timedOut;
         }
 
-        public bool IsValid
+        public override bool IsValid
         {
             get { return !_timedOut; }
         }
 
-        public ValidationState ValidationState
+        public override ValidationState ValidationState
         {
             get
             {
@@ -65,7 +65,7 @@ namespace RosComponentTesting.MessageHandling
             }
         }
 
-        public void Validate(ValidationContext context)
+        public override void Validate(ValidationContext context)
         {
             if (!IsValid)
             {

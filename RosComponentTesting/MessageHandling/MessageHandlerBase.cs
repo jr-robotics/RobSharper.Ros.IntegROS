@@ -1,23 +1,13 @@
-using System;
 using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.MessageHandling
 {
-    public abstract class MessageHandlerBase<TTopic> : IComparable<MessageHandlerBase<TTopic>>
+    public abstract class MessageHandlerBase<TTopic>
     {
         public bool IsActive { get; private set; }
-        public int Priority { get; }
 
-        public CallerReference CallerInfo { get;}
-
-        public MessageHandlerBase(int priority) : this(null, priority)
+        protected MessageHandlerBase()
         {
-        }
-
-        protected MessageHandlerBase(CallerReference callerInfo, int priority)
-        {
-            Priority = priority;
-            CallerInfo = callerInfo;
         }
 
         public virtual void Activate()
@@ -39,14 +29,23 @@ namespace RosComponentTesting.MessageHandling
         }
         
         protected abstract void HandleMessageInternal(TTopic message, MessageHandlingContext context);
+    }
 
-        public int CompareTo(MessageHandlerBase<TTopic> other)
+    public abstract class ValidationMessageHandlerBase<TTopic> : MessageHandlerBase<TTopic>, IValidationMessageHandler
+    {
+        public CallerReference CallerInfo { get;}
+        
+        protected ValidationMessageHandlerBase()
         {
-            if (ReferenceEquals(this, other)) return 1;
-            if (ReferenceEquals(null, other)) return 0;
-            
-            // Sort descending
-            return -1 * Priority.CompareTo(other.Priority);
         }
+        
+        protected ValidationMessageHandlerBase(CallerReference callerInfo)
+        {
+            CallerInfo = callerInfo;
+        }
+
+        public abstract bool IsValid { get; }
+        public abstract ValidationState ValidationState { get; }
+        public abstract void Validate(ValidationContext context);
     }
 }

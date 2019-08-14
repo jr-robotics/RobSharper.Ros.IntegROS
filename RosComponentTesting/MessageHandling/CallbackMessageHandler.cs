@@ -1,5 +1,4 @@
 using System;
-using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.MessageHandling
 {
@@ -7,11 +6,7 @@ namespace RosComponentTesting.MessageHandling
     {
         private readonly Action<TTopic> _callback;
 
-        public CallbackMessageHandler(Action<TTopic> callback, int priority = 50) : this(callback, null, priority)
-        {
-        }
-
-        public CallbackMessageHandler(Action<TTopic> callback, CallerReference callerInfo, int priority = 50) : base(callerInfo, priority)
+        public CallbackMessageHandler(Action<TTopic> callback)
         {
             _callback = callback ?? throw new ArgumentNullException(nameof(callback));
         }

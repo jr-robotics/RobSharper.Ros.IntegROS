@@ -6,7 +6,7 @@ namespace RosComponentTesting.MessageHandling
     {
         private readonly Match<TTopic> _match;
 
-        public MatchMessageHandler(Match<TTopic> match, int priority = 100) : base(priority)
+        public MatchMessageHandler(Match<TTopic> match) : base()
         {
             _match = match ?? throw new ArgumentNullException(nameof(match));
         }

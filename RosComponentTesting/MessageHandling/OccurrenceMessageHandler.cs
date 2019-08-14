@@ -4,16 +4,16 @@ using RosComponentTesting.Debugging;
 
 namespace RosComponentTesting.MessageHandling
 {
-    public class OccurrenceMessageHandler<TTopic> : MessageHandlerBase<TTopic>, IValidationMessageHandler
+    public class OccurrenceMessageHandler<TTopic> : ValidationMessageHandlerBase<TTopic>
     {
         private long _counter;
         private readonly Times _expectedOccurrences;
 
-        public OccurrenceMessageHandler(Times expectedOccurrences, int priority = 50) : this(expectedOccurrences, null, priority)
+        public OccurrenceMessageHandler(Times expectedOccurrences) : this(expectedOccurrences, null)
         {
         }
 
-        public OccurrenceMessageHandler(Times expectedOccurrences, CallerReference callerInfo, int priority = 50) : base(callerInfo, priority)
+        public OccurrenceMessageHandler(Times expectedOccurrences, CallerReference callerInfo) : base(callerInfo)
         {
             _expectedOccurrences = expectedOccurrences ?? throw new ArgumentNullException(nameof(expectedOccurrences));
         }
@@ -23,12 +23,12 @@ namespace RosComponentTesting.MessageHandling
             _counter++;
         }
 
-        public bool IsValid
+        public override bool IsValid
         {
             get { return _expectedOccurrences.IsValid(_counter); }
         }
 
-        public ValidationState ValidationState
+        public override ValidationState ValidationState
         {
             get
             {
@@ -43,7 +43,7 @@ namespace RosComponentTesting.MessageHandling
             }
         }
 
-        public void Validate(ValidationContext context)
+        public override void Validate(ValidationContext context)
         {
             if (IsValid) return;
 

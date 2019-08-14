@@ -8,7 +8,7 @@ namespace RosComponentTesting
     
     public class TopicExpectation<TTopic> : ITopicExpectation
     {
-        private readonly List<MessageHandlerBase<TTopic>> _handlers = new List<MessageHandlerBase<TTopic>>();
+        private readonly List<SortableMessageHandlerListItem<TTopic>> _handlers = new List<SortableMessageHandlerListItem<TTopic>>();
 
         public bool IsActive { get; private set; }
 
@@ -31,7 +31,7 @@ namespace RosComponentTesting
                 
                 foreach (var handler in _handlers)
                 {
-                    handler.Activate();
+                    handler.Item.Activate();
                 }
 
                 IsActive = true;
@@ -48,7 +48,7 @@ namespace RosComponentTesting
                 
                 foreach (var handler in _handlers)
                 {
-                    handler.Deactivate();
+                    handler.Item.Deactivate();
                 }
 
                 IsActive = false;
@@ -62,7 +62,8 @@ namespace RosComponentTesting
             
             lock (_handlers)
             {
-                HandleMessageInternal((TTopic) message, _handlers);
+                var handlers = _handlers.Select(h => h.Item);
+                HandleMessageInternal((TTopic) message, handlers);
             }
         }
 
@@ -86,7 +87,7 @@ namespace RosComponentTesting
             return context.Errors;
         }
         
-        public void AddMessageHandler(MessageHandlerBase<TTopic> messageHandler, bool isSingleton = false)
+        public void AddMessageHandler(MessageHandlerBase<TTopic> messageHandler, int priority, bool isSingleton = false)
         {
             if (messageHandler == null) throw new ArgumentNullException(nameof(messageHandler));
 
@@ -97,7 +98,9 @@ namespace RosComponentTesting
                     _handlers.RemoveAll(v => v.GetType() == messageHandler.GetType());
                 }
 
-                _handlers.Add(messageHandler);
+                var item = new SortableMessageHandlerListItem<TTopic>(messageHandler, priority);
+                
+                _handlers.Add(item);
                 _handlers.Sort();
             }
         }

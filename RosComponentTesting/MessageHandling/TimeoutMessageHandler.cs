@@ -7,7 +7,7 @@ namespace RosComponentTesting.MessageHandling
         private readonly TimeSpan _timeout;
         private DateTime _timedOutAt;
 
-        public TimeoutMessageHandler(TimeSpan timeout, int priority = 100) : base(priority)
+        public TimeoutMessageHandler(TimeSpan timeout)
         {
             _timeout = timeout;
         }
