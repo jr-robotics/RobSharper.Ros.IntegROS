@@ -8,7 +8,9 @@ namespace RosComponentTesting
         private readonly CancellationTokenSource _cancellationTokenSource;
         private Exception _ex;
 
-        public bool HasError => _ex != null;
+        public Exception Exception => _ex;
+
+        public bool HasException => _ex != null;
 
         public ExceptionDispatcher(CancellationTokenSource cancellationTokenSource)
         {
@@ -19,16 +21,6 @@ namespace RosComponentTesting
         {
             _ex = exception;
             _cancellationTokenSource.Cancel();
-        }
-
-        public void Throw()
-        {
-            if (_ex == null)
-            {
-                return;
-            }
-
-            throw _ex;
         }
     }
 }

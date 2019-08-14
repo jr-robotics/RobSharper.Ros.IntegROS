@@ -189,9 +189,9 @@ namespace RosComponentTesting
         private void VerifyExecution()
         {
             // Check for unhandled exception
-            if (_exceptionDispatcher.HasError)
+            if (_exceptionDispatcher.HasException)
             {
-                _exceptionDispatcher.Throw();
+                throw _exceptionDispatcher.Exception;
             }
             
             // If the execution wa cancelled and exception dispatcher has no exception,

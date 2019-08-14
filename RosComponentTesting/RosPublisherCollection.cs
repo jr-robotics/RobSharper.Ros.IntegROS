@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace RosComponentTesting
 {
     public class RosPublisherCollection : IRosPublisherResolver
     {
-        private readonly Dictionary<TopicDescriptor, IRosPublisher> _publishers = new Dictionary<TopicDescriptor, IRosPublisher>();
+        private readonly IDictionary<TopicDescriptor, IRosPublisher> _publishers = new ConcurrentDictionary<TopicDescriptor, IRosPublisher>();
         
         public IRosPublisher GetPublisherFor(TopicDescriptor topic)
         {
@@ -16,10 +17,7 @@ namespace RosComponentTesting
 
         public void Add(TopicDescriptor topic, IRosPublisher publisher)
         {
-            lock (_publishers)
-            {
-                _publishers.Add(topic, publisher);
-            }
+            _publishers.Add(topic, publisher);
         }
     }
 }

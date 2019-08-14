@@ -5,7 +5,7 @@ namespace RosComponentTesting.TestFrameworks
 {
     public interface ITestFramework
     {
-        bool IsLoaded { get; }
+        bool IsAvailable { get; }
 
         void Throw(string errorMessage);
     }

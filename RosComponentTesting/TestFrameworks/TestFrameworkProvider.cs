@@ -42,7 +42,7 @@ namespace RosComponentTesting.TestFrameworks
         {
             foreach (var testFramework in _frameworks)
             {
-                if (testFramework.IsLoaded)
+                if (testFramework.IsAvailable)
                 {
                     return testFramework;
                 }

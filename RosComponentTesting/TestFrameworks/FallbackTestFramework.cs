@@ -4,7 +4,7 @@ namespace RosComponentTesting.TestFrameworks
 {
     public class FallbackTestFramework : ITestFramework
     {
-        public bool IsLoaded
+        public bool IsAvailable
         {
             get { return true; }
         }

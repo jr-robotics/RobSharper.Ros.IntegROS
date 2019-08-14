@@ -10,7 +10,7 @@ namespace RosComponentTesting
     {
         private readonly List<ExpectationMessageHandler<TTopic>> _handlers = new List<ExpectationMessageHandler<TTopic>>();
 
-        public bool Active { get; private set; }
+        public bool IsActive { get; private set; }
 
         public string TopicName { get; set; }
         
@@ -23,41 +23,41 @@ namespace RosComponentTesting
 
         public virtual void Activate()
         {
-            if (Active) return;
+            if (IsActive) return;
             
             lock (_handlers)
             {
-                if (Active) return;
+                if (IsActive) return;
                 
                 foreach (var handler in _handlers)
                 {
                     handler.OnActivateExpectation();
                 }
 
-                Active = true;
+                IsActive = true;
             }
         }
 
         public virtual void Deactivate()
         {
-            if (!Active) return;
+            if (!IsActive) return;
 
             lock (_handlers)
             {
-                if (!Active) return;
+                if (!IsActive) return;
                 
                 foreach (var handler in _handlers)
                 {
                     handler.OnDeactivateExpectation();
                 }
 
-                Active = false;
+                IsActive = false;
             }
         }
         
         public void HandleMessage(object message)
         {
-            if (!Active) return;
+            if (!IsActive) return;
             
             
             lock (_handlers)

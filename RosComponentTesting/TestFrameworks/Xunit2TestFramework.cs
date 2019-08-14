@@ -8,7 +8,7 @@ namespace RosComponentTesting.TestFrameworks
         private static Assembly _testFrameworkAssembly;
         private static Type _exceptionType;
 
-        public bool IsLoaded
+        public bool IsAvailable
         {
             get
             {
