@@ -14,12 +14,13 @@ namespace RosComponentTesting.MessageHandling
         
         public override void Activate()
         {
+            base.Activate();
             _timedOutAt = DateTime.Now + _timeout;
         }
 
         protected override void HandleMessageInternal(TTopic message, MessageHandlingContext context)
         {
-            context.Continue = _timedOutAt < DateTime.Now;
+            context.Continue = _timedOutAt >= DateTime.Now;
         }
     }
 }

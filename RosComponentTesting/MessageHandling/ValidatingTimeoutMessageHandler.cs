@@ -23,6 +23,8 @@ namespace RosComponentTesting.MessageHandling
         
         public override void Activate()
         {
+            base.Activate();
+            
             _timedOut = false;
             _cancellationTokenSource = new CancellationTokenSource();
             
@@ -39,6 +41,8 @@ namespace RosComponentTesting.MessageHandling
 
         public override void Deactivate()
         {
+            base.Deactivate();
+            
             _cancellationTokenSource?.Cancel();
             _cancellationTokenSource = null;
         }
@@ -57,7 +61,7 @@ namespace RosComponentTesting.MessageHandling
         {
             get
             {
-                return _timedOut ? ValidationState.Stable : ValidationState.NotYetDetermined;
+                return !IsActive ? ValidationState.Stable : ValidationState.NotYetDetermined;
             }
         }
 

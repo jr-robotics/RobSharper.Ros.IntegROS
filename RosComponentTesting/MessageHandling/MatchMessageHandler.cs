@@ -10,14 +10,6 @@ namespace RosComponentTesting.MessageHandling
         {
             _match = match ?? throw new ArgumentNullException(nameof(match));
         }
-        
-        public override void Activate()
-        {
-        }
-
-        public override void Deactivate()
-        {
-        }
 
         protected override void HandleMessageInternal(TTopic message, MessageHandlingContext context)
         {

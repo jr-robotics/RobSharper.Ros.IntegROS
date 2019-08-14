@@ -7,15 +7,15 @@ namespace RosComponentTesting.MessageHandling
     public class OccurrenceMessageHandler<TTopic> : MessageHandlerBase<TTopic>, IValidationMessageHandler
     {
         private long _counter;
-        private readonly Times _times;
+        private readonly Times _expectedOccurrences;
 
-        public OccurrenceMessageHandler(Times times, int priority = 50) : this(times, null, priority)
+        public OccurrenceMessageHandler(Times expectedOccurrences, int priority = 50) : this(expectedOccurrences, null, priority)
         {
         }
 
-        public OccurrenceMessageHandler(Times times, CallerReference callerInfo, int priority = 50) : base(callerInfo, priority)
+        public OccurrenceMessageHandler(Times expectedOccurrences, CallerReference callerInfo, int priority = 50) : base(callerInfo, priority)
         {
-            _times = times ?? throw new ArgumentNullException(nameof(times));
+            _expectedOccurrences = expectedOccurrences ?? throw new ArgumentNullException(nameof(expectedOccurrences));
         }
 
         protected override void HandleMessageInternal(TTopic message, MessageHandlingContext context)
@@ -25,14 +25,14 @@ namespace RosComponentTesting.MessageHandling
 
         public bool IsValid
         {
-            get { return _times.IsValid(_counter); }
+            get { return _expectedOccurrences.IsValid(_counter); }
         }
 
         public ValidationState ValidationState
         {
             get
             {
-                if (_counter > _times.Max)
+                if (_counter > _expectedOccurrences.Max)
                 {
                     // State will always be invalid because counter is larger than max
                     // and future increments will not validate again
@@ -52,21 +52,21 @@ namespace RosComponentTesting.MessageHandling
             errorMessage.AppendLine("Occurrences() failure");
             errorMessage.Append("Expected: ");
             
-            if (_times.Min == _times.Max)
+            if (_expectedOccurrences.Min == _expectedOccurrences.Max)
             {
-                errorMessage.AppendLine($"{_times.Min}");
+                errorMessage.AppendLine($"{_expectedOccurrences.Min}");
             }
-            else if (_times.Min == 0) // at most
+            else if (_expectedOccurrences.Min == 0) // at most
             {
-                errorMessage.AppendLine($"<= {_times.Max}");
+                errorMessage.AppendLine($"<= {_expectedOccurrences.Max}");
             }
-            else if (_times.Max == uint.MaxValue) // at least
+            else if (_expectedOccurrences.Max == uint.MaxValue) // at least
             {
-                errorMessage.AppendLine($">= {_times.Min}");
+                errorMessage.AppendLine($">= {_expectedOccurrences.Min}");
             }
             else
             {
-                errorMessage.AppendLine($"{_times.Min} - {_times.Max}");
+                errorMessage.AppendLine($"{_expectedOccurrences.Min} - {_expectedOccurrences.Max}");
             }
 
             errorMessage.AppendLine($"Actual:   {_counter}");
