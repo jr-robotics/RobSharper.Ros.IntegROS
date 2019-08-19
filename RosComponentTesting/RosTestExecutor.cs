@@ -222,6 +222,12 @@ namespace RosComponentTesting
             if (_rosShutdownTask == null)
             {
                 _rosShutdownTask = ROS.Shutdown();
+
+                // ROS.Shutdown() may return null
+                if (_rosShutdownTask == null)
+                {
+                    _rosShutdownTask = Task.CompletedTask;
+                }
             }
         }
 
