@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
 using RosComponentTesting.TestSteps;
 
 namespace RosComponentTesting
@@ -83,9 +84,13 @@ namespace RosComponentTesting
             return this;
         }
 
-        public RosTestExecutor ToTestExecutor()
+        public ITestExecutor ToTestExecutor()
         {
-            return new RosTestExecutor(_steps, _expectations);
+            var testExecutorFactory =  DependencyResolver.Services
+                .BuildServiceProvider()
+                .GetService<ITestExecutorFactory>();
+            
+            return testExecutorFactory.Create(_steps, _expectations);
         }
         
         public void Execute(TestExecutionOptions options = null)

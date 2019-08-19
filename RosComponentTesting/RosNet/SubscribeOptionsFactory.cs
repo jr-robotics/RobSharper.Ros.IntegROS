@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using Uml.Robotics.Ros;
 
-namespace RosComponentTesting
+namespace RosComponentTesting.RosNet
 {
     internal static class SubscribeOptionsFactory
     {

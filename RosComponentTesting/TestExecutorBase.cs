@@ -9,35 +9,21 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using RosComponentTesting.MessageHandling;
 using RosComponentTesting.TestFrameworks;
 using RosComponentTesting.TestSteps;
-using Uml.Robotics.Ros;
 
 namespace RosComponentTesting
 {
-    public class RosTestExecutor
+    public abstract class TestExecutorBase : ITestExecutor
     {
-        public enum RosTestExecutionState
-        {
-            NotStarted,
-            Setup,
-            Running,
-            TearDown,
-            Finished,
-            Canceled
-        }
-        
-        private readonly ICollection<ITestStep> _steps;
+        private readonly IEnumerable<ITestStep> _steps;
         private readonly IEnumerable<IExpectation> _expectations;
         
-        private Task _rosShutdownTask;
         private CancellationTokenSource _cancellationTokenSource;
         private RosPublisherCollection _publisherCollection;
         private ExceptionDispatcher _exceptionDispatcher;
-        private NodeHandle _nodeHandle;
-        private AsyncSpinner _spinner;
 
-        public RosTestExecutionState State { get; private set; }
+        public TestExecutionState State { get; private set; }
 
-        public RosTestExecutor(ICollection<ITestStep> steps, IEnumerable<IExpectation> expectations)
+        public TestExecutorBase(IEnumerable<ITestStep> steps, IEnumerable<IExpectation> expectations)
         {
             if (steps == null) throw new ArgumentNullException(nameof(steps));
             if (expectations == null) throw new ArgumentNullException(nameof(expectations));
@@ -46,15 +32,9 @@ namespace RosComponentTesting
             _expectations = expectations;
         }
 
-        public void Execute(TestExecutionOptions options = null)
-        {
-            var t = ExecuteAsync(options);
-            t.GetAwaiter().GetResult();
-        }
-
         public async Task ExecuteAsync(TestExecutionOptions options = null)
         {
-            if (State != RosTestExecutionState.NotStarted)
+            if (State != TestExecutionState.NotStarted)
             {
                 throw new InvalidOperationException("Executor is not in a valid state.");
             }
@@ -66,59 +46,59 @@ namespace RosComponentTesting
 
             try
             {
-                State = RosTestExecutionState.Setup;
+                State = TestExecutionState.Setup;
                 
-                Setup();
-                await RegisterRosComponentsAsync(_nodeHandle);
+                SetupInternal();
+                await RegisterRosComponentsAsync();
 
                 // Wait until timeout expires or cancellation requested
                 _cancellationTokenSource.CancelAfter(options.Timeout);
 
                 // Execute Steps
-                State = RosTestExecutionState.Running;
+                State = TestExecutionState.Running;
                 ExecuteSteps();
                 
-                State = RosTestExecutionState.TearDown;
+                State = TestExecutionState.TearDown;
                 
                 // No Cancellation from this point on
                 _cancellationTokenSource.Dispose();
-                
-                // Start ROS shutdown in background
-                InitiateRosShutdown();
 
                 VerifyExecution();
             }
             finally
             {
                 await ShutdownAsync();
-
+                
                 if (_cancellationTokenSource.IsCancellationRequested)
                 {
-                    State = RosTestExecutionState.Canceled;
+                    State = TestExecutionState.Canceled;
                 }
                 else
                 {
-                    State = RosTestExecutionState.Finished;
+                    State = TestExecutionState.Finished;
                 }
             }
         }
 
-        private void Setup()
+        protected abstract void Setup();
+
+        protected abstract Task RegisterSubscriberAsync(ITopicExpectation topicExpectation,
+            ExceptionDispatcher exceptionDispatcher);
+
+        protected abstract Task RegisterPublisherAsync(TopicDescriptor topic,
+            RosPublisherCollection publisherCollection);
+
+        protected abstract Task ShutdownAsync();
+        
+        private void SetupInternal()
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _exceptionDispatcher = new ExceptionDispatcher(_cancellationTokenSource);
             _publisherCollection = new RosPublisherCollection();
 
             RegisterCancellationCallbacks();
-          
-            // ROS Specific setup
-
-            ROS.Init(new string[0], "TESTNODE");
-                
-            _spinner = new AsyncSpinner();
-            _spinner.Start();
-
-            _nodeHandle = new NodeHandle();
+            
+            Setup();
         }
 
         private void RegisterCancellationCallbacks()
@@ -131,19 +111,23 @@ namespace RosComponentTesting
             }
         }
 
-        private async Task RegisterRosComponentsAsync(NodeHandle node)
+        private async Task RegisterRosComponentsAsync()
         {
             var awaitableRosRegistrationTasks = new List<Task>();
+
+            // Register Subscribers            
             var expectations = _steps
                 .OfType<IExpectationStep>()
                 .Select(s => s.Expectation)
                 .Union(_expectations);
 
-            // Register Subscribers
             foreach (var expectation in expectations)
             {
-                var t = RegisterSubscribersAsync(expectation, node, _exceptionDispatcher);
-                awaitableRosRegistrationTasks.Add(t);
+                if (expectation is ITopicExpectation topicExpectation)
+                {
+                    var t = RegisterSubscriberAsync(topicExpectation, _exceptionDispatcher);
+                    awaitableRosRegistrationTasks.Add(t);
+                }
             }
 
             // Register Publishers
@@ -154,7 +138,7 @@ namespace RosComponentTesting
 
             foreach (var topic in publicationTopics)
             {
-                var t = RegisterPublisher(topic, node, _publisherCollection);
+                var t = RegisterPublisherAsync(topic, _publisherCollection);
                 awaitableRosRegistrationTasks.Add(t);
             }
 
@@ -217,26 +201,6 @@ namespace RosComponentTesting
             }
         }
 
-        private void InitiateRosShutdown()
-        {
-            if (_rosShutdownTask == null)
-            {
-                _rosShutdownTask = ROS.Shutdown();
-
-                // ROS.Shutdown() may return null
-                if (_rosShutdownTask == null)
-                {
-                    _rosShutdownTask = Task.CompletedTask;
-                }
-            }
-        }
-
-        private async Task ShutdownAsync()
-        {
-            InitiateRosShutdown();
-            await _rosShutdownTask.ConfigureAwait(false);
-        }
-
         private IServiceProvider BuildServiceProvider(IRosPublisherResolver publisherResolver)
         {
             var serviceCollection = new ServiceCollection();
@@ -246,51 +210,6 @@ namespace RosComponentTesting
             serviceCollection.AddSingleton<IRosPublisherResolver>(publisherResolver);
             
             return serviceCollection.BuildServiceProvider();
-        }
-
-        private async Task RegisterSubscribersAsync(IExpectation expectation, NodeHandle node,
-            ExceptionDispatcher exceptionDispatcher)
-        {
-            if (expectation is ITopicExpectation topicExpectation)
-            {
-                ROS.RegisterMessageAssembly(topicExpectation.TopicType.Assembly);
-                
-                await node.SubscribeAsync(SubscribeOptionsFactory.Create(topicExpectation, exceptionDispatcher));
-            }
-            else
-            {
-                throw new NotSupportedException($"Expectation type {expectation.GetType()} is not supported.");
-            }
-        }
-        
-        private async Task RegisterPublisher(TopicDescriptor topic, NodeHandle node,
-            RosPublisherCollection publisherCollection)
-        {
-            var messageType = topic.Type;
-
-            var advertiseMethod = node
-                .GetType()
-                .GetMethod("Advertise", new[] {typeof(string), typeof(int)})
-                ?.MakeGenericMethod(messageType);
-            
-            if (advertiseMethod == null)
-            {
-                throw new NotSupportedException("Could not retrieve AdvertiseAsync method");
-            }
-            
-            var t = Task.Run(async () =>
-            {
-                var rosPublisher = advertiseMethod.Invoke(node, new object[] {topic.Topic, 1});
-                var publisherProxy = RosPublisherProxy.Create(topic, rosPublisher);
-
-                // Give all subscribers in the ROS network a chance to subscribe before
-                // publishing starts 
-                await Task.Delay(1000).ConfigureAwait(false);
-                
-                publisherCollection.Add(topic, publisherProxy);
-            });
-            
-            await t;
         }
 
         private static string BuildErrorMessage(List<ValidationError> errors)

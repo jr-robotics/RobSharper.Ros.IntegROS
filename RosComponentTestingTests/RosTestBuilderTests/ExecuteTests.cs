@@ -1,27 +1,46 @@
-using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using RosComponentTesting;
-using Uml.Robotics.Ros;
+using RosComponentTesting.TestSteps;
 using Xunit;
+using It = Moq.It;
 
 namespace RosComponentTestingTests.RosTestBuilderTests
 {
     public class ExecuteTests
     {
         [Fact]
-        public void Cannot_Execute_without_expectation()
+        public void Can_execute_without_expectation()
         {
-            var builder = new RosTestBuilder();
+            RegisterMockTestExecutor();
 
-            Assert.Throws<InvalidOperationException>(() => builder.Execute());
+            new RosTestBuilder()
+                .Execute();
         }
 
         [Fact]
         public void Can_execute_with_expectation()
         {
+            RegisterMockTestExecutor();
+            
             new RosTestBuilder()
                 .Expect(new Mock<IExpectation>().Object)
                 .Execute();
+        }
+
+        private static void RegisterMockTestExecutor()
+        {
+            var executorFactoryMock = new Mock<ITestExecutorFactory>();
+            executorFactoryMock
+                .Setup(m => m.Create(It.IsAny<IEnumerable<ITestStep>>(), It.IsAny<IEnumerable<IExpectation>>()))
+                .Returns<IEnumerable<ITestStep>, IEnumerable<IExpectation>>((steps, expectations) =>
+                {
+                    var mock = new Mock<TestExecutorBase>(steps, expectations);
+                    return mock.Object;
+                });
+
+            DependencyResolver.Services.AddSingleton<ITestExecutorFactory>(x => executorFactoryMock.Object);
         }
     }
 }

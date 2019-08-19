@@ -1,5 +1,6 @@
 using System;
 using RosComponentTesting;
+using RosComponentTesting.RosNet;
 using Xunit;
 
 namespace RosComponentTestingTests
