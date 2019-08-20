@@ -1,16 +1,10 @@
 using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Messages.geometry_msgs;
 using RosComponentTesting;
-using Uml.Robotics.Ros;
+using RosComponentTesting.RosNet;
 using Xunit;
 using Xunit.Abstractions;
-using Xunit.Sdk;
-using Int32 = Messages.std_msgs.Int32;
 using Pose = Messages.turtlesim.Pose;
 
 namespace TurtleSimTests
@@ -22,16 +16,13 @@ namespace TurtleSimTests
         public HoldPositionTests(ITestOutputHelper output)
         {
             this._output = output;
-            
-
-            ROS.ROS_MASTER_URI = "http://localhost:11311";
-            ROS.Init(new string[0], "TESTNODE");
         }
         
         [Fact]
         public void TurtleIsNotMovingWithoutCommand()
         {
             new RosTestBuilder()
+                .UseRos()
                 .Wait(TimeSpan.FromSeconds(5))
                 .Expect<Twist>(x => x
                     .Topic("/turtle1/cmd_vel")
@@ -49,6 +40,7 @@ namespace TurtleSimTests
         public void Failing_TurtleIsNotMovingWithoutCommand()
         {
             new RosTestBuilder()
+                .UseRos()
                 .Wait(TimeSpan.FromSeconds(5))
                 .Expect<Twist>(x => x
                     .Topic("/turtle1/cmd_vel")
@@ -69,6 +61,7 @@ namespace TurtleSimTests
         public void When_not_moving_velocity_is_zero_example_a()
         {
             new RosTestBuilder()
+                .UseRos()
                 .Wait(TimeSpan.FromSeconds(3))
                 .Expect<Pose>(x => x
                     .Topic("/turtle1/pose")
@@ -78,8 +71,6 @@ namespace TurtleSimTests
                     {
                         p.angular_velocity.Should().Be(0, "because turtle is not moving");
                         p.linear_velocity.Should().Be(0, "because turtle is not moving");
-
-                        //p.linear_velocity.Should().BeGreaterThan(0, "because we need a failing test");
                     })
                 )
                 .Execute();
@@ -92,6 +83,7 @@ namespace TurtleSimTests
             
             int cnt = 0;
             new RosTestBuilder()
+                .UseRos()
                 .WaitFor<Pose>(x => x
                     .Topic("/turtle1/pose")
                     .Match(It.IsAny<Pose>())
@@ -128,6 +120,7 @@ namespace TurtleSimTests
             };
 
             new RosTestBuilder()
+                .UseRos()
                 .WaitFor<Pose>(x => x
                     .Topic("/turtle1/pose")
                     .Match(It.Matches<Pose>(m => m.x > 5))

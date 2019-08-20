@@ -8,18 +8,36 @@ namespace RosComponentTesting.RosNet
 {
     public class RosTestExecutor : TestExecutorBase
     {
+        public const string DEFAULT_ROS_MASTER_URI = "http://localhost:11311";
+        
+        private readonly string _rosMasterUri;
+        private readonly string _nodeName;
+        
         private NodeHandle _nodeHandle;
         private AsyncSpinner _spinner;
         
         public RosTestExecutor(IEnumerable<ITestStep> steps, IEnumerable<IExpectation> expectations) : base(steps, expectations)
         {
+            _rosMasterUri = DEFAULT_ROS_MASTER_URI;
+            _nodeName = CreateRandomNodeName();
+        }
+
+        public RosTestExecutor(string rosMasterUri, string nodeName, IEnumerable<ITestStep> steps, IEnumerable<IExpectation> expectations) : base(steps, expectations)
+        {
+            _rosMasterUri = rosMasterUri ?? DEFAULT_ROS_MASTER_URI;
+            _nodeName = nodeName ?? CreateRandomNodeName();
+        }
+
+        private static string CreateRandomNodeName()
+        {
+            return $"RosComponentTesting_{Guid.NewGuid()}";
         }
 
         protected override void Setup()
         {
             // ROS Specific setup
-
-            ROS.Init(new string[0], "TESTNODE");
+            ROS.ROS_MASTER_URI = _rosMasterUri;
+            ROS.Init(new string[0], _nodeName);
 
             _spinner = new AsyncSpinner();
             _spinner.Start();

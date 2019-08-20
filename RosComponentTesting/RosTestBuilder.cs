@@ -8,6 +8,8 @@ namespace RosComponentTesting
 {
     public class RosTestBuilder
     {
+        public ITestExecutorFactory TestExecutorFactory { get; set; }
+        
         private readonly ICollection<IExpectation> _expectations = new List<IExpectation>();
         private readonly ICollection<ITestStep> _steps = new List<ITestStep>();
 
@@ -86,9 +88,20 @@ namespace RosComponentTesting
 
         public ITestExecutor ToTestExecutor()
         {
-            var testExecutorFactory =  DependencyResolver.Services
-                .BuildServiceProvider()
-                .GetService<ITestExecutorFactory>();
+            var testExecutorFactory = TestExecutorFactory;
+
+            if (testExecutorFactory == null)
+            {
+                testExecutorFactory = DependencyResolver.Services
+                    .BuildServiceProvider()
+                    .GetService<ITestExecutorFactory>();
+                
+                
+                if (testExecutorFactory == null)
+                {
+                    throw new InvalidOperationException("Cannot create test executor. No test executor factory registered!");
+                }
+            }
             
             return testExecutorFactory.Create(_steps, _expectations);
         }
