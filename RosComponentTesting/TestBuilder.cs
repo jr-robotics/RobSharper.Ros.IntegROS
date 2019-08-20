@@ -6,14 +6,14 @@ using RosComponentTesting.TestSteps;
 
 namespace RosComponentTesting
 {
-    public class RosTestBuilder
+    public class TestBuilder
     {
         public ITestExecutorFactory TestExecutorFactory { get; set; }
         
         private readonly ICollection<IExpectation> _expectations = new List<IExpectation>();
         private readonly ICollection<ITestStep> _steps = new List<ITestStep>();
 
-        public RosTestBuilder Publish(string advertiseTopic, object message)
+        public TestBuilder Publish(string advertiseTopic, object message)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
             
@@ -25,7 +25,7 @@ namespace RosComponentTesting
             return this;
         }
 
-        public RosTestBuilder Publish(IPublication publication)
+        public TestBuilder Publish(IPublication publication)
         {
             var step = new PublicationStep(publication);
             _steps.Add(step);
@@ -33,12 +33,12 @@ namespace RosComponentTesting
             return this;
         }
 
-        public RosTestBuilder Expect<T>(string subscribeTopic, Func<T, bool> func, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public TestBuilder Expect<T>(string subscribeTopic, Func<T, bool> func, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             return Expect(subscribeTopic, new Match<T>(func), callerFilePath, lineNumber);
         }
 
-        public RosTestBuilder Expect<T>(string subscriberTopic, Match<T> match, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public TestBuilder Expect<T>(string subscriberTopic, Match<T> match, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             return Expect<T>(x => x
                 .Topic(subscriberTopic)
@@ -46,7 +46,7 @@ namespace RosComponentTesting
                 callerFilePath, lineNumber);
         }
 
-        public RosTestBuilder Expect<T>(Action<TopicExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public TestBuilder Expect<T>(Action<TopicExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             var builder = new TopicExpectationBuilder<T>()
                 .Occurrences(Times.AtLeast(1), callerFilePath, lineNumber);
@@ -56,7 +56,7 @@ namespace RosComponentTesting
             return Expect(builder.Expectation);
         }
 
-        public RosTestBuilder Expect(IExpectation expectation)
+        public TestBuilder Expect(IExpectation expectation)
         {
             if (expectation == null) throw new ArgumentNullException(nameof(expectation));
 
@@ -64,7 +64,7 @@ namespace RosComponentTesting
             return this;
         }
 
-        public RosTestBuilder Wait(TimeSpan duration)
+        public TestBuilder Wait(TimeSpan duration)
         {
             var step = new WaitStep(duration);
             _steps.Add(step);
@@ -72,7 +72,7 @@ namespace RosComponentTesting
             return this;
         }
         
-        public RosTestBuilder WaitFor<T>(Action<WaitForExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
+        public TestBuilder WaitFor<T>(Action<WaitForExpectationBuilder<T>> builderAction, [CallerFilePath] string callerFilePath = null, [CallerLineNumber] int lineNumber = 0)
         {
             var builder = new WaitForExpectationBuilder<T>()
                 .Occurrences(Times.AtLeast(1), callerFilePath, lineNumber);

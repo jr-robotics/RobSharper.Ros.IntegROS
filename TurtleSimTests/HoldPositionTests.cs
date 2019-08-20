@@ -21,7 +21,7 @@ namespace TurtleSimTests
         [Fact]
         public void TurtleIsNotMovingWithoutCommand()
         {
-            new RosTestBuilder()
+            new TestBuilder()
                 .UseRos()
                 .Wait(TimeSpan.FromSeconds(5))
                 .Expect<Twist>(x => x
@@ -39,7 +39,7 @@ namespace TurtleSimTests
         [Fact(Skip = "No failing tests")]
         public void Failing_TurtleIsNotMovingWithoutCommand()
         {
-            new RosTestBuilder()
+            new TestBuilder()
                 .UseRos()
                 .Wait(TimeSpan.FromSeconds(5))
                 .Expect<Twist>(x => x
@@ -60,7 +60,7 @@ namespace TurtleSimTests
         [Fact]
         public void When_not_moving_velocity_is_zero_example_a()
         {
-            new RosTestBuilder()
+            new TestBuilder()
                 .UseRos()
                 .Wait(TimeSpan.FromSeconds(3))
                 .Expect<Pose>(x => x
@@ -82,7 +82,7 @@ namespace TurtleSimTests
             const int expectedOccurrences = 25;
             
             int cnt = 0;
-            new RosTestBuilder()
+            new TestBuilder()
                 .UseRos()
                 .WaitFor<Pose>(x => x
                     .Topic("/turtle1/pose")
@@ -119,7 +119,7 @@ namespace TurtleSimTests
                 }
             };
 
-            new RosTestBuilder()
+            new TestBuilder()
                 .UseRos()
                 .WaitFor<Pose>(x => x
                     .Topic("/turtle1/pose")

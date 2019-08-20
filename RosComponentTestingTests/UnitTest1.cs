@@ -38,7 +38,7 @@ namespace RosComponentTestingTests
             // Expect ExpectType on SubscriberTopic
             //   with value == "x"
             
-            new RosTestBuilder()
+            new TestBuilder()
                 .Publish("AdvertiseTopic", message)
                 .Expect<ExpectedType>("SubscribeTopic", m => m.Value == "x")
                 .Execute();
@@ -55,7 +55,7 @@ namespace RosComponentTestingTests
             // Expect ExpectType on SubscriberTopic
             //   with value == "x"
             
-            new RosTestBuilder()
+            new TestBuilder()
                 .Publish("AdvertiseTopic", message)
                 .Expect("SubscribeTopic", It.Matches<ExpectedType>(m => m.Value == "x"))
                 .Execute();
@@ -69,7 +69,7 @@ namespace RosComponentTestingTests
             // Expect any ExpectType on SubscriberTopic1
             // AND Expect any ExpectType on SubscriberTopic2
             
-            new RosTestBuilder()
+            new TestBuilder()
                 .Publish("AdvertiseTopic", new object())
                 .Expect<ExpectedType>("SubscriberTopic1", It.IsAny<ExpectedType>())
                 .Expect<ExpectedType>("SubscriberTopic2", It.IsAny<ExpectedType>())
@@ -79,7 +79,7 @@ namespace RosComponentTestingTests
         [Fact]
         public void ComplexExpectation()
         {
-            new RosTestBuilder()
+            new TestBuilder()
                 .Publish("StartMovement", new object())
                 .Expect<ExpectedType>(x => x
                         .Topic("GoToTopic")
@@ -96,7 +96,7 @@ namespace RosComponentTestingTests
             string pos = null;
             
             // Dependent expectations
-            new RosTestBuilder()
+            new TestBuilder()
                 .Publish("StartMovement", new object())
                 .Expect<ExpectedType>(x => x
                     .Name("GotoMessage")
@@ -117,7 +117,7 @@ namespace RosComponentTestingTests
         [Fact]
         public void WaitForEvent()
         {
-            new RosTestBuilder()
+            new TestBuilder()
                 .Publish("StartMovement", new object())
                 .Expect<ExpectedType>(x => x
                     .Name("GotoMessage")
@@ -145,7 +145,7 @@ namespace RosComponentTestingTests
         [Fact]
         public void NoOtherPublications()
         {
-            new RosTestBuilder()
+            new TestBuilder()
                 .Publish("StartMovement", new object())
                 .Expect<ExpectedType>(x => x
                     .Topic("GoToTopic")

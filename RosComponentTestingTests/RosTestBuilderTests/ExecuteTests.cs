@@ -15,7 +15,7 @@ namespace RosComponentTestingTests.RosTestBuilderTests
         {
             RegisterMockTestExecutor();
 
-            new RosTestBuilder()
+            new TestBuilder()
                 .Execute();
         }
 
@@ -24,7 +24,7 @@ namespace RosComponentTestingTests.RosTestBuilderTests
         {
             RegisterMockTestExecutor();
             
-            new RosTestBuilder()
+            new TestBuilder()
                 .Expect(new Mock<IExpectation>().Object)
                 .Execute();
         }
