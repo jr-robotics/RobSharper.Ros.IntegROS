@@ -32,14 +32,12 @@ namespace RosComponentTestingTests
         [Fact]
         public void SimpleTest()
         {
-            object message = null;
-
             // When Publish message on AdvertiseTopic
             // Expect ExpectType on SubscriberTopic
             //   with value == "x"
             
             new TestBuilder()
-                .Publish("AdvertiseTopic", message)
+                .Publish("AdvertiseTopic", new object())
                 .Expect<ExpectedType>("SubscribeTopic", m => m.Value == "x")
                 .Execute();
         }

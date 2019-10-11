@@ -2,7 +2,7 @@ using System;
 
 namespace RosComponentTesting
 {
-    public class TopicDescriptor
+    public sealed class TopicDescriptor
     {
         public string Topic { get; }
         public Type Type { get; }
@@ -13,7 +13,7 @@ namespace RosComponentTesting
             Type = type ?? throw new ArgumentNullException(nameof(type));
         }
 
-        protected bool Equals(TopicDescriptor other)
+        private bool Equals(TopicDescriptor other)
         {
             return string.Equals(Topic, other.Topic) && Equals(Type, other.Type);
         }

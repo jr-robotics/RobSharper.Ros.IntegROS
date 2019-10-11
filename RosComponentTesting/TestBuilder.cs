@@ -8,10 +8,34 @@ namespace RosComponentTesting
 {
     public class TestBuilder
     {
-        public ITestExecutorFactory TestExecutorFactory { get; set; }
-        
         private readonly ICollection<IExpectation> _expectations = new List<IExpectation>();
         private readonly ICollection<ITestStep> _steps = new List<ITestStep>();
+        private ITestExecutorFactory _testExecutorFactory;
+
+        public ITestExecutorFactory TestExecutorFactory
+        {
+            set => _testExecutorFactory = value;
+            get
+            {
+                if (_testExecutorFactory == null)
+                {
+                    _testExecutorFactory = DependencyResolver.Services
+                        .BuildServiceProvider()
+                        .GetService<ITestExecutorFactory>();
+
+
+                    if (_testExecutorFactory == null)
+                    {
+                        throw new InvalidOperationException(
+                            "Cannot create test executor. No test executor factory registered!");
+                    }
+                }
+
+                return _testExecutorFactory;
+            }
+        }
+
+        public ITestExecutor TestExecutor => TestExecutorFactory.Create(_steps, _expectations);
 
         public TestBuilder Publish(string advertiseTopic, object message)
         {
@@ -85,30 +109,11 @@ namespace RosComponentTesting
             
             return this;
         }
-
-        public ITestExecutor ToTestExecutor()
-        {
-            var testExecutorFactory = TestExecutorFactory;
-
-            if (testExecutorFactory == null)
-            {
-                testExecutorFactory = DependencyResolver.Services
-                    .BuildServiceProvider()
-                    .GetService<ITestExecutorFactory>();
-                
-                
-                if (testExecutorFactory == null)
-                {
-                    throw new InvalidOperationException("Cannot create test executor. No test executor factory registered!");
-                }
-            }
-            
-            return testExecutorFactory.Create(_steps, _expectations);
-        }
         
         public void Execute(TestExecutionOptions options = null)
         {
-            ToTestExecutor().Execute(options);
+            var testExecutor = TestExecutorFactory.Create(_steps, _expectations);
+            testExecutor.Execute(options);
         }
     }
 }
