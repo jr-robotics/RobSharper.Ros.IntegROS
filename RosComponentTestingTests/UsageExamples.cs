@@ -5,11 +5,11 @@ using Xunit;
 
 namespace RosComponentTestingTests
 {
-    public class UnitTest1 : IDisposable
+    public class UsageExamples : IDisposable
     {
         private readonly RosNodeContext _executionContext;
 
-        public UnitTest1()
+        public UsageExamples()
         {
             _executionContext = new RosNodeSetup()
                 .Launch("LaunchFile.launch")
@@ -29,7 +29,7 @@ namespace RosComponentTestingTests
         
         
         
-        [Fact]
+        [Fact(Skip = "This is just a usage example")]
         public void SimpleTest()
         {
             // When Publish message on AdvertiseTopic
@@ -42,7 +42,7 @@ namespace RosComponentTestingTests
                 .Execute();
         }
         
-        [Fact]
+        [Fact(Skip = "This is just a usage example")]
         public void SimpleTest3()
         {
             object message = null;
@@ -59,7 +59,7 @@ namespace RosComponentTestingTests
                 .Execute();
         }
 
-        [Fact]
+        [Fact(Skip = "This is just a usage example")]
         public void SimpleTest2()
         {
             
@@ -74,7 +74,7 @@ namespace RosComponentTestingTests
                 .Execute();
         }
 
-        [Fact]
+        [Fact(Skip = "This is just a usage example")]
         public void ComplexExpectation()
         {
             new TestBuilder()
@@ -88,7 +88,7 @@ namespace RosComponentTestingTests
                 .Execute();
         }
 
-        [Fact]
+        [Fact(Skip = "This is just a usage example")]
         public void DependentExpectations()
         {
             string pos = null;
@@ -112,7 +112,7 @@ namespace RosComponentTestingTests
                 .Execute();
         }
 
-        [Fact]
+        [Fact(Skip = "This is just a usage example")]
         public void WaitForEvent()
         {
             new TestBuilder()
@@ -140,7 +140,7 @@ namespace RosComponentTestingTests
                 .Execute();
         }
 
-        [Fact]
+        [Fact(Skip = "This is just a usage example")]
         public void NoOtherPublications()
         {
             new TestBuilder()

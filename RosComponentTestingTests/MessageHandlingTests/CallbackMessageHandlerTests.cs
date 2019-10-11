@@ -22,7 +22,6 @@ namespace RosComponentTestingTests.MessageHandlingTests
         [Fact]
         public void Callback_is_executed_with_message()
         {
-            var callbackCalled = false;
             var expectedMessage = new object();
             
             var target = new CallbackMessageHandler<object>(o => { o.Should().Be(expectedMessage); });
