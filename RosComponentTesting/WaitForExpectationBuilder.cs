@@ -30,8 +30,6 @@ namespace RosComponentTesting
         public WaitForExpectationBuilder<TTopicType> Match(Match<TTopicType> match)
         {
             if (match == null) throw new ArgumentNullException(nameof(match));
-            
-            Expectation.TopicType = typeof(TTopicType);
 
             var handler = new MatchMessageHandler<TTopicType>(match);
             _expectation.AddMessageHandler(handler, 100, true);

@@ -14,12 +14,9 @@ namespace RosComponentTesting
 
         public string TopicName { get; set; }
         
-        public Type TopicType { get; set; }
+        public Type TopicType => typeof(TTopic);
 
-        public virtual bool IsValid
-        {
-            get { return Validate().IsValid; }
-        }
+        public virtual bool IsValid => Validate().IsValid;
 
         public virtual void Activate()
         {
