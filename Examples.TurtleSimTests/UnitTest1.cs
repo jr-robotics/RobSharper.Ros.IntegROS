@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Xunit;
@@ -22,4 +23,36 @@ namespace Examples.TurtleSimTests
                 .Should().Be(0, "no pose should be published");
         }
     }
+    
+/*
+    public class Crawl2Tests : ForScenario<CrawlForward>
+    {
+        [ExpectThat]
+        public void No_pose_is_published()
+        {
+            
+        }
+    }
+
+    public class Crawl3Tests : ForScenario
+    {
+        protected override void Setup()
+        {
+        }
+        
+        protected override void Exercise()
+        {
+        }
+        
+        protected override void Teardown()
+        {
+        }
+        
+        [ExpectThat]
+        public void No_pose_is_published()
+        {
+            
+        }
+    }
+*/
 }

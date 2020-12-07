@@ -29,4 +29,8 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\IntegROS\IntegROS.csproj" />
+    </ItemGroup>
+
 </Project>

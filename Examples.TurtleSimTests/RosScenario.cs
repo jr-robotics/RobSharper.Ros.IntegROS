@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using IntegROS.ROS;
 
 namespace Examples.TurtleSimTests
 {
@@ -17,11 +18,32 @@ namespace Examples.TurtleSimTests
     {
         private readonly object _lock = new object();
         private bool _executed = false;
-        
+        private RosScenarioConfiguration _config;
+
         public RosScenarioState State { get; private set; } = RosScenarioState.Pending;
+
+        private RosScenarioConfiguration Configuration
+        {
+            get
+            {
+                if (_config == null)
+                {
+                    lock (_lock)
+                    {
+                        if (_config == null)
+                        {
+                            _config = RosScenarioConfigurationFactory.Instance.Create();
+                        }
+                    }
+                }
+
+                return _config;
+            }
+        }
         
-        protected IRosApplication RosApp { get; }
-        protected IRosMessageRecorder MessageRecorder { get; }
+        protected IRosApplication RosApp => Configuration.RosApp;
+
+        protected IRosMessageRecorder MessageRecorder => Configuration.MessageRecorder;
 
         public IEnumerable<RecordedMessage> Messages
         {
@@ -96,5 +118,30 @@ namespace Examples.TurtleSimTests
             
             Setup();
         }
+    }
+
+    public class RosScenarioConfigurationFactory
+    {
+        public static RosScenarioConfigurationFactory Instance
+        {
+            get;
+        } = new RosScenarioConfigurationFactory();
+        
+        public RosScenarioConfiguration Create()
+        {
+            return new RosScenarioConfiguration(null, null);
+        }
+    }
+
+    public sealed class RosScenarioConfiguration
+    {
+        public RosScenarioConfiguration(IRosApplication rosApp, IRosMessageRecorder messageRecorder)
+        {
+            RosApp = rosApp ?? throw new ArgumentNullException(nameof(rosApp));
+            MessageRecorder = messageRecorder ?? throw new ArgumentNullException(nameof(messageRecorder));
+        }
+
+        public IRosApplication RosApp { get; }
+        public IRosMessageRecorder MessageRecorder { get; }
     }
 }

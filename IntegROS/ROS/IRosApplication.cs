@@ -1,8 +1,4 @@
-using System;
-using Messages.turtlesim;
-using Uml.Robotics.Ros;
-
-namespace Examples.TurtleSimTests
+namespace IntegROS.ROS
 {
     public interface IRosApplication
     {
