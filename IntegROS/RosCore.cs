@@ -1,6 +1,7 @@
 using System;
+using IntegROS.RosCoreActions;
 
-namespace IntegROS.ROS
+namespace IntegROS
 {
     public class RosCore
     {

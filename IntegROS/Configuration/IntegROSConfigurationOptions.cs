@@ -1,5 +1,5 @@
 using System;
-using IntegROS.ROS;
+using IntegROS.RosCoreActions;
 
 namespace IntegROS.Configuration
 {

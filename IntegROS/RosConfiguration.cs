@@ -1,4 +1,4 @@
-namespace IntegROS.ROS
+namespace IntegROS
 {
     public class RosConfiguration
     {

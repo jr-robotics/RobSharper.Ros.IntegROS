@@ -1,6 +1,6 @@
 using System;
 
-namespace IntegROS.ROS
+namespace IntegROS.RosCoreActions
 {
     public class ShutdownRosCoreAction : IRosCoreConnectionAction
     {
