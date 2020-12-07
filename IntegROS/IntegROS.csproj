@@ -8,4 +8,8 @@
       <Folder Include="XunitExtensions" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
+    </ItemGroup>
+
 </Project>
