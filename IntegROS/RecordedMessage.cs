@@ -6,6 +6,7 @@ namespace IntegROS
     {
         public TimeSpan Timestamp { get; }
         public string Topic { get; }
+        
         public Type Type { get; }
         public object Data { get; }
     }
