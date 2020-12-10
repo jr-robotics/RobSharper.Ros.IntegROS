@@ -1,6 +1,6 @@
 using System;
 
-namespace Examples.TurtleSimTests
+namespace IntegROS
 {
     public class RecordedMessage
     {
