@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="FluentAssertions" Version="5.10.3" />
       <PackageReference Include="RobSharper.Ros.BagReader" Version="1.0.0-rc1" />
       <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
     </ItemGroup>

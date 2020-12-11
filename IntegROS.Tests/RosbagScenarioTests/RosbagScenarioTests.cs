@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using FluentAssertions;
+using IntegROS.Rosbag;
 using Moq;
 using Xunit;
 

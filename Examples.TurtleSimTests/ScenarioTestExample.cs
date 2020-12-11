@@ -1,6 +1,7 @@
 using System.Linq;
 using FluentAssertions;
 using IntegROS;
+using IntegROS.Rosbag;
 using Moq;
 
 namespace Examples.TurtleSimTests
@@ -9,10 +10,20 @@ namespace Examples.TurtleSimTests
     {
         public ScenarioTestExample(RosbagScenario scenario) : base(scenario)
         {
+            ShouldContainMessages = false;
+            
             //TODO: Replace stub when rosbag reader is available
             RosbagReader.Instance = new Mock<IRosbagReader>().Object;
-            
             scenario.Load("rosbagfilepath.bag");
+        }
+
+        [ExpectThat]
+        public void Publishes_pose()
+        {
+            Scenario.Messages
+                .Should()
+                .NotContain(message => message.Topic == "/turtle1/pose", "no pose should be published");
+
         }
         
         [ExpectThat]

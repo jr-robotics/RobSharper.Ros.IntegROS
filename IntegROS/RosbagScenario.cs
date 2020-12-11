@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using RobSharper.Ros.BagReader;
+using IntegROS.Rosbag;
 
 namespace IntegROS
 {
     public class RosbagScenario : IScenario
     {
-        private IQueryable<RecordedMessage> _messages;
+        private IEnumerable<RecordedMessage> _messages;
 
-        public IQueryable<RecordedMessage> Messages
+        public IEnumerable<RecordedMessage> Messages
         {
             get
             {
@@ -37,26 +37,6 @@ namespace IntegROS
             
             _messages = RosbagReader.Instance.Read(rosbagFile).AsQueryable();
             RosbagFile = rosbagFile;
-        }
-    }
-
-    public interface IRosbagReader
-    {
-        IEnumerable<RecordedMessage> Read(string filename);
-    }
-
-    public static class RosbagReader
-    {
-        public static IRosbagReader Instance { get; set; }
-    }
-
-    public class RobSharperRosbagReaderAdapter : IRosbagReader
-    {
-        public IEnumerable<RecordedMessage> Read(string filename)
-        {
-            var bag = FileBag.Create(filename);
-            return bag.Messages
-                .Select(m => new RecordedMessage());
         }
     }
 }
