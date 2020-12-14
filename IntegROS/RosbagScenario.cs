@@ -7,9 +7,9 @@ namespace IntegROS
 {
     public class RosbagScenario : IScenario
     {
-        private IEnumerable<RecordedMessage> _messages;
+        private IEnumerable<IRecordedMessage> _messages;
 
-        public IEnumerable<RecordedMessage> Messages
+        public IEnumerable<IRecordedMessage> Messages
         {
             get
             {
@@ -35,7 +35,7 @@ namespace IntegROS
                 return;
             }
             
-            _messages = RosbagReader.Instance.Read(rosbagFile).AsQueryable();
+            _messages = RosbagReader.Instance.Read(rosbagFile);
             RosbagFile = rosbagFile;
         }
     }

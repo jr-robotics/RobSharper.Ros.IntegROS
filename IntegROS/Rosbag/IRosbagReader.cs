@@ -4,6 +4,6 @@ namespace IntegROS.Rosbag
 {
     public interface IRosbagReader
     {
-        IEnumerable<RecordedMessage> Read(string filename);
+        IEnumerable<IRecordedMessage> Read(string filename);
     }
 }

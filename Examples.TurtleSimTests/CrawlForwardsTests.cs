@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using FluentAssertions;
 using IntegROS;
 using Xunit;
 
@@ -17,8 +18,12 @@ namespace Examples.TurtleSimTests
         {
             var messages = Scenario.Messages
                 .InTopic("/turtle*/pose")
+                .SetMessageType<Object>()
+                .Select(x => x.Message)
+                //.Should()
+                //.BeInAscendingOrder(message => message.X)
                 .ToList();
-                
+
             throw new NotImplementedException();
         }
 

@@ -4,6 +4,6 @@ namespace IntegROS
 {
     public interface IScenario
     {
-        IEnumerable<RecordedMessage> Messages { get; }
+        IEnumerable<IRecordedMessage> Messages { get; }
     }
 }

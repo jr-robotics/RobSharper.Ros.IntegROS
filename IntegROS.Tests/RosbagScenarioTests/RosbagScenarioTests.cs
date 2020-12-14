@@ -48,7 +48,7 @@ namespace IntegROS.Tests.RosbagScenarioTests
             var rosbagReaderMock = new Mock<IRosbagReader>(MockBehavior.Strict);
             rosbagReaderMock
                 .Setup(x => x.Read(ExpectedBagFileName))
-                .Returns(Enumerable.Empty<RecordedMessage>());
+                .Returns(Enumerable.Empty<IRecordedMessage>());
 
             RosbagReader.Instance = rosbagReaderMock.Object;
             var target = new RosbagScenario();
@@ -66,7 +66,7 @@ namespace IntegROS.Tests.RosbagScenarioTests
             var rosbagReaderMock = new Mock<IRosbagReader>(MockBehavior.Strict);
             rosbagReaderMock
                 .Setup(x => x.Read(ExpectedBagFileName))
-                .Returns(Enumerable.Empty<RecordedMessage>());
+                .Returns(Enumerable.Empty<IRecordedMessage>());
 
             RosbagReader.Instance = rosbagReaderMock.Object;
             var target = new RosbagScenario();

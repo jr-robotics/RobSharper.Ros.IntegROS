@@ -45,7 +45,7 @@ namespace Examples.TurtleSimTests
 
         protected IRosMessageRecorder MessageRecorder => Configuration.MessageRecorder;
 
-        public IEnumerable<RecordedMessage> Messages
+        public IEnumerable<IRecordedMessage> Messages
         {
             get
             {

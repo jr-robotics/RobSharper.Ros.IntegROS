@@ -5,7 +5,7 @@ namespace Examples.TurtleSimTests
 {
     public interface IRosMessageRecorder
     {
-        IEnumerable<RecordedMessage> Messages { get; }
+        IEnumerable<IRecordedMessage> Messages { get; }
         
         void Start();
         void Stop();

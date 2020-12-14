@@ -1,37 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 
 namespace IntegROS
 {
-    public class RecordedMessage
+    public class RecordedMessage<TType> : IRecordedMessage<TType> where TType : class
     {
-        public TimeSpan Timestamp { get; }
-        public string Topic { get; }
-        
-        public Type Type { get; }
-        public object Data { get; }
-    }
+        private readonly IRecordedMessage _innerMessage;
+        private TType _message;
 
-    public static class RecordedMessageExtensions
-    {
-        public static bool IsInTopic(this RecordedMessage message, string topicNamePattern)
+        public RecordedMessage(IRecordedMessage message)
         {
-            if (topicNamePattern == null) throw new ArgumentNullException(nameof(topicNamePattern));
-
-            if (message == null)
-                return false;
-
-            var regex = TopicRegx.Create(topicNamePattern);
-            return regex.IsMatch(message.Topic);
+            _innerMessage = message ?? throw new ArgumentNullException(nameof(message));
         }
-        
-        public static IEnumerable<RecordedMessage> InTopic(this IEnumerable<RecordedMessage> messages, string topicNamePattern)
-        {
-            if (messages == null)
-                return null;
 
-            return messages.Where(m => m.IsInTopic(topicNamePattern));
+        public string Topic => _innerMessage.Topic;
+        public TType Message
+        {
+            get
+            {
+                if (_message == null)
+                {
+                    _message = _innerMessage.GetMessage<TType>(); 
+                }
+
+                return _message;
+            }
         }
     }
 }
