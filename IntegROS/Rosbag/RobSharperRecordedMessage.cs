@@ -1,5 +1,6 @@
 ﻿using System;
 using RobSharper.Ros.BagReader;
+using RobSharper.Ros.MessageEssentials;
 using RobSharper.Ros.MessageEssentials.Serialization;
 
 namespace IntegROS.Rosbag
@@ -17,6 +18,8 @@ namespace IntegROS.Rosbag
         }
 
         public string Topic => _bagMessage.Connection.HeaderTopic;
+
+        public RosType Type => _bagMessage.Connection.Type;
         
         public object GetMessage(Type type)
         {

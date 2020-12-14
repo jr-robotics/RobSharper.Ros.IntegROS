@@ -1,4 +1,5 @@
 ﻿using System;
+using RobSharper.Ros.MessageEssentials;
 
 namespace IntegROS
 {
@@ -13,6 +14,9 @@ namespace IntegROS
         }
 
         public string Topic => _innerMessage.Topic;
+
+        public RosType Type => _innerMessage.Type;
+        
         public TType Message
         {
             get

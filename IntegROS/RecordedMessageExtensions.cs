@@ -20,9 +20,6 @@ namespace IntegROS
         
         public static IEnumerable<IRecordedMessage> InTopic(this IEnumerable<IRecordedMessage> messages, string topicNamePattern)
         {
-            if (messages == null)
-                return null;
-
             return messages.Where(m => IsInTopic(m, topicNamePattern));
         }
         
@@ -39,10 +36,13 @@ namespace IntegROS
         public static IEnumerable<IRecordedMessage<TType>> SetMessageType<TType>(
             this IEnumerable<IRecordedMessage> messages) where TType : class
         {
-            if (messages == null)
-                return null;
-
             return messages.Select(m => m.SetMessageType<TType>());
+        }
+        
+        public static IEnumerable<TType> SelectMessages<TType>(
+            this IEnumerable<IRecordedMessage> messages) where TType : class
+        {
+            return messages.Select(m => m.SetMessageType<TType>().Message);
         }
     }
 }
