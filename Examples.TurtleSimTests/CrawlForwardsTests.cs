@@ -1,9 +1,7 @@
-using System;
 using System.Linq;
-using System.Linq.Expressions;
 using FluentAssertions;
 using FluentAssertions.Collections;
-using FluentAssertions.Types;
+using FluentAssertions.Execution;
 using IntegROS;
 using RobSharper.Ros.MessageEssentials;
 
@@ -49,15 +47,14 @@ namespace Examples.TurtleSimTests
         {
             var messages = Scenario.Messages
                 .InTopic("/turtle*/pose")
-                .SelectMessages<Pose>();
-            
-            messages
+                .WithMessageType<Pose>()
+                .Select(message => message.Value.X)
                 .Should()
-                .BeInAscendingOrder(pose => pose.X);
+                .BeInAscendingOrder();
         }
 
         [ExpectThat]
-        public void Turtle_does_not_move_sidewards__variant1()
+        public void Turtle_does_not_move_sidewards__variant_1()
         {
             var messages = Scenario.Messages
                 .InTopic("/turtle*/pose")
@@ -69,15 +66,6 @@ namespace Examples.TurtleSimTests
             {
                 pose.Y.Should().Be(first.Y);
             }
-            
-            // messages
-            //     .Should()
-            //     .AllBeEquivalentTo();
-            
-            // //TODO besser noch:
-            // messages
-            //     .Should()
-            //     .AllBeEquivalent(pose => pose.Y);
         }
         
         [ExpectThat]
@@ -91,15 +79,61 @@ namespace Examples.TurtleSimTests
                 .Select(pose => pose.Y)
                 .Distinct()
                 .Should()
-                .HaveCount(2);
+                .HaveCount(1);
+        }
+        
+        [ExpectThat]
+        public void Turtle_does_not_move_sidewards__variant_3()
+        {
+            Scenario.Messages
+                .InTopic("/turtle*/pose")
+                .WithMessageType<Pose>()
+                .Select(message => message.Value.Y)
+                .Should()
+                .AllBeTheSame();
         }
 
         [ExpectThat]
         public void Turtle_does_not_turn()
         {
-            throw new NotImplementedException();
+            var messages = Scenario.Messages
+                .InTopic("/turtle*/pose")
+                .SelectMessages<Pose>();
+
+            messages
+                .Select(pose => pose.Theta)
+                .Should()
+                .AllBeTheSame($"{nameof(Pose.Theta)} should not change");
+
+            messages
+                .Select(pose => pose.AngularVelocity)
+                .Should()
+                .AllBeEquivalentTo(0f, $"{nameof(Pose.AngularVelocity)} should be 0");
         }
-        
-        
+    }
+
+    
+    public static class TestAssertionExtensions
+    {
+        [CustomAssertion]
+        public static AndConstraint<GenericCollectionAssertions<T>> AllBeTheSame<T>(this GenericCollectionAssertions<T> target,
+            string because = "",
+            params object[] args)
+        {
+            if (target.Subject == null || !target.Subject.Any())
+                return new AndConstraint<GenericCollectionAssertions<T>>(target);
+            
+            var expectedValue = target.Subject.FirstOrDefault();
+
+            foreach (var actualValue in target.Subject)
+            {
+                Execute.Assertion
+                    .ForCondition(object.Equals(expectedValue, actualValue))
+                    .BecauseOf(because, args)
+                    .FailWith("Expected all values of {context:collection} to be {0}{reason}, but found {1}.", expectedValue, actualValue);
+            }
+            
+            return new AndConstraint<GenericCollectionAssertions<T>>(target);
+        }
     }
 }

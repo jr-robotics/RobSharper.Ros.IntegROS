@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using RobSharper.Ros.MessageEssentials;
 
 namespace IntegROS
@@ -19,6 +20,6 @@ namespace IntegROS
         
         public RosType Type { get; }
         
-        TMessage Message { get; }
+        TMessage Value { get; }
     }
 }

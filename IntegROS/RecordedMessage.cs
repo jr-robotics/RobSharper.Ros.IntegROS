@@ -17,7 +17,7 @@ namespace IntegROS
 
         public RosType Type => _innerMessage.Type;
         
-        public TType Message
+        public TType Value
         {
             get
             {

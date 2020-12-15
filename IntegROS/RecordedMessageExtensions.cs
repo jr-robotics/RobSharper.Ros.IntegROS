@@ -33,7 +33,7 @@ namespace IntegROS
             return new RecordedMessage<TType>(message);
         }
 
-        public static IEnumerable<IRecordedMessage<TType>> SetMessageType<TType>(
+        public static IEnumerable<IRecordedMessage<TType>> WithMessageType<TType>(
             this IEnumerable<IRecordedMessage> messages) where TType : class
         {
             return messages.Select(m => m.SetMessageType<TType>());
@@ -42,7 +42,7 @@ namespace IntegROS
         public static IEnumerable<TType> SelectMessages<TType>(
             this IEnumerable<IRecordedMessage> messages) where TType : class
         {
-            return messages.Select(m => m.SetMessageType<TType>().Message);
+            return messages.Select(m => m.SetMessageType<TType>().Value);
         }
     }
 }
