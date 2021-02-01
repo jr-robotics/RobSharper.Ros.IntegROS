@@ -54,6 +54,23 @@ namespace Examples.TurtleSimTests
         }
 
         [ExpectThat]
+        public void Turtle_always_moves_forwards_grouped()
+        {
+            var poses = Scenario.Messages
+                .InTopic("/turtle*/pose")
+                .WithMessageType<Pose>()
+                .GroupBy(t => t.Topic);
+            
+            foreach (var turtle in poses)
+            {
+                turtle
+                    .Select(m => m.Value.X)
+                    .Should()
+                    .BeInAscendingOrder();
+            }
+        }
+
+        [ExpectThat]
         public void Turtle_does_not_move_sidewards__variant_1()
         {
             var messages = Scenario.Messages
