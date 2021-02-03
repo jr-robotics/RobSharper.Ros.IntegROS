@@ -7,8 +7,7 @@ using RobSharper.Ros.MessageEssentials;
 
 namespace Examples.TurtleSimTests
 {
-    //[RosbagScenarioAttrinute(TurtleSimBagFiles.MoveForwards)]
-    public class CrawlForwardsTests : ScenarioTests
+    public class CrawlForwardsTests : ForScenario<RosbagScenario>
     {
         [RosMessage("turtlesim/Pose")]
         public class Pose
@@ -38,10 +37,10 @@ namespace Examples.TurtleSimTests
             public float AngularVelocity { get; set; }
         }
         
-        // public CrawlForwardsTests(RosbagScenario scenario) : base(scenario)
-        // {
-        //     scenario.Load(TurtleSimBagFiles.MoveForwards);
-        // }
+        public CrawlForwardsTests(RosbagScenario scenario) : base(scenario)
+        {
+            scenario.Load(TurtleSimBagFiles.MoveForwards);
+        }
 
         [ExpectThat]
         public void Turtle_always_moves_forwards()
