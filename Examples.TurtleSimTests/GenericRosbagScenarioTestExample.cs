@@ -6,9 +6,9 @@ using Moq;
 
 namespace Examples.TurtleSimTests
 {
-    public class ScenarioTestExample : ForScenario<RosbagScenario>
+    public class GenericRosbagScenarioTestExample : ForScenario<RosbagScenario>
     {
-        public ScenarioTestExample(RosbagScenario scenario) : base(scenario)
+        public GenericRosbagScenarioTestExample(RosbagScenario scenario) : base(scenario)
         {
             ShouldContainMessages = false;
             
