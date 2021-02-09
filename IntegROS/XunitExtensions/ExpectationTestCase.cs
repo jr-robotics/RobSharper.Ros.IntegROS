@@ -23,12 +23,12 @@ namespace IntegROS.XunitExtensions
             DisplayName = String.Format("{0}, it {1}", TestMethod.TestClass.Class.Name, TestMethod.Method.Name).Replace('_', ' ');
         }
 
-        public Task<RunSummary> RunAsync(Specification specification,
+        public Task<RunSummary> RunAsync(ForNewScenario scenario,
                                          IMessageBus messageBus,
                                          ExceptionAggregator aggregator,
                                          CancellationTokenSource cancellationTokenSource)
         {
-            return new ExpectationTestCaseRunner(specification, this, DisplayName, messageBus, aggregator, cancellationTokenSource).RunAsync();
+            return new ExpectationTestCaseRunner(scenario, this, DisplayName, messageBus, aggregator, cancellationTokenSource).RunAsync();
         }
     }
 }

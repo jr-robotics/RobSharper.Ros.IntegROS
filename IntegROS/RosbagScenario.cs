@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using IntegROS.Rosbag;
 
 namespace IntegROS
 {
     public class RosbagScenario : IScenario
     {
+        private readonly string _bagfile;
         private IEnumerable<IRecordedMessage> _messages;
 
         public IEnumerable<IRecordedMessage> Messages
@@ -15,28 +15,26 @@ namespace IntegROS
             {
                 if (_messages == null)
                 {
-                    throw new InvalidOperationException("Messages have not been loaded yet. Call Load(rosbagFile) before accessing messages.");
+                    Load();
                 }
+                
                 return _messages;
             }
         }
 
-        public string RosbagFile { get; private set; }
-
-        public void Load(string rosbagFile)
+        public string RosbagFile
         {
-            if (rosbagFile == null) throw new ArgumentNullException(nameof(rosbagFile));
+            get => _bagfile;
+        }
 
-            if (_messages != null)
-            {
-                if (!string.Equals(RosbagFile, rosbagFile))
-                    throw new InvalidOperationException("Another rosbag was loaded before.");
-                
-                return;
-            }
-            
-            _messages = RosbagReader.Instance.Read(rosbagFile);
-            RosbagFile = rosbagFile;
+        public RosbagScenario(string bagfile)
+        {
+            _bagfile = bagfile ?? throw new ArgumentNullException(nameof(bagfile));
+        }
+
+        private void Load()
+        {
+            _messages = RosbagReader.Instance.Read(_bagfile);
         }
     }
 }

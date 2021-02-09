@@ -27,4 +27,11 @@ namespace IntegROS
                 Scenario.Messages.Should().NotBeEmpty("it should contain messages");
         }
     }
+
+    public abstract class ForNewScenario
+    {
+        public IScenario Scenario { get; internal set; }
+
+        public IEnumerable<IRecordedMessage> Messages => Scenario?.Messages;
+    }
 }

@@ -9,9 +9,9 @@ namespace IntegROS.XunitExtensions
 {
     public class ExpectationTestInvoker : TestInvoker<ExpectationTestCase>
     {
-        private readonly Specification specification;
+        private readonly ForNewScenario _scenario;
 
-        public ExpectationTestInvoker(Specification specification,
+        public ExpectationTestInvoker(ForNewScenario scenario,
                                       ITest test,
                                       IMessageBus messageBus,
                                       Type testClass,
@@ -20,7 +20,7 @@ namespace IntegROS.XunitExtensions
                                       CancellationTokenSource cancellationTokenSource)
             : base(test, messageBus, testClass, null, testMethod, null, aggregator, cancellationTokenSource)
         {
-            this.specification = specification;
+            this._scenario = scenario;
         }
 
         public new Task<decimal> RunAsync()
@@ -32,7 +32,7 @@ namespace IntegROS.XunitExtensions
                     if (!CancellationTokenSource.IsCancellationRequested)
                     {
                         if (!Aggregator.HasExceptions)
-                            await Timer.AggregateAsync(() => InvokeTestMethodAsync(specification));
+                            await Timer.AggregateAsync(() => InvokeTestMethodAsync(_scenario));
                     }
                 }
 

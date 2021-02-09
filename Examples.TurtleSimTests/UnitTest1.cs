@@ -1,58 +1,33 @@
-using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
+using IntegROS;
 using Xunit;
+
+
+[assembly: TestFramework("IntegROS.XunitExtensions.IntegrosTestFramework", "IntegROS")]
 
 namespace Examples.TurtleSimTests
 {
-    public class CrawlTests : IClassFixture<CrawlForwardScenario>
-    {
-        private CrawlForwardScenario Scenario { get; }
-        
-        public CrawlTests(CrawlForwardScenario scenario)
-        {
-            Scenario = scenario;
-        }
 
-        [Fact]
-        public void CrawlForwardTest()
-        {
-            Scenario.Messages
-                .Where(m => m.Topic == "/turtle1/pose")
-                .Count()
-                .Should().Be(0, "no pose should be published");
-        }
-    }
-    
-/*
-    public class Crawl2Tests : ForScenario<CrawlForward>
+    // [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
+    // [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
+    public class ForNewScenarioExample : ForNewScenario
     {
         [ExpectThat]
-        public void No_pose_is_published()
+        [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
+        [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
+        public void Test_fails()
         {
-            
+            Assert.True(true);
         }
-    }
 
-    public class Crawl3Tests : ForScenario
-    {
-        protected override void Setup()
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void My_theory(int input)
         {
-        }
-        
-        protected override void Exercise()
-        {
-        }
-        
-        protected override void Teardown()
-        {
-        }
-        
-        [ExpectThat]
-        public void No_pose_is_published()
-        {
-            
+            input.Should().BePositive();
         }
     }
-*/
 }

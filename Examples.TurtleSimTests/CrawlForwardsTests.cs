@@ -39,7 +39,7 @@ namespace Examples.TurtleSimTests
         
         public CrawlForwardsTests(RosbagScenario scenario) : base(scenario)
         {
-            scenario.Load(TurtleSimBagFiles.MoveForwards);
+            //scenario.Load(TurtleSimBagFiles.MoveForwards);
         }
 
         [ExpectThat]

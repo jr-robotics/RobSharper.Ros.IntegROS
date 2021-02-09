@@ -30,29 +30,29 @@ namespace IntegROS.XunitExtensions
         {
             var timer = new ExecutionTimer();
             object testClassInstance = null;
-
             Aggregator.Run(() => testClassInstance = Activator.CreateInstance(testClass.Class.ToRuntimeType()));
 
             if (Aggregator.HasExceptions)
                 return FailEntireClass(testCases, timer);
 
-            var specification = testClassInstance as Specification;
-            if (specification == null)
+            var scenario = testClassInstance as ForNewScenario;
+            if (scenario == null)
             {
-                Aggregator.Add(new InvalidOperationException(String.Format("Test class {0} cannot be static, and must derive from Specification.", testClass.Class.Name)));
+                Aggregator.Add(new InvalidOperationException(String.Format("Test class {0} cannot be static, and must derive from {1}.", testClass.Class.Name, nameof(ForNewScenario))));
                 return FailEntireClass(testCases, timer);
             }
 
-            Aggregator.Run(specification.OnStart);
-            if (Aggregator.HasExceptions)
-                return FailEntireClass(testCases, timer);
+            // TODO
+            // Aggregator.Run(scenario.OnStart);
+            // if (Aggregator.HasExceptions)
+            //     return FailEntireClass(testCases, timer);
             
-            var result = await new ExpectationTestClassRunner(specification, testClass, @class, testCases, diagnosticMessageSink, MessageBus, TestCaseOrderer, new ExceptionAggregator(Aggregator), CancellationTokenSource).RunAsync();
+            var result = await new ExpectationTestClassRunner(scenario, testClass, @class, testCases, diagnosticMessageSink, MessageBus, TestCaseOrderer, new ExceptionAggregator(Aggregator), CancellationTokenSource).RunAsync();
 
-            Aggregator.Run(specification.OnFinish);
+            // TODO
+            //Aggregator.Run(scenario.OnFinish);
 
-            var disposable = specification as IDisposable;
-            if (disposable != null)
+            if (scenario is IDisposable disposable)
                 timer.Aggregate(disposable.Dispose);
 
             return result;

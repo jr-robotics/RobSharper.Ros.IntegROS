@@ -6,10 +6,10 @@ namespace IntegROS.XunitExtensions
 {
     public class ExpectationTestCaseRunner : TestCaseRunner<ExpectationTestCase>
     {
-        readonly string displayName;
-        readonly Specification specification;
+        private readonly string _displayName;
+        private readonly ForNewScenario _scenario;
 
-        public ExpectationTestCaseRunner(Specification specification,
+        public ExpectationTestCaseRunner(ForNewScenario scenario,
                                          ExpectationTestCase testCase,
                                          string displayName,
                                          IMessageBus messageBus,
@@ -17,18 +17,18 @@ namespace IntegROS.XunitExtensions
                                          CancellationTokenSource cancellationTokenSource)
             : base(testCase, messageBus, aggregator, cancellationTokenSource)
         {
-            this.specification = specification;
-            this.displayName = displayName;
+            this._scenario = scenario;
+            this._displayName = displayName;
         }
 
         protected override Task<RunSummary> RunTestAsync()
         {
             var timer = new ExecutionTimer();
-            var TestClass = TestCase.TestMethod.TestClass.Class.ToRuntimeType();
-            var TestMethod = TestCase.TestMethod.Method.ToRuntimeMethod();
-            var test = new ExpectationTest(TestCase, displayName);
+            var testClass = TestCase.TestMethod.TestClass.Class.ToRuntimeType();
+            var testMethod = TestCase.TestMethod.Method.ToRuntimeMethod();
+            var test = new ExpectationTest(TestCase, _displayName);
 
-            return new ExpectationTestRunner(specification, test, MessageBus, timer, TestClass, TestMethod, Aggregator, CancellationTokenSource).RunAsync();
+            return new ExpectationTestRunner(_scenario, test, MessageBus, timer, testClass, testMethod, Aggregator, CancellationTokenSource).RunAsync();
         }
     }
 }

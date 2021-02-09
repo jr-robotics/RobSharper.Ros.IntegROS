@@ -8,9 +8,9 @@ namespace IntegROS.XunitExtensions
 {
     public class ExpectationTestMethodRunner : TestMethodRunner<ExpectationTestCase>
     {
-        readonly Specification specification;
+        readonly ForNewScenario _scenario;
 
-        public ExpectationTestMethodRunner(Specification specification,
+        public ExpectationTestMethodRunner(ForNewScenario scenario,
                                            ITestMethod testMethod,
                                            IReflectionTypeInfo @class,
                                            IReflectionMethodInfo method,
@@ -20,12 +20,12 @@ namespace IntegROS.XunitExtensions
                                            CancellationTokenSource cancellationTokenSource)
             : base(testMethod, @class, method, testCases, messageBus, aggregator, cancellationTokenSource)
         {
-            this.specification = specification;
+            _scenario = scenario;
         }
 
         protected override Task<RunSummary> RunTestCaseAsync(ExpectationTestCase testCase)
         {
-            return testCase.RunAsync(specification, MessageBus, new ExceptionAggregator(Aggregator), CancellationTokenSource);
+            return testCase.RunAsync(_scenario, MessageBus, new ExceptionAggregator(Aggregator), CancellationTokenSource);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Examples.TurtleSimTests
             
             //TODO: Replace stub when rosbag reader is available
             RosbagReader.Instance = new Mock<IRosbagReader>().Object;
-            scenario.Load("rosbagfilepath.bag");
+            //scenario.Load("rosbagfilepath.bag");
         }
 
         [ExpectThat]

@@ -9,10 +9,10 @@ namespace IntegROS.XunitExtensions
 {
     public class ExpectationTestRunner : TestRunner<ExpectationTestCase>
     {
-        readonly Specification specification;
-        readonly ExecutionTimer timer;
+        private readonly ForNewScenario _scenario;
+        private readonly ExecutionTimer _timer;
         
-        public ExpectationTestRunner(Specification specification,
+        public ExpectationTestRunner(ForNewScenario scenario,
                                      ITest test,
                                      IMessageBus messageBus,
                                      ExecutionTimer timer,
@@ -22,13 +22,13 @@ namespace IntegROS.XunitExtensions
                                      CancellationTokenSource cancellationTokenSource)
             : base(test, messageBus, testClass, null, testMethod, null, null, aggregator, cancellationTokenSource)
         {
-            this.specification = specification;
-            this.timer = timer;
+            this._scenario = scenario;
+            this._timer = timer;
         }
 
         protected override async Task<Tuple<decimal, string>> InvokeTestAsync(ExceptionAggregator aggregator)
         {
-            var duration = await new ExpectationTestInvoker(specification, Test, MessageBus, TestClass, TestMethod, aggregator, CancellationTokenSource).RunAsync();
+            var duration = await new ExpectationTestInvoker(_scenario, Test, MessageBus, TestClass, TestMethod, aggregator, CancellationTokenSource).RunAsync();
             return Tuple.Create(duration, String.Empty);
         }
     }
