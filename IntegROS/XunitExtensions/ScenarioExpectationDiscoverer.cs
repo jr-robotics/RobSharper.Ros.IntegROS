@@ -33,64 +33,63 @@ namespace IntegROS.XunitExtensions
                 return CreateTestCasesForSkip(discoveryOptions, testMethod);
             }
             
-            if (!discoveryOptions.PreEnumerateTheoriesOrDefault())
-            {
-                // TODO
-                throw new NotSupportedException("Scenarios must be enumerable.");
-            }
-            
             try
             {
-                // Create one test per scenario
-                var methodScenarioAttributes = testMethod.Method.GetCustomAttributes(typeof(ScenarioAttribute));
-                var classScenarioAttributes = testMethod.TestClass.Class.GetCustomAttributes(typeof(ScenarioAttribute));
-                
                 var testCases = new List<IXunitTestCase>();
 
-                foreach (var methodScenarioAttribute in methodScenarioAttributes)
-                {
-                    var skipReason = methodScenarioAttribute.GetNamedArgument<string>("Skip");
-
-                    if (skipReason != null)
-                    {
-                        var skippedScenarioTestCase = new SkippedScenarioTestCase(DiagnosticMessageSink,
-                            discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(),
-                            testMethod, skipReason, null);
-                        
-                        testCases.Add(skippedScenarioTestCase);
-                        continue;
-                    }
-
-                    var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, methodScenarioAttribute);
-                    var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(methodScenarioAttribute);
-                    var scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
-
-                    if (scenario == null)
-                    {
-                        testCases.Add(
-                            new ExecutionErrorTestCase(
-                                DiagnosticMessageSink,
-                                discoveryOptions.MethodDisplayOrDefault(),
-                                discoveryOptions.MethodDisplayOptionsOrDefault(),
-                                testMethod,
-                                $"Scenario was null for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}."
-                            )
-                        );
-                        
-                        continue;
-                    }
-
-                    var testCase = new ScenarioTestCase(DiagnosticMessageSink,
-                        discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(),
-                        testMethod, scenarioIdentifier);
-
-                    testCases.Add(testCase);
-                }
-
-                foreach (var classScenarioAttribute in classScenarioAttributes)
-                {
-                    // TODO: Do the same for class attributes
-                }
+                var tc = new MultipleScenariosTestCase(DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(),
+                    discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod);
+                
+                testCases.Add(tc);
+                
+                
+                // var methodScenarioAttributes = testMethod.Method.GetCustomAttributes(typeof(ScenarioAttribute));
+                // var classScenarioAttributes = testMethod.TestClass.Class.GetCustomAttributes(typeof(ScenarioAttribute));
+                //
+                // foreach (var methodScenarioAttribute in methodScenarioAttributes)
+                // {
+                //     var skipReason = methodScenarioAttribute.GetNamedArgument<string>("Skip");
+                //
+                //     if (skipReason != null)
+                //     {
+                //         var skippedScenarioTestCase = new SkippedScenarioTestCase(DiagnosticMessageSink,
+                //             discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(),
+                //             testMethod, skipReason, null);
+                //         
+                //         testCases.Add(skippedScenarioTestCase);
+                //         continue;
+                //     }
+                //
+                //     var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, methodScenarioAttribute);
+                //     var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(methodScenarioAttribute);
+                //     var scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
+                //
+                //     if (scenario == null)
+                //     {
+                //         testCases.Add(
+                //             new ExecutionErrorTestCase(
+                //                 DiagnosticMessageSink,
+                //                 discoveryOptions.MethodDisplayOrDefault(),
+                //                 discoveryOptions.MethodDisplayOptionsOrDefault(),
+                //                 testMethod,
+                //                 $"Scenario was null for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}."
+                //             )
+                //         );
+                //         
+                //         continue;
+                //     }
+                //
+                //     var testCase = new ScenarioTestCase(DiagnosticMessageSink,
+                //         discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(),
+                //         testMethod, scenarioIdentifier);
+                //
+                //     testCases.Add(testCase);
+                // }
+                //
+                // foreach (var classScenarioAttribute in classScenarioAttributes)
+                // {
+                //     // TODO: Do the same for class attributes
+                // }
 
                 if (testCases.Count == 0)
                 {

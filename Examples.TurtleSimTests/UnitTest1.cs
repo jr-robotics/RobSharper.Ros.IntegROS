@@ -14,14 +14,14 @@ namespace Examples.TurtleSimTests
     public class ForNewScenarioExample : ForNewScenario
     {
         [ExpectThat()]
-        public void Expectation_without_scenario_should_not_run(IScenario scenario)
+        public void Expectation_without_scenario_should_not_run()
         {
             Assert.True(true);
         }
         
         [ExpectThat()]
         [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
-        public void Expectation_for_one_scenario(IScenario scenario)
+        public void Expectation_for_one_scenario()
         {
             Assert.True(true);
         }
@@ -29,7 +29,7 @@ namespace Examples.TurtleSimTests
         [ExpectThat()]
         [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
         [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
-        public void Expectation_for_two_scenarios(IScenario scenario)
+        public void Expectation_for_two_scenarios()
         {
             Assert.True(true);
         }
