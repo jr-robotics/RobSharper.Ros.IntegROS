@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
+using IntegROS.Scenarios;
 using Xunit;
 
 namespace IntegROS

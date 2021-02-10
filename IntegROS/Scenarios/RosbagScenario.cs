@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using IntegROS.Rosbag;
 
-namespace IntegROS
+namespace IntegROS.Scenarios
 {
     public class RosbagScenario : IScenario
     {
@@ -35,6 +35,15 @@ namespace IntegROS
         private void Load()
         {
             _messages = RosbagReader.Instance.Read(_bagfile);
+        }
+
+        public static string CreateKey(string bagfile)
+        {
+            if (bagfile == null) throw new ArgumentNullException(nameof(bagfile));
+            
+            // TODO: Sanitize bagfile path
+
+            return "ROSBAG_" + bagfile;
         }
     }
 }

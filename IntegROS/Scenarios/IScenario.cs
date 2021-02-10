@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace IntegROS
+namespace IntegROS.Scenarios
 {
     public interface IScenario
     {

@@ -3,7 +3,7 @@ using IntegROS;
 using Xunit;
 
 
-[assembly: TestFramework("IntegROS.XunitExtensions.IntegrosTestFramework", "IntegROS")]
+//[assembly: TestFramework("IntegROS.XunitExtensions.IntegrosTestFramework", "IntegROS")]
 
 namespace Examples.TurtleSimTests
 {
@@ -12,10 +12,23 @@ namespace Examples.TurtleSimTests
     // [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
     public class ForNewScenarioExample : ForNewScenario
     {
-        [ExpectThat]
+        [ExpectThat()]
+        public void Expectation_without_scenario_should_not_run()
+        {
+            Assert.True(true);
+        }
+        
+        [ExpectThat()]
         [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
-        [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
-        public void Test_fails()
+        public void Expectation_for_one_scenario()
+        {
+            Assert.True(true);
+        }
+        
+        [ExpectThat()]
+        [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
+        [RosbagScenario(TurtleSimBagFiles.MoveBackwards, DisplayName = "Move Backwars")]
+        public void Expectation_for_two_scenarios()
         {
             Assert.True(true);
         }

@@ -3,6 +3,7 @@ using FluentAssertions;
 using FluentAssertions.Collections;
 using FluentAssertions.Execution;
 using IntegROS;
+using IntegROS.Scenarios;
 using RobSharper.Ros.MessageEssentials;
 
 namespace Examples.TurtleSimTests

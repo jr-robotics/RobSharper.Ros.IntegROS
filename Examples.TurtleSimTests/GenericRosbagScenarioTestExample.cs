@@ -2,6 +2,7 @@ using System.Linq;
 using FluentAssertions;
 using IntegROS;
 using IntegROS.Rosbag;
+using IntegROS.Scenarios;
 using Moq;
 
 namespace Examples.TurtleSimTests

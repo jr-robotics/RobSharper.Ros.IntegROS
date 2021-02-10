@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using IntegROS.Rosbag;
+using IntegROS.Scenarios;
 using Moq;
 using Xunit;
 

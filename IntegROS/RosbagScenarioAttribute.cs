@@ -1,34 +1,11 @@
-﻿using System;
+﻿using IntegROS.XunitExtensions.ScenarioDiscovery;
 
 namespace IntegROS
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public class RosbagScenarioAttribute : Attribute, IHaveAScenario
+    [ScenarioDiscoverer("IntegROS.XunitExtensions.ScenarioDiscovery.RosbagScenarioDiscoverer", "IntegROS")]
+    public class RosbagScenarioAttribute : ScenarioAttribute
     {
-        private object _lock = new object();
-        private RosbagScenario _scenario;
         public string Bagfile { get; }
-        
-        public RosbagScenario Scenario
-        {
-            get
-            {
-                if (_scenario == null)
-                {
-                    lock (_lock)
-                    {
-                        if (_scenario == null)
-                        {
-                            _scenario = new RosbagScenario(Bagfile);
-                        }
-                    }
-                }
-
-                return _scenario;
-            }
-        }
-
-        IScenario IHaveAScenario.Scenario => Scenario;
 
         public RosbagScenarioAttribute(string bagfile)
         {
