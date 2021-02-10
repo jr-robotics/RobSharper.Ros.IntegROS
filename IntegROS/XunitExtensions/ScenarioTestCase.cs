@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,20 @@ namespace IntegROS.XunitExtensions
             defaultMethodDisplayOptions, testMethod,
             testMethodArguments)
         {
+            SetScenarioIdentifier(scenarioIdentifier);
+        }
+
+        private void SetScenarioIdentifier(IScenarioIdentifier scenarioIdentifier)
+        {
             ScenarioIdentifier = scenarioIdentifier;
+            DisplayName += $"[{scenarioIdentifier}]";
+
+            Traits.Add("Scenario", new List<string>() {scenarioIdentifier.ToString()});
+        }
+
+        protected override string GetUniqueID()
+        {
+            return base.GetUniqueID() + $"[{ScenarioIdentifier}]";
         }
 
         public override void Serialize(IXunitSerializationInfo data)
@@ -37,7 +51,9 @@ namespace IntegROS.XunitExtensions
         public override void Deserialize(IXunitSerializationInfo data)
         {
             base.Deserialize(data);
-            ScenarioIdentifier = data.GetValue<IScenarioIdentifier>(nameof(ScenarioIdentifier));
+            
+            var scenarioIdentifier = data.GetValue<IScenarioIdentifier>(nameof(ScenarioIdentifier));
+            SetScenarioIdentifier(scenarioIdentifier);
         }
 
         public override Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink, IMessageBus messageBus, object[] constructorArguments,

@@ -1,5 +1,6 @@
 using FluentAssertions;
 using IntegROS;
+using IntegROS.Scenarios;
 using Xunit;
 
 
@@ -13,22 +14,22 @@ namespace Examples.TurtleSimTests
     public class ForNewScenarioExample : ForNewScenario
     {
         [ExpectThat()]
-        public void Expectation_without_scenario_should_not_run()
+        public void Expectation_without_scenario_should_not_run(IScenario scenario)
         {
             Assert.True(true);
         }
         
         [ExpectThat()]
         [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
-        public void Expectation_for_one_scenario()
+        public void Expectation_for_one_scenario(IScenario scenario)
         {
             Assert.True(true);
         }
         
         [ExpectThat()]
         [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
-        [RosbagScenario(TurtleSimBagFiles.MoveBackwards, DisplayName = "Move Backwars")]
-        public void Expectation_for_two_scenarios()
+        [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
+        public void Expectation_for_two_scenarios(IScenario scenario)
         {
             Assert.True(true);
         }

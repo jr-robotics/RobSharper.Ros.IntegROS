@@ -32,8 +32,12 @@ namespace IntegROS.XunitExtensions
             {
                 return CreateTestCasesForSkip(discoveryOptions, testMethod);
             }
-
-            var preenumerate = discoveryOptions.PreEnumerateTheoriesOrDefault();
+            
+            if (!discoveryOptions.PreEnumerateTheoriesOrDefault())
+            {
+                // TODO
+                throw new NotSupportedException("Scenarios must be enumerable.");
+            }
             
             try
             {

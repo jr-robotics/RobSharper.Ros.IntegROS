@@ -29,7 +29,7 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
 
         public override string ToString()
         {
-            return Bagfile;
+            return $"ROSBAG:{Bagfile}";
         }
     }
 }
