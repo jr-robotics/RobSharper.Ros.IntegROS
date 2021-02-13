@@ -1,6 +1,5 @@
 using FluentAssertions;
 using IntegROS;
-using IntegROS.Scenarios;
 using Xunit;
 
 
@@ -13,17 +12,24 @@ namespace Examples.TurtleSimTests
     // [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
     public class ForNewScenarioExample : ForNewScenario
     {
-        [ExpectThat()]
+        [ExpectThat(Skip = "Does not work without scenario attribute")]
         public void Expectation_without_scenario_should_not_run()
         {
             Assert.True(true);
         }
         
-        [ExpectThat()]
+        [ExpectThat(DisplayName = "Expect that")]
         [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
         public void Expectation_for_one_scenario()
         {
-            Assert.True(true);
+            Value.Should().BePositive();
+        }
+        
+        [Theory(DisplayName = "Theory Name")]
+        [InlineData(2)]
+        public void My_single_data_theory(int input)
+        {
+            input.Should().BePositive();
         }
         
         [ExpectThat()]
@@ -31,17 +37,41 @@ namespace Examples.TurtleSimTests
         [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
         public void Expectation_for_two_scenarios()
         {
-            Assert.True(true);
+            Value.Should().BePositive();
         }
+        
+        //
+        // [Theory]
+        // // [InlineData(-1, Skip = "Invalid data")]
+        // // [InlineData(0, Skip = "Invalid data")]
+        // [InlineData(1)]
+        // [InlineData(2)]
+        // public void My_theory(int input)
+        // {
+        //     input.Should().BePositive();
+        // }
+        
+        //
+        // [Fact()]
+        // public void My_fact()
+        // {
+        //     true.Should().BeTrue();
+        // }
 
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        public void My_theory(int input)
-        {
-            input.Should().BePositive();
-        }
+        // [Fact]
+        // public void FailIfJetBrainsRider()
+        // {
+        //     var executing = Assembly.GetEntryAssembly();
+        //     var isJetBrainsExecutor = executing.FullName.StartsWith("resharper", StringComparison.OrdinalIgnoreCase);
+        //
+        //     isJetBrainsExecutor.Should().BeFalse("JetBrains Resharper Test executor is not supported");
+        // }
+        //
+        // [Fact]
+        // public void TestExecutorName()
+        // {
+        //     var executing = Assembly.GetEntryAssembly();
+        //     executing.FullName.Should().BeNullOrEmpty();
+        // }
     }
 }

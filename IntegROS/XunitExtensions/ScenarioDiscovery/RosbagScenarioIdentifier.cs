@@ -6,7 +6,7 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
 {
     public class RosbagScenarioIdentifier : IScenarioIdentifier
     {
-        public string Bagfile { get; }
+        public string Bagfile { get; private set; }
         
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
@@ -19,7 +19,7 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
 
         public void Deserialize(IXunitSerializationInfo info)
         {
-            info.GetValue<string>("Bagfile");
+            Bagfile = info.GetValue<string>("Bagfile");
         }
 
         public void Serialize(IXunitSerializationInfo info)

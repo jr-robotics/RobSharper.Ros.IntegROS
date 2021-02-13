@@ -41,8 +41,22 @@ namespace IntegROS.XunitExtensions
     
     public class ScenarioTestCase : XunitTestCase
     {
-        public IScenarioIdentifier ScenarioIdentifier { get; private set; }
-        
+        private IScenarioIdentifier _scenarioIdentifier;
+
+        public IScenarioIdentifier ScenarioIdentifier
+        {
+            get
+            {
+                EnsureInitialized();
+                return _scenarioIdentifier;
+            }
+            private set
+            {
+                EnsureInitialized();
+                _scenarioIdentifier = value;
+            }
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
         public ScenarioTestCase() {}
@@ -56,15 +70,15 @@ namespace IntegROS.XunitExtensions
             defaultMethodDisplayOptions, testMethod,
             testMethodArguments)
         {
-            SetScenarioIdentifier(scenarioIdentifier);
+            _scenarioIdentifier = scenarioIdentifier;
         }
 
-        private void SetScenarioIdentifier(IScenarioIdentifier scenarioIdentifier)
+        protected override void Initialize()
         {
-            ScenarioIdentifier = scenarioIdentifier;
-            DisplayName += $"[{scenarioIdentifier}]";
+            base.Initialize();
+            DisplayName += $"(scenario: \"{ScenarioIdentifier}\")";
 
-            Traits.Add("Scenario", new List<string>() {scenarioIdentifier.ToString()});
+            Traits.Add("Scenario", new List<string>() {ScenarioIdentifier.ToString()});
         }
 
         protected override string GetUniqueID()
@@ -75,6 +89,7 @@ namespace IntegROS.XunitExtensions
         public override void Serialize(IXunitSerializationInfo data)
         {
             base.Serialize(data);
+            
             data.AddValue(nameof(ScenarioIdentifier), ScenarioIdentifier);
         }
 
@@ -82,8 +97,7 @@ namespace IntegROS.XunitExtensions
         {
             base.Deserialize(data);
             
-            var scenarioIdentifier = data.GetValue<IScenarioIdentifier>(nameof(ScenarioIdentifier));
-            SetScenarioIdentifier(scenarioIdentifier);
+            _scenarioIdentifier = data.GetValue<IScenarioIdentifier>(nameof(ScenarioIdentifier));
         }
 
         public override Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink, IMessageBus messageBus, object[] constructorArguments,

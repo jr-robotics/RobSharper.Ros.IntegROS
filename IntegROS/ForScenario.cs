@@ -31,6 +31,8 @@ namespace IntegROS
 
     public abstract class ForNewScenario
     {
+        public int Value { get; set; }
+        
         public IScenario Scenario { get; internal set; }
 
         public IEnumerable<IRecordedMessage> Messages => Scenario?.Messages;

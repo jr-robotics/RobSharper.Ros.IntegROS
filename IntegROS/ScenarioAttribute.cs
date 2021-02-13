@@ -8,6 +8,5 @@ namespace IntegROS
         public string DisplayName { get; set; }
         
         public string Skip { get; set; }
-        
     }
 }
