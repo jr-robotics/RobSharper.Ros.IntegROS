@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
+    
+    [Obsolete("Unused", true)]
     public class ExpectationDiscoverer : TestFrameworkDiscoverer
     {
         readonly CollectionPerClassTestCollectionFactory testCollectionFactory;

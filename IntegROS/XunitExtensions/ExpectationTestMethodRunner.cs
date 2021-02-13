@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit.Abstractions;
@@ -6,6 +7,7 @@ using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
+    [Obsolete("Unused", true)]
     public class ExpectationTestMethodRunner : TestMethodRunner<ExpectationTestCase>
     {
         readonly ForNewScenario _scenario;

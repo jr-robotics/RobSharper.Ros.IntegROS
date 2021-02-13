@@ -7,6 +7,7 @@ using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
+    [Obsolete("Unused", true)]
     public class ExpectationTestCase : TestMethodTestCase
     {
         [EditorBrowsable(EditorBrowsableState.Never)]

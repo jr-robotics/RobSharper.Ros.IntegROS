@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
+    [Obsolete("Unused", true)]
     public class ExpectationExecutor : TestFrameworkExecutor<ExpectationTestCase>
     {
         public ExpectationExecutor(AssemblyName assemblyName,

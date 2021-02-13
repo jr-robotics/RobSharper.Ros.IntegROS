@@ -1,8 +1,10 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace IntegROS.XunitExtensions
 {
+    [Obsolete("Unused", true)]
     public class ExpectationTest : LongLivedMarshalByRefObject, ITest
     {
         public ExpectationTest(ExpectationTestCase testCase, string displayName)

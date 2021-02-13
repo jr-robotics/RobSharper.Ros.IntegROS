@@ -1,9 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
+    [Obsolete("Unused", true)]
     public class IntegrosTestFramework : TestFramework
     {
         public IntegrosTestFramework(IMessageSink diagnosticMessageSink)

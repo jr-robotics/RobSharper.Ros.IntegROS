@@ -8,6 +8,7 @@ using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
+    [Obsolete("Unused", true)]
     public class ExpectationTestCollectionRunner : TestCollectionRunner<ExpectationTestCase>
     {
         readonly IMessageSink diagnosticMessageSink;

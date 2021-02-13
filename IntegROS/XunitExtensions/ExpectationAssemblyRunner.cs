@@ -7,6 +7,7 @@ using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
+    [Obsolete("Unused", true)]
     public class ExpectationAssemblyRunner : TestAssemblyRunner<ExpectationTestCase>
     {
         public ExpectationAssemblyRunner(ITestAssembly testAssembly,
