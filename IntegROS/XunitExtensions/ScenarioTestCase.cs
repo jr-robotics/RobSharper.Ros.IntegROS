@@ -76,28 +76,28 @@ namespace IntegROS.XunitExtensions
         protected override void Initialize()
         {
             base.Initialize();
-            DisplayName += $"(scenario: \"{ScenarioIdentifier}\")";
 
-            Traits.Add("Scenario", new List<string>() {ScenarioIdentifier.ToString()});
+            DisplayName += $"(scenario: \"{_scenarioIdentifier}\")";
+            Traits.Add("Scenario", new List<string>() {_scenarioIdentifier.ToString()});
         }
 
         protected override string GetUniqueID()
         {
-            return base.GetUniqueID() + $"[{ScenarioIdentifier}]";
+            return base.GetUniqueID() + $"[{_scenarioIdentifier}]";
         }
 
         public override void Serialize(IXunitSerializationInfo data)
         {
             base.Serialize(data);
             
-            data.AddValue(nameof(ScenarioIdentifier), ScenarioIdentifier);
+            data.AddValue(nameof(ScenarioIdentifier), _scenarioIdentifier);
         }
 
         public override void Deserialize(IXunitSerializationInfo data)
         {
-            base.Deserialize(data);
-            
             _scenarioIdentifier = data.GetValue<IScenarioIdentifier>(nameof(ScenarioIdentifier));
+            
+            base.Deserialize(data);
         }
 
         public override Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink, IMessageBus messageBus, object[] constructorArguments,
