@@ -87,7 +87,7 @@ namespace IntegROS.XunitExtensions
             throw new NotSupportedException("Test can only be created with scenario");
         }
         
-        protected virtual ITest CreateTest(IXunitTestCase testCase, IScenarioIdentifier scenarioIdentifier)
+        protected virtual ScenarioTest CreateTest(IXunitTestCase testCase, IScenarioIdentifier scenarioIdentifier)
         {
             var displayName = testCase.DisplayName + $"(scenario: \"{scenarioIdentifier}\")";
             return new ScenarioTest(testCase, displayName, scenarioIdentifier);

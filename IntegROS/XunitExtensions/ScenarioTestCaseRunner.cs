@@ -30,7 +30,7 @@ namespace IntegROS.XunitExtensions
             MethodInfo testMethod, object[] testMethodArguments, string skipReason, IReadOnlyList<BeforeAfterTestAttribute> beforeAfterAttributes,
             ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource)
         {
-            return new ScenarioTestRunner(test, messageBus, testClass, constructorArguments, testMethod,
+            return new ScenarioTestRunner((ScenarioTest) test, messageBus, testClass, constructorArguments, testMethod,
                 testMethodArguments, skipReason, beforeAfterAttributes, new ExceptionAggregator(aggregator),
                 cancellationTokenSource);
         }

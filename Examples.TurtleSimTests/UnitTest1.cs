@@ -2,7 +2,7 @@ using FluentAssertions;
 using IntegROS;
 using Xunit;
 
-
+//[assembly: TestCaseOrderer("IntegROS.XunitExtensions.ExpectationTestCaseOrderer", "IntegROS")]
 //[assembly: TestFramework("IntegROS.XunitExtensions.IntegrosTestFramework", "IntegROS")]
 
 namespace Examples.TurtleSimTests
@@ -22,7 +22,7 @@ namespace Examples.TurtleSimTests
         [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
         public void Expectation_for_one_scenario()
         {
-            Value.Should().BePositive();
+            1.Should().BePositive();
         }
         
         [Theory(DisplayName = "Theory Name")]
@@ -37,7 +37,7 @@ namespace Examples.TurtleSimTests
         [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
         public void Expectation_for_two_scenarios()
         {
-            Value.Should().BePositive();
+            1.Should().BePositive();
         }
         
         //
