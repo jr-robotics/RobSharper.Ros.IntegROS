@@ -10,9 +10,9 @@ namespace IntegROS.XunitExtensions
     [Obsolete("Unused", true)]
     public class ExpectationTestInvoker : TestInvoker<ExpectationTestCase>
     {
-        private readonly ForNewScenario _scenario;
+        private readonly ForScenario _scenario;
 
-        public ExpectationTestInvoker(ForNewScenario scenario,
+        public ExpectationTestInvoker(ForScenario scenario,
                                       ITest test,
                                       IMessageBus messageBus,
                                       Type testClass,

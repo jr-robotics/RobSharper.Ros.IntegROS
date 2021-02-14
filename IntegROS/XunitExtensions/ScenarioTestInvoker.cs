@@ -26,7 +26,7 @@ namespace IntegROS.XunitExtensions
         {
             var testClass = base.CreateTestClass();
             
-            if (testClass is ForNewScenario scenarioTestClass)
+            if (testClass is ForScenario scenarioTestClass)
             {
                 scenarioTestClass.Scenario = Scenario;
             }

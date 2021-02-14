@@ -9,9 +9,9 @@ namespace IntegROS.XunitExtensions
     public class ExpectationTestCaseRunner : TestCaseRunner<ExpectationTestCase>
     {
         private readonly string _displayName;
-        private readonly ForNewScenario _scenario;
+        private readonly ForScenario _scenario;
 
-        public ExpectationTestCaseRunner(ForNewScenario scenario,
+        public ExpectationTestCaseRunner(ForScenario scenario,
                                          ExpectationTestCase testCase,
                                          string displayName,
                                          IMessageBus messageBus,

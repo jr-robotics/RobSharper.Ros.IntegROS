@@ -10,10 +10,10 @@ namespace IntegROS.XunitExtensions
     [Obsolete("Unused", true)]
     public class ExpectationTestRunner : TestRunner<ExpectationTestCase>
     {
-        private readonly ForNewScenario _scenario;
+        private readonly ForScenario _scenario;
         private readonly ExecutionTimer _timer;
         
-        public ExpectationTestRunner(ForNewScenario scenario,
+        public ExpectationTestRunner(ForScenario scenario,
                                      ITest test,
                                      IMessageBus messageBus,
                                      ExecutionTimer timer,

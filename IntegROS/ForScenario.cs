@@ -29,13 +29,13 @@ namespace IntegROS
         }
     }
 
-    public abstract class ForNewScenario
+    public abstract class ForScenario
     {
         public IScenario Scenario { get; internal set; }
 
         public IEnumerable<IRecordedMessage> Messages => Scenario?.Messages;
 
-        public ForNewScenario()
+        public ForScenario()
         {
             
         }

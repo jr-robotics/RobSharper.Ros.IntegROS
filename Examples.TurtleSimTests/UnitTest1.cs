@@ -10,7 +10,7 @@ namespace Examples.TurtleSimTests
 
     // [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
     // [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
-    public class ForNewScenarioExample : ForNewScenario
+    public class ForScenarioExample : ForScenario
     {
         [ExpectThat(Skip = "Does not work without scenario attribute")]
         public void Expectation_without_scenario_should_not_run()

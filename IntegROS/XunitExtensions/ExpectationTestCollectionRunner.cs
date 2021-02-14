@@ -36,10 +36,10 @@ namespace IntegROS.XunitExtensions
             if (Aggregator.HasExceptions)
                 return FailEntireClass(testCases, timer);
 
-            var scenario = testClassInstance as ForNewScenario;
+            var scenario = testClassInstance as ForScenario;
             if (scenario == null)
             {
-                Aggregator.Add(new InvalidOperationException(String.Format("Test class {0} cannot be static, and must derive from {1}.", testClass.Class.Name, nameof(ForNewScenario))));
+                Aggregator.Add(new InvalidOperationException(String.Format("Test class {0} cannot be static, and must derive from {1}.", testClass.Class.Name, nameof(ForScenario))));
                 return FailEntireClass(testCases, timer);
             }
 

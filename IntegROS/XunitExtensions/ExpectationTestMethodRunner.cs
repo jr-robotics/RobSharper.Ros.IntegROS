@@ -10,9 +10,9 @@ namespace IntegROS.XunitExtensions
     [Obsolete("Unused", true)]
     public class ExpectationTestMethodRunner : TestMethodRunner<ExpectationTestCase>
     {
-        readonly ForNewScenario _scenario;
+        readonly ForScenario _scenario;
 
-        public ExpectationTestMethodRunner(ForNewScenario scenario,
+        public ExpectationTestMethodRunner(ForScenario scenario,
                                            ITestMethod testMethod,
                                            IReflectionTypeInfo @class,
                                            IReflectionMethodInfo method,

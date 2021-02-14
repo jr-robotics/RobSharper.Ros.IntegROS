@@ -24,7 +24,7 @@ namespace IntegROS.XunitExtensions
             DisplayName = String.Format("{0}, it {1}", TestMethod.TestClass.Class.Name, TestMethod.Method.Name).Replace('_', ' ');
         }
 
-        public Task<RunSummary> RunAsync(ForNewScenario scenario,
+        public Task<RunSummary> RunAsync(ForScenario scenario,
                                          IMessageBus messageBus,
                                          ExceptionAggregator aggregator,
                                          CancellationTokenSource cancellationTokenSource)
