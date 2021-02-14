@@ -28,8 +28,7 @@ namespace IntegROS.XunitExtensions
             
             if (testClass is ForNewScenario scenarioTestClass)
             {
-                var scenario = Scenario;
-                scenarioTestClass.Scenario = scenario;
+                scenarioTestClass.Scenario = Scenario;
             }
 
             return testClass;

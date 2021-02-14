@@ -10,6 +10,7 @@ namespace IntegROS.XunitExtensions
 {
     public class ScenarioTestCaseRunner : XunitTestCaseRunner
     {
+        public IMessageSink DiagnosticMessageSink { get; }
         public IScenarioIdentifier ScenarioIdentifier { get; }
         
         public ScenarioTestCaseRunner(ScenarioTestCase scenarioTestCase, string displayName, string skipReason,
@@ -18,6 +19,7 @@ namespace IntegROS.XunitExtensions
             : base(scenarioTestCase, displayName, skipReason, constructorArguments, new object[0], messageBus,
                 aggregator, cancellationTokenSource)
         {
+            DiagnosticMessageSink = diagnosticMessageSink;
             ScenarioIdentifier = scenarioTestCase.ScenarioIdentifier;
         }
 
@@ -30,7 +32,7 @@ namespace IntegROS.XunitExtensions
             MethodInfo testMethod, object[] testMethodArguments, string skipReason, IReadOnlyList<BeforeAfterTestAttribute> beforeAfterAttributes,
             ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource)
         {
-            return new ScenarioTestRunner((ScenarioTest) test, messageBus, testClass, constructorArguments, testMethod,
+            return new ScenarioTestRunner((ScenarioTest) test, DiagnosticMessageSink, messageBus, testClass, constructorArguments, testMethod,
                 testMethodArguments, skipReason, beforeAfterAttributes, new ExceptionAggregator(aggregator),
                 cancellationTokenSource);
         }

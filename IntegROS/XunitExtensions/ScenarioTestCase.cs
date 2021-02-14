@@ -48,7 +48,7 @@ namespace IntegROS.XunitExtensions
             base.Initialize();
 
             DisplayName += $"(scenario: \"{_scenarioIdentifier}\")";
-            Traits.Add("Scenario", new List<string>() {_scenarioIdentifier.ToString()});
+            Traits.Add("Scenario", new List<string>() {_scenarioIdentifier.UniqueId});
         }
 
         protected override string GetUniqueID()

@@ -23,7 +23,7 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
                 throw new InvalidOperationException("Bagfile is null or empty");
             }
             
-            return new RosbagScenarioIdentifier(bagfile);
+            return new RosbagScenarioIdentifier(bagfile, this.GetType());
         }
         
         public IScenario GetScenario(IScenarioIdentifier identifier)

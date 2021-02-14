@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 namespace IntegROS.XunitExtensions.ScenarioDiscovery
 {
-    public class RosbagScenarioIdentifier : IScenarioIdentifier
+    public class RosbagScenarioIdentifier : ScenarioIdentifierBase
     {
         public string Bagfile { get; private set; }
         
@@ -12,22 +12,26 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
         [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
         public RosbagScenarioIdentifier() { }
         
-        public RosbagScenarioIdentifier(string bagfile)
+        public RosbagScenarioIdentifier(string bagfile, Type scenarioDiscovererType) : base(scenarioDiscovererType)
         {
             Bagfile = bagfile;
         }
 
-        public void Deserialize(IXunitSerializationInfo info)
+        public override void Deserialize(IXunitSerializationInfo info)
         {
-            Bagfile = info.GetValue<string>("Bagfile");
+            Bagfile = info.GetValue<string>(nameof(Bagfile));
+            
+            base.Deserialize(info);
         }
 
-        public void Serialize(IXunitSerializationInfo info)
+        public override void Serialize(IXunitSerializationInfo info)
         {
-            info.AddValue("Bagfile", Bagfile);
+            base.Serialize(info);
+            
+            info.AddValue(nameof(Bagfile), Bagfile);
         }
 
-        public override string ToString()
+        protected override string GetUniqueId()
         {
             return $"ROSBAG:{Bagfile}";
         }

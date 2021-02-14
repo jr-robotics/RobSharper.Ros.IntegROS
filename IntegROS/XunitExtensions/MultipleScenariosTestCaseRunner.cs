@@ -64,7 +64,7 @@ namespace IntegROS.XunitExtensions
                     }
 
                     var test = CreateTest(TestCase, scenarioIdentifier);
-                    var testRunner = new ScenarioTestRunner(test, MessageBus, TestClass, ConstructorArguments, TestMethod,
+                    var testRunner = new ScenarioTestRunner(test, DiagnosticMessageSink, MessageBus, TestClass, ConstructorArguments, TestMethod,
                         TestMethodArguments, skipReason, BeforeAfterAttributes, new ExceptionAggregator(Aggregator),
                         CancellationTokenSource);
                     

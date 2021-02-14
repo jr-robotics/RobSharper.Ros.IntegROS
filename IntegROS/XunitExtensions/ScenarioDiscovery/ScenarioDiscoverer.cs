@@ -13,6 +13,18 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
             var discovererAttribute = scenarioAttribute.GetCustomAttributes(typeof(ScenarioDiscovererAttribute)).First();
             var args = discovererAttribute.GetConstructorArguments().Cast<string>().ToList();
             var discovererType = LoadType(args[1], args[0]);
+            
+            return GetDiscoverer(diagnosticsMessageSink, discovererType);
+        }
+
+        public static IScenarioDiscoverer GetDiscoverer(IMessageSink diagnosticsMessageSink,
+            IScenarioIdentifier scenarioIdentifier)
+        {
+            return GetDiscoverer(diagnosticsMessageSink, scenarioIdentifier.ScenarioDiscovererType);
+        }
+
+        private static IScenarioDiscoverer GetDiscoverer(IMessageSink diagnosticsMessageSink, Type discovererType)
+        {
             if (discovererType == null)
                 return null;
 

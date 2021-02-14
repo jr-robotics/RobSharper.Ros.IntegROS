@@ -15,14 +15,14 @@ namespace Examples.TurtleSimTests
         [ExpectThat(Skip = "Does not work without scenario attribute")]
         public void Expectation_without_scenario_should_not_run()
         {
-            Assert.True(true);
+            Scenario.Should().BeNull();
         }
         
         [ExpectThat(DisplayName = "Expect that")]
         [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
         public void Expectation_for_one_scenario()
         {
-            1.Should().BePositive();
+            Scenario.Should().NotBeNull();
         }
         
         [Theory(DisplayName = "Theory Name")]
@@ -37,7 +37,7 @@ namespace Examples.TurtleSimTests
         [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
         public void Expectation_for_two_scenarios()
         {
-            1.Should().BePositive();
+            Scenario.Should().NotBeNull();
         }
         
         //
