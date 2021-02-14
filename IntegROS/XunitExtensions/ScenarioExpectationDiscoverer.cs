@@ -36,7 +36,7 @@ namespace IntegROS.XunitExtensions
             
             try
             {
-                var scenarioAttributes = testMethod.GetScenarioAttributes();
+                var scenarioAttributes = testMethod.GetScenarioAttributes(DiagnosticMessageSink);
 
                 if (!scenarioAttributes.Any())
                 {
