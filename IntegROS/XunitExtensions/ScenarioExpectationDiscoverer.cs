@@ -36,24 +36,21 @@ namespace IntegROS.XunitExtensions
             
             try
             {
-                ICollection<IXunitTestCase> testCases;
+                var scenarioAttributes = testMethod.GetScenarioAttributes();
+
+                if (!scenarioAttributes.Any())
+                {
+                    return CreateNoScenarioTestCases(discoveryOptions, testMethod);
+                }
                 
                 if (IsPreEnumerationSupported(discoveryOptions))
                 {
-                    testCases = DiscoverPreEnumeratedTestCases(discoveryOptions, testMethod, expectThatAttribute);
+                    return CreatePreEnumeratedTestCases(discoveryOptions, testMethod, scenarioAttributes);
                 }
                 else
                 {
-                    testCases = DiscoverSingleTestCase(discoveryOptions, testMethod);
+                    return CreateSingleTestCaseForAllScenarios(discoveryOptions, testMethod);
                 }
-
-                
-                if (testCases.Count == 0)
-                {
-                    testCases = CreateNoScenarioTestCases(discoveryOptions, testMethod);
-                }
-                
-                return testCases;
             }
             catch (Exception e)
             {
@@ -62,15 +59,13 @@ namespace IntegROS.XunitExtensions
             }
         }
 
-        private ICollection<IXunitTestCase> DiscoverPreEnumeratedTestCases(ITestFrameworkDiscoveryOptions discoveryOptions,
-            ITestMethod testMethod, IAttributeInfo expectThatAttributes)
+        private ICollection<IXunitTestCase> CreatePreEnumeratedTestCases(
+            ITestFrameworkDiscoveryOptions discoveryOptions,
+            ITestMethod testMethod, IEnumerable<IAttributeInfo> scenarioAttributes)
         {
             var testCases = new List<IXunitTestCase>();
-                
-            var methodScenarioAttributes = testMethod.Method.GetCustomAttributes(typeof(ScenarioAttribute));
-            var classScenarioAttributes = testMethod.TestClass.Class.GetCustomAttributes(typeof(ScenarioAttribute));
 
-            foreach (var methodScenarioAttribute in methodScenarioAttributes)
+            foreach (var methodScenarioAttribute in scenarioAttributes)
             {
                 var skipReason = methodScenarioAttribute.GetNamedArgument<string>("Skip");
 
@@ -112,30 +107,16 @@ namespace IntegROS.XunitExtensions
                 testCases.Add(testCase);
             }
 
-            foreach (var classScenarioAttribute in classScenarioAttributes)
-            {
-                // TODO: Do the same for class attributes
-            }
-
             return testCases;
         }
 
-        private ICollection<IXunitTestCase> DiscoverSingleTestCase(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod)
+        private ICollection<IXunitTestCase> CreateSingleTestCaseForAllScenarios(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod)
         {
-            var testCases = new List<IXunitTestCase>();
-
-            var methodScenarioAttributes = testMethod.Method.GetCustomAttributes(typeof(ScenarioAttribute));
-            var classScenarioAttributes = testMethod.TestClass.Class.GetCustomAttributes(typeof(ScenarioAttribute));
-
-            if (methodScenarioAttributes.Any() || classScenarioAttributes.Any())
+            return new[]
             {
-                var tc = new MultipleScenariosTestCase(DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(),
-                    discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod);
-
-                testCases.Add(tc);
-            }
-
-            return testCases;
+                new MultipleScenariosTestCase(DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(),
+                    discoveryOptions.MethodDisplayOptionsOrDefault(), testMethod)
+            };
         }
 
         /// <summary>

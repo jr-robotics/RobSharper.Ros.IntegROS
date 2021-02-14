@@ -1,4 +1,5 @@
-﻿using IntegROS.XunitExtensions.ScenarioDiscovery;
+﻿using System;
+using IntegROS.XunitExtensions.ScenarioDiscovery;
 
 namespace IntegROS
 {
@@ -10,6 +11,11 @@ namespace IntegROS
         public RosbagScenarioAttribute(string bagfile)
         {
             Bagfile = bagfile;
+        }
+
+        public override int GetScenarioHashCode()
+        {
+            return HashCode.Combine(Bagfile);
         }
     }
 }

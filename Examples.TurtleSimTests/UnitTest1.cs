@@ -8,8 +8,17 @@ using Xunit;
 namespace Examples.TurtleSimTests
 {
 
-    // [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
-    // [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
+    [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
+    [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
+    public class ForClassScenariosExample : ForScenario
+    {
+        [ExpectThat]
+        public void TestCase()
+        {
+            Scenario.Should().NotBeNull();
+        }
+    }
+    
     public class ForScenarioExample : ForScenario
     {
         [ExpectThat(Skip = "Does not work without scenario attribute")]

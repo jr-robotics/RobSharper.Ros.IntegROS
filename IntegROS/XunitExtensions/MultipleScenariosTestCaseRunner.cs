@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using IntegROS.Scenarios;
 using IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -36,25 +35,23 @@ namespace IntegROS.XunitExtensions
 
             try
             {
-                var methodScenarioAttributes = TestCase.TestMethod.Method.GetCustomAttributes(typeof(ScenarioAttribute));
-                var classScenarioAttributes = TestCase.TestMethod.TestClass.Class.GetCustomAttributes(typeof(ScenarioAttribute));
-
-                if (!methodScenarioAttributes.Any() && !classScenarioAttributes.Any())
+                var scenarioAttributes = TestCase.TestMethod.GetScenarioAttributes();
+                
+                if (!scenarioAttributes.Any())
                 {
                     throw new InvalidOperationException(
                         $"No scenario specified for {TestCase.TestMethod.TestClass.Class.Name}.{TestCase.TestMethod.Method.Name}. Make sure to add at least one ScenarioAttribute to the test method or class.");
                 }
                 
-                foreach (var methodScenarioAttribute in methodScenarioAttributes)
+                foreach (var scenarioAttribute in scenarioAttributes)
                 {
-                    var skipReason = methodScenarioAttribute.GetNamedArgument<string>("Skip");
-                    var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, methodScenarioAttribute);
-                    var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(methodScenarioAttribute);
-                    IScenario scenario = null;
+                    var skipReason = scenarioAttribute.GetNamedArgument<string>("Skip");
+                    var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, scenarioAttribute);
+                    var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(scenarioAttribute);
 
                     if (skipReason != null)
                     {
-                        scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
+                        var scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
 
                         if (scenario == null)
                         {
@@ -69,11 +66,6 @@ namespace IntegROS.XunitExtensions
                         CancellationTokenSource);
                     
                     _testRunners.Add(testRunner);
-                }
-                
-                foreach (var classScenarioAttribute in classScenarioAttributes)
-                {
-                    // TODO: Do the same for class attributes
                 }
             }
             catch (Exception ex)
