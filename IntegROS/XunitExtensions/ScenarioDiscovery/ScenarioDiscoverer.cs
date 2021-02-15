@@ -13,6 +13,10 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
             var discovererAttribute = scenarioAttribute.GetCustomAttributes(typeof(ScenarioDiscovererAttribute)).First();
             var args = discovererAttribute.GetConstructorArguments().Cast<string>().ToList();
             var discovererType = LoadType(args[1], args[0]);
+
+            if (discovererType == null)
+                throw new InvalidOperationException(
+                    $"Could not load scenario discoverer type \"{args[0]}, {args[1]}\"");
             
             return GetDiscoverer(diagnosticsMessageSink, discovererType);
         }
@@ -26,7 +30,7 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
         private static IScenarioDiscoverer GetDiscoverer(IMessageSink diagnosticsMessageSink, Type discovererType)
         {
             if (discovererType == null)
-                return null;
+                throw new ArgumentNullException(nameof(discovererType));
 
             return ExtensibilityPointFactory.Get<IScenarioDiscoverer>(diagnosticsMessageSink, discovererType);
         }

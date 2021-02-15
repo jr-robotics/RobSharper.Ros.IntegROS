@@ -54,7 +54,7 @@ namespace IntegROS.XunitExtensions
             }
             catch (Exception e)
             {
-                DiagnosticMessageSink.OnMessage(new DiagnosticMessage($"Exception thrown during scenario expectation discovery on '{testMethod.TestClass.Class.Name}.{testMethod.Method.Name}'.{Environment.NewLine}{e}"));
+                DiagnosticMessageSink.OnMessage(new PrintableDiagnosticMessage($"Exception thrown during scenario expectation discovery on '{testMethod.TestClass.Class.Name}.{testMethod.Method.Name}'.{Environment.NewLine}{e}"));
                 throw;
             }
         }
@@ -65,13 +65,12 @@ namespace IntegROS.XunitExtensions
         {
             var testCases = new List<IXunitTestCase>();
 
-            foreach (var methodScenarioAttribute in scenarioAttributes)
+            foreach (var scenarioAttribute in scenarioAttributes)
             {
-                var skipReason = methodScenarioAttribute.GetNamedArgument<string>("Skip");
+                var skipReason = scenarioAttribute.GetNamedArgument<string>("Skip");
 
-                var scenarioDiscoverer =
-                    ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, methodScenarioAttribute);
-                var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(methodScenarioAttribute);
+                var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, scenarioAttribute);
+                var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(scenarioAttribute);
 
                 if (skipReason != null)
                 {
