@@ -2,17 +2,14 @@
 // using FluentAssertions;
 // using IntegROS;
 // using IntegROS.Rosbag;
-// using IntegROS.Scenarios;
 // using Moq;
 //
 // namespace Examples.TurtleSimTests
 // {
-//     public class GenericRosbagScenarioTestExample : ForScenario<RosbagScenario>
+//     public class GenericRosbagScenarioTestExample : ForScenario
 //     {
-//         public GenericRosbagScenarioTestExample(RosbagScenario scenario) : base(scenario)
+//         public GenericRosbagScenarioTestExample() : base(shouldContainMessages: false)
 //         {
-//             ShouldContainMessages = false;
-//             
 //             //TODO: Replace stub when rosbag reader is available
 //             RosbagReader.Instance = new Mock<IRosbagReader>().Object;
 //             //scenario.Load("rosbagfilepath.bag");

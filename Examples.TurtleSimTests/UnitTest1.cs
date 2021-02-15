@@ -3,7 +3,6 @@ using IntegROS;
 using Xunit;
 
 //[assembly: TestCaseOrderer("IntegROS.XunitExtensions.ExpectationTestCaseOrderer", "IntegROS")]
-//[assembly: TestFramework("IntegROS.XunitExtensions.IntegrosTestFramework", "IntegROS")]
 
 namespace Examples.TurtleSimTests
 {
