@@ -47,39 +47,5 @@ namespace Examples.TurtleSimTests
         {
             Scenario.Should().NotBeNull();
         }
-        
-        //
-        // [Theory]
-        // // [InlineData(-1, Skip = "Invalid data")]
-        // // [InlineData(0, Skip = "Invalid data")]
-        // [InlineData(1)]
-        // [InlineData(2)]
-        // public void My_theory(int input)
-        // {
-        //     input.Should().BePositive();
-        // }
-        
-        //
-        // [Fact()]
-        // public void My_fact()
-        // {
-        //     true.Should().BeTrue();
-        // }
-
-        // [Fact]
-        // public void FailIfJetBrainsRider()
-        // {
-        //     var executing = Assembly.GetEntryAssembly();
-        //     var isJetBrainsExecutor = executing.FullName.StartsWith("resharper", StringComparison.OrdinalIgnoreCase);
-        //
-        //     isJetBrainsExecutor.Should().BeFalse("JetBrains Resharper Test executor is not supported");
-        // }
-        //
-        // [Fact]
-        // public void TestExecutorName()
-        // {
-        //     var executing = Assembly.GetEntryAssembly();
-        //     executing.FullName.Should().BeNullOrEmpty();
-        // }
     }
 }
