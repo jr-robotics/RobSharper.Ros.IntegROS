@@ -5,7 +5,9 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
 {
     public interface IScenarioIdentifier : IXunitSerializable
     {
-        public string UniqueId { get; }
+        public string DisplayName { get; }
+        
+        public string UniqueScenarioId { get; }
         
         public Type ScenarioDiscovererType { get; }
     }

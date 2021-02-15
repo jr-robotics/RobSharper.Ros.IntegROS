@@ -17,13 +17,14 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
         public IScenarioIdentifier GetScenarioIdentifier(IAttributeInfo scenarioAttribute)
         {
             var bagfile = scenarioAttribute.GetConstructorArguments().FirstOrDefault() as string;
+            var displayName = scenarioAttribute.GetNamedArgument<string>(nameof(RosbagScenarioAttribute.DisplayName));
             
             if (string.IsNullOrEmpty(bagfile))
             {
                 throw new InvalidOperationException("Bagfile is null or empty");
             }
             
-            return new RosbagScenarioIdentifier(bagfile, this.GetType());
+            return new RosbagScenarioIdentifier(bagfile, this.GetType(), displayName);
         }
         
         public IScenario GetScenario(IScenarioIdentifier identifier)

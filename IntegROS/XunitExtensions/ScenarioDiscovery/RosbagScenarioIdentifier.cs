@@ -12,7 +12,7 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
         [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
         public RosbagScenarioIdentifier() { }
         
-        public RosbagScenarioIdentifier(string bagfile, Type scenarioDiscovererType) : base(scenarioDiscovererType)
+        public RosbagScenarioIdentifier(string bagfile, Type scenarioDiscovererType, string displayName) : base(scenarioDiscovererType, displayName)
         {
             Bagfile = bagfile;
         }

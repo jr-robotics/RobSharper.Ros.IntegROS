@@ -69,20 +69,20 @@ namespace IntegROS.XunitExtensions
             {
                 var skipReason = methodScenarioAttribute.GetNamedArgument<string>("Skip");
 
+                var scenarioDiscoverer =
+                    ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, methodScenarioAttribute);
+                var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(methodScenarioAttribute);
+
                 if (skipReason != null)
                 {
                     var skippedScenarioTestCase = new SkippedScenarioTestCase(DiagnosticMessageSink,
                         discoveryOptions.MethodDisplayOrDefault(),
                         discoveryOptions.MethodDisplayOptionsOrDefault(),
-                        testMethod, skipReason, null);
+                        testMethod, scenarioIdentifier, skipReason, null);
 
                     testCases.Add(skippedScenarioTestCase);
                     continue;
                 }
-
-                var scenarioDiscoverer =
-                    ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, methodScenarioAttribute);
-                var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(methodScenarioAttribute);
                 var scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
 
                 if (scenario == null)

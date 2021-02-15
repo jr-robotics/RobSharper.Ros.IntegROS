@@ -8,7 +8,9 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
     {
         private string _uniqueId;
 
-        public string UniqueId
+        public string DisplayName { get; protected set; }
+
+        public string UniqueScenarioId
         {
             get
             {
@@ -21,7 +23,7 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
             }
         }
         
-        public Type ScenarioDiscovererType { get; private set; }
+        public Type ScenarioDiscovererType { get; protected set; }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
@@ -29,19 +31,24 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
         {
         }
         
-        protected ScenarioIdentifierBase(Type scenarioDiscovererType)
+        protected ScenarioIdentifierBase(Type scenarioDiscovererType, string displayName = null)
         {
             ScenarioDiscovererType = scenarioDiscovererType;
+            DisplayName = displayName;
         }
 
         public override string ToString()
         {
-            return UniqueId;
+            if (string.IsNullOrEmpty(DisplayName))
+                return UniqueScenarioId;
+            
+            return DisplayName;
         }
 
         public virtual void Deserialize(IXunitSerializationInfo info)
         {
-            _uniqueId = info.GetValue<string>(nameof(UniqueId));
+            _uniqueId = info.GetValue<string>(nameof(UniqueScenarioId));
+            DisplayName = info.GetValue<string>(nameof(DisplayName));
 
             var discovererTypeName = info.GetValue<string>(nameof(ScenarioDiscovererType));
             if (discovererTypeName != null)
@@ -50,7 +57,8 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
 
         public virtual void Serialize(IXunitSerializationInfo info)
         {
-            info.AddValue(nameof(UniqueId), UniqueId);
+            info.AddValue(nameof(UniqueScenarioId), UniqueScenarioId);
+            info.AddValue(nameof(DisplayName), DisplayName);
             info.AddValue(nameof(ScenarioDiscovererType), ScenarioDiscovererType?.AssemblyQualifiedName);
         }
 
