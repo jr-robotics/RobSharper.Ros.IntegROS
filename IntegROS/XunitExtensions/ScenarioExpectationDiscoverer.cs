@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using IntegROS.Scenarios;
 using IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -29,7 +30,7 @@ namespace IntegROS.XunitExtensions
             IAttributeInfo expectThatAttribute)
         {
             // Check if expectation should be skipped
-            if (expectThatAttribute.GetNamedArgument<string>("Skip") != null)
+            if (expectThatAttribute.GetNamedArgument<string>(nameof(ExpectThatAttribute.Skip)) != null)
             {
                 return CreateSkipTestCases(discoveryOptions, testMethod);
             }
@@ -67,10 +68,50 @@ namespace IntegROS.XunitExtensions
 
             foreach (var scenarioAttribute in scenarioAttributes)
             {
-                var skipReason = scenarioAttribute.GetNamedArgument<string>("Skip");
+                IScenarioIdentifier scenarioIdentifier;
+                var skipReason = scenarioAttribute.GetNamedArgument<string>(nameof(ScenarioAttribute.Skip));
 
-                var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, scenarioAttribute);
-                var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(scenarioAttribute);
+                try
+                {
+                    var scenarioDiscoverer =
+                        ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, scenarioAttribute);
+                    scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(scenarioAttribute);
+
+                    var scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
+                    if (scenario == null)
+                    {
+                        testCases.Add(
+                            new ExecutionErrorTestCase(
+                                DiagnosticMessageSink,
+                                discoveryOptions.MethodDisplayOrDefault(),
+                                discoveryOptions.MethodDisplayOptionsOrDefault(),
+                                testMethod,
+                                $"Scenario is null for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier.DisplayName}."
+                            )
+                        );
+
+                        continue;
+                    }
+                }
+                catch (Exception e)
+                {
+                    scenarioIdentifier = new DummyScenarioDiscoverer().GetScenarioIdentifier(scenarioAttribute);
+
+                    if (skipReason == null)
+                    {
+                        testCases.Add(
+                            new ExecutionErrorTestCase(
+                                DiagnosticMessageSink,
+                                discoveryOptions.MethodDisplayOrDefault(),
+                                discoveryOptions.MethodDisplayOptionsOrDefault(),
+                                testMethod,
+                                $"{e.Message} for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier.DisplayName}."
+                            )
+                        );
+
+                        continue;
+                    }
+                }
 
                 if (skipReason != null)
                 {
@@ -80,22 +121,6 @@ namespace IntegROS.XunitExtensions
                         testMethod, scenarioIdentifier, skipReason, null);
 
                     testCases.Add(skippedScenarioTestCase);
-                    continue;
-                }
-                var scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
-
-                if (scenario == null)
-                {
-                    testCases.Add(
-                        new ExecutionErrorTestCase(
-                            DiagnosticMessageSink,
-                            discoveryOptions.MethodDisplayOrDefault(),
-                            discoveryOptions.MethodDisplayOptionsOrDefault(),
-                            testMethod,
-                            $"Scenario was null for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}."
-                        )
-                    );
-
                     continue;
                 }
 
@@ -175,6 +200,51 @@ namespace IntegROS.XunitExtensions
                     testMethod,
                     $"No scenario specified for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}.{Environment.NewLine}Make sure to add at least one ScenarioAttribute to the test method or class.")
             };
+        }
+    }
+
+    public class DummyScenarioDiscoverer : IScenarioDiscoverer
+    {
+        public IScenarioIdentifier GetScenarioIdentifier(IAttributeInfo scenarioAttribute)
+        {
+            var displayName = scenarioAttribute != null
+                ? ScenarioAttribute.GetAttributeDefinition(scenarioAttribute)
+                : "unknown";
+
+            return new DummyScenarioIdentifier(displayName);
+        }
+
+        public IScenario GetScenario(IScenarioIdentifier scenarioIdentifier)
+        {
+            return null;
+        }
+    }
+    
+    public class DummyScenarioIdentifier : IScenarioIdentifier
+    {
+        public DummyScenarioIdentifier(string displayName)
+        {
+            DisplayName = displayName;
+            UniqueScenarioId = $"DUMMYSCENARIO:{HashCode.Combine(DisplayName)}";
+        }
+
+        public void Deserialize(IXunitSerializationInfo info)
+        {
+            DisplayName = info.GetValue<string>(nameof(DisplayName));
+            UniqueScenarioId = info.GetValue<string>(nameof(UniqueScenarioId));
+        }
+
+        public void Serialize(IXunitSerializationInfo info)
+        {
+            info.AddValue(nameof(DisplayName), DisplayName);
+            info.AddValue(nameof(UniqueScenarioId), UniqueScenarioId);
+        }
+
+        public string DisplayName { get; private set; }
+        public string UniqueScenarioId { get; private set; }
+        public Type ScenarioDiscovererType
+        {
+            get => typeof(DummyScenarioDiscoverer);
         }
     }
 }

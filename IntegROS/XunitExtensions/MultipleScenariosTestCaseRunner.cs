@@ -45,24 +45,24 @@ namespace IntegROS.XunitExtensions
                 
                 foreach (var scenarioAttribute in scenarioAttributes)
                 {
+                    IScenarioIdentifier scenarioIdentifier = null;
+                    var aggregator = new ExceptionAggregator(Aggregator);
                     var skipReason = scenarioAttribute.GetNamedArgument<string>("Skip");
-                    var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, scenarioAttribute);
-                    var scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(scenarioAttribute);
 
-                    if (skipReason != null)
+                    try
                     {
-                        var scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
-
-                        if (scenario == null)
-                        {
-                            // Aggregator errors are ignored... maybe handle this issue in test runner?
-                            Aggregator.Add(new InvalidOperationException($"Scenario was null for {TestCase.TestMethod.TestClass.Class.Name}.{TestCase.TestMethod.Method.Name}."));
-                        }
+                        var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, scenarioAttribute);
+                        scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(scenarioAttribute);
+                    }
+                    catch (Exception exception)
+                    {
+                        scenarioIdentifier = new DummyScenarioDiscoverer().GetScenarioIdentifier(scenarioAttribute);
+                        aggregator.Add(exception);
                     }
 
                     var test = CreateTest(TestCase, scenarioIdentifier);
                     var testRunner = new ScenarioTestRunner(test, DiagnosticMessageSink, MessageBus, TestClass, ConstructorArguments, TestMethod,
-                        TestMethodArguments, skipReason, BeforeAfterAttributes, new ExceptionAggregator(Aggregator),
+                        TestMethodArguments, skipReason, BeforeAfterAttributes, aggregator,
                         CancellationTokenSource);
                     
                     _testRunners.Add(testRunner);

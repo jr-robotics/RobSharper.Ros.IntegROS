@@ -10,14 +10,20 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
     {
         public static IScenarioDiscoverer GetDiscoverer(IMessageSink diagnosticsMessageSink, IAttributeInfo scenarioAttribute)
         {
-            var discovererAttribute = scenarioAttribute.GetCustomAttributes(typeof(ScenarioDiscovererAttribute)).First();
+            if (scenarioAttribute == null) throw new ArgumentNullException(nameof(scenarioAttribute));
+            var discovererAttribute = scenarioAttribute.GetCustomAttributes(typeof(ScenarioDiscovererAttribute)).SingleOrDefault();
+
+            if (discovererAttribute == null)
+                throw new InvalidOperationException(
+                    $"{ScenarioAttribute.GetAttributeTypeName(scenarioAttribute)} must be annotated with a single ScenarioDiscovererAttribute");
+            
             var args = discovererAttribute.GetConstructorArguments().Cast<string>().ToList();
             var discovererType = LoadType(args[1], args[0]);
 
             if (discovererType == null)
                 throw new InvalidOperationException(
-                    $"Could not load scenario discoverer type \"{args[0]}, {args[1]}\"");
-            
+                    $"Could not load scenario discoverer of type \"{args[1]}, {args[0]}\" for {ScenarioAttribute.GetAttributeTypeName(scenarioAttribute)}");
+
             return GetDiscoverer(diagnosticsMessageSink, discovererType);
         }
 
@@ -32,7 +38,14 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
             if (discovererType == null)
                 throw new ArgumentNullException(nameof(discovererType));
 
-            return ExtensibilityPointFactory.Get<IScenarioDiscoverer>(diagnosticsMessageSink, discovererType);
+            var discoverer = ExtensibilityPointFactory.Get<IScenarioDiscoverer>(diagnosticsMessageSink, discovererType);
+
+            if (discoverer == null)
+            {
+                throw new InvalidOperationException($"Could not create instance for discoverer type {discovererType}");
+            }
+            
+            return discoverer;
         }
 
         private static Type LoadType(string assemblyName, string typeName)

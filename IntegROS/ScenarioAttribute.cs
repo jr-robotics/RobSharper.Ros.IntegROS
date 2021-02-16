@@ -1,4 +1,6 @@
 ﻿using System;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace IntegROS
 {
@@ -38,6 +40,42 @@ namespace IntegROS
         public override int GetHashCode()
         {
             return HashCode.Combine(base.GetHashCode(), DisplayName, Skip);
+        }
+        
+
+        internal static string GetAttributeTypeName(IAttributeInfo scenarioAttribute)
+        {
+            if (scenarioAttribute is IReflectionAttributeInfo reflectionAttribute)
+            {
+                var attribute = reflectionAttribute.Attribute;
+                if (attribute != null)
+                {
+                    return attribute.ToString();
+                }
+            }
+
+            return "(unknown attribute type)";
+        }
+
+        internal static string GetAttributeDefinition(IAttributeInfo scenarioAttribute)
+        {
+            if (scenarioAttribute is ReflectionAttributeInfo xunitReflectionAttribute)
+            {
+                var attributeData = xunitReflectionAttribute.AttributeData;
+                if (attributeData != null)
+                    return attributeData.ToString();
+            }
+
+            if (scenarioAttribute is IReflectionAttributeInfo reflectionAttribute)
+            {
+                var attribute = reflectionAttribute.Attribute;
+                if (attribute != null)
+                {
+                    return $"[{attribute.GetType()}(???)]";
+                }
+            }
+            
+            return "[???ScenarioAttribute(???)]";
         }
     }
 }

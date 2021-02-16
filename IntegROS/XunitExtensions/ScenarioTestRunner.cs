@@ -35,10 +35,23 @@ namespace IntegROS.XunitExtensions
         {
             base.AfterTestStarting();
 
-            var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, ScenarioTest.ScenarioIdentifier);
-            Scenario = scenarioDiscoverer.GetScenario(ScenarioTest.ScenarioIdentifier);
+            if (Aggregator.HasExceptions || SkipReason != null)
+                return;
             
-            // TODO: Handle null scenario or discoverer
+            try
+            {
+                var scenarioDiscoverer = ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, ScenarioTest.ScenarioIdentifier);
+                Scenario = scenarioDiscoverer.GetScenario(ScenarioTest.ScenarioIdentifier);
+
+                if (Scenario == null)
+                {
+                    throw new InvalidOperationException("Scenario is null (ScenarioDiscoverer returned no scenario).");
+                }
+            }
+            catch (Exception e)
+            {
+                Aggregator.Add(e);
+            }
         }
 
         protected override Task<decimal> InvokeTestMethodAsync(ExceptionAggregator aggregator)

@@ -95,6 +95,14 @@ namespace Examples.TurtleSimTests
         {
             public static readonly  Guid NullId = new Guid("535124A8-20E9-4706-877F-4C99F9513454");
 
+            public NullScenario()
+            {
+            }
+
+            public NullScenario(string value)
+            {
+            }
+
             public override int GetScenarioHashCode()
             {
                 return HashCode.Combine(NullId);
@@ -102,9 +110,9 @@ namespace Examples.TurtleSimTests
         }
 
         [ExpectThat]
-        [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
-        [NullScenario()]
-        public void Null_scenario_throws_exception()
+        [NullScenario("asdf", Skip = "I want to skip that")]
+        //[RosbagScenario(TurtleSimBagFiles.MoveForwards)]
+        public void Null_scenario_returns_no_scenario()
         {
             Scenario.Should().BeNull();
         }
