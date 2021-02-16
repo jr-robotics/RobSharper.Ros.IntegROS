@@ -36,14 +36,5 @@ namespace IntegROS.Scenarios
         {
             _messages = RosbagReader.Instance.Read(_bagfile);
         }
-
-        public static string CreateKey(string bagfile)
-        {
-            if (bagfile == null) throw new ArgumentNullException(nameof(bagfile));
-            
-            // TODO: Sanitize bagfile path
-
-            return "ROSBAG_" + bagfile;
-        }
     }
 }

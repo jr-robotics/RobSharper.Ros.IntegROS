@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.Linq;
 using FluentAssertions;
 using IntegROS;
 using IntegROS.Scenarios;
@@ -8,11 +7,8 @@ using IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit;
 using Xunit.Abstractions;
 
-//[assembly: TestCaseOrderer("IntegROS.XunitExtensions.ExpectationTestCaseOrderer", "IntegROS")]
-
 namespace Examples.TurtleSimTests
 {
-
     [RosbagScenario(TurtleSimBagFiles.MoveForwards)]
     [RosbagScenario(TurtleSimBagFiles.MoveBackwards)]
     public class ForClassScenariosExample : ForScenario
