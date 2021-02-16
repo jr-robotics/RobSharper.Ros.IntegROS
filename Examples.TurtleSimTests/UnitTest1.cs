@@ -99,10 +99,6 @@ namespace Examples.TurtleSimTests
             {
             }
 
-            public NullScenario(string value)
-            {
-            }
-
             public override int GetScenarioHashCode()
             {
                 return HashCode.Combine(NullId);
@@ -110,8 +106,7 @@ namespace Examples.TurtleSimTests
         }
 
         [ExpectThat]
-        [NullScenario("asdf", Skip = "I want to skip that")]
-        //[RosbagScenario(TurtleSimBagFiles.MoveForwards)]
+        [NullScenario()]
         public void Null_scenario_returns_no_scenario()
         {
             Scenario.Should().BeNull();
