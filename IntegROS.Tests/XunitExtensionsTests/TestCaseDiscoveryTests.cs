@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using IntegROS.Tests.XunitExtensionsTests.Utility;
@@ -28,19 +27,8 @@ namespace IntegROS.Tests.XunitExtensionsTests
                 return base.IsPreEnumerationSupported(testFrameworkDiscoveryOptions);
             }
         }
-        
-        public class ListMessageSink : IMessageSink
-        {
-            public IList<IMessageSinkMessage> Messages { get; } = new List<IMessageSinkMessage>();
-            
-            public bool OnMessage(IMessageSinkMessage message)
-            {
-                Messages.Add(message);
-                return true;
-            }
-        }
 
-        public ListMessageSink DiagnosticsMessageSink { get; set; }
+        public IMessageSink DiagnosticsMessageSink { get; set; }
         
         public TestableScenarioExpectationDiscoverer Discoverer { get; set; }
         
@@ -51,14 +39,14 @@ namespace IntegROS.Tests.XunitExtensionsTests
         
         public ScenarioExpectationDiscovererTests()
         {
-            DiagnosticsMessageSink = new ListMessageSink();
+            DiagnosticsMessageSink = new NullMessageSink();
             Discoverer = new TestableScenarioExpectationDiscoverer(DiagnosticsMessageSink);
 
             ExpectThatAttribute = XunitMocks.ExpectThatAttribute();
             Options = new TestFrameworkOptions();
         }
     }
-    
+
     public class ScenarioExpectationDiscovererTestsWithPreEnumerationOnOrOff : ScenarioExpectationDiscovererTests
     {
         [Theory]

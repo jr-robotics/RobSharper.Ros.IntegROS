@@ -5,6 +5,8 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
 {
     public class DummyScenarioIdentifier : IScenarioIdentifier
     {
+        public DummyScenarioIdentifier() { }
+        
         public DummyScenarioIdentifier(string displayName)
         {
             DisplayName = displayName;
@@ -25,7 +27,7 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
 
         public string DisplayName { get; private set; }
         public string UniqueScenarioId { get; private set; }
-        public Type ScenarioDiscovererType
+        public virtual Type ScenarioDiscovererType
         {
             get => typeof(DummyScenarioDiscoverer);
         }

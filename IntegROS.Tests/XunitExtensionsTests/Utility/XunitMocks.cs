@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using IntegROS.XunitExtensions;
 using Moq;
+using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
@@ -29,22 +33,31 @@ namespace IntegROS.Tests.XunitExtensionsTests.Utility
             return new TestCollection(TestAssembly(assembly), definition, displayName);
         }
         
-        public static TestClass TestClass(Type type, ITestCollection collection = null)
+        public static TestClass TestClass(Type type)
         {
-            if (collection == null)
-                collection = TestCollection(type.GetTypeInfo().Assembly);
+            var collection = TestCollection(type.GetTypeInfo().Assembly);
 
             return new TestClass(collection, Reflector.Wrap(type));
         }
         
-        public static ITestMethod TestMethod(Type type, string methodName, ITestCollection collection = null)
+        public static ITestMethod TestMethod(Type type, string methodName, string displayName = null, string skip = null, int timeout = 0)
         {
-            var @class = TestClass(type, collection);
+            var @class = TestClass(type);
             var methodInfo = type.GetMethod(methodName);
+            
             if (methodInfo == null)
                 throw new Exception($"Unknown method: {type.FullName}.{methodName}");
 
-            return new TestMethod(@class, Reflector.Wrap(methodInfo));
+            var expectAttribute = new ExpectThatAttribute()
+            {
+                DisplayName = displayName,
+                Skip = skip,
+                Timeout = timeout
+            };
+            
+            var testMethodInfo = new ExpectatThatTestMethodInfo(methodInfo, expectAttribute);
+            
+            return new TestMethod(@class, testMethodInfo);
         }
 
         public static IReflectionAttributeInfo ExpectThatAttribute(string displayName = null, string skip = null, int timeout = 0)
@@ -69,5 +82,61 @@ namespace IntegROS.Tests.XunitExtensionsTests.Utility
             
             return mock.Object;
         }
+    }
+
+    public class ExpectatThatTestMethodInfo : IReflectionMethodInfo, IMethodInfo
+    {
+        private readonly IReflectionMethodInfo _reflectionMethodInfo;
+        private readonly IReflectionAttributeInfo _expectAttribute;
+
+        public ExpectatThatTestMethodInfo(MethodInfo methodInfo, ExpectThatAttribute expectAttribute)
+        {
+            _reflectionMethodInfo = Reflector.Wrap(methodInfo);
+            
+            var expectAttributeMock = new Mock<IReflectionAttributeInfo>();
+
+            expectAttributeMock.SetupGet(x => x.Attribute).Returns(expectAttribute);
+            expectAttributeMock.Setup(x => x.GetNamedArgument<string>("DisplayName"))
+                .Returns(expectAttribute.DisplayName);
+            expectAttributeMock.Setup(x => x.GetNamedArgument<string>("Skip")).Returns(expectAttribute.Skip);
+            expectAttributeMock.Setup(x => x.GetNamedArgument<int>("Timeout")).Returns(expectAttribute.Timeout);
+            
+            _expectAttribute = expectAttributeMock.Object;
+        }
+
+        public IEnumerable<IAttributeInfo> GetCustomAttributes(string assemblyQualifiedAttributeTypeName)
+        {
+            var attributeType = System.Type.GetType(assemblyQualifiedAttributeTypeName);
+            if (attributeType != null && attributeType.IsAssignableFrom(typeof(ExpectThatAttribute)))
+            {
+                return new[] {_expectAttribute};
+            }
+
+            return _reflectionMethodInfo.GetCustomAttributes(assemblyQualifiedAttributeTypeName);
+        }
+
+        public IEnumerable<ITypeInfo> GetGenericArguments()
+        {
+            return _reflectionMethodInfo.GetGenericArguments();
+        }
+
+        public IEnumerable<IParameterInfo> GetParameters()
+        {
+            return _reflectionMethodInfo.GetParameters();
+        }
+
+        public IMethodInfo MakeGenericMethod(params ITypeInfo[] typeArguments)
+        {
+            return _reflectionMethodInfo.MakeGenericMethod(typeArguments);
+        }
+
+        public bool IsAbstract => _reflectionMethodInfo.IsAbstract;
+        public bool IsGenericMethodDefinition => _reflectionMethodInfo.IsGenericMethodDefinition;
+        public bool IsPublic => _reflectionMethodInfo.IsPublic;
+        public bool IsStatic => _reflectionMethodInfo.IsStatic;
+        public string Name => _reflectionMethodInfo.Name;
+        public ITypeInfo ReturnType => _reflectionMethodInfo.ReturnType;
+        public ITypeInfo Type => _reflectionMethodInfo.Type;
+        public MethodInfo MethodInfo => _reflectionMethodInfo.MethodInfo;
     }
 }
