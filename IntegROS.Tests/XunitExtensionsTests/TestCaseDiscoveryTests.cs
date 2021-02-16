@@ -184,11 +184,23 @@ namespace IntegROS.Tests.XunitExtensionsTests
             testCases.First().Should().BeOfType<ExecutionErrorTestCase>();
         }
         
-        
         [Fact]
         public void Method_with_scenario_wrong_discoverer()
         {
             ITestMethod testMethod = XunitMocks.TestMethod(typeof(XunitExtensionsTestCases), nameof(XunitExtensionsTestCases.Method_with_invalid_scenario_wrong_discoverer));
+
+            var testCases = Discoverer.Discover(Options, testMethod, ExpectThatAttribute);
+
+            testCases.Should().NotBeNull();
+            testCases.Count().Should().Be(1);
+
+            testCases.First().Should().BeOfType<ExecutionErrorTestCase>();
+        }
+        
+        [Fact]
+        public void Method_with_null_scenario()
+        {
+            ITestMethod testMethod = XunitMocks.TestMethod(typeof(XunitExtensionsTestCases), nameof(XunitExtensionsTestCases.Method_with_null_scenario));
 
             var testCases = Discoverer.Discover(Options, testMethod, ExpectThatAttribute);
 

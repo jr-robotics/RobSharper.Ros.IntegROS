@@ -23,5 +23,8 @@ namespace IntegROS.Tests.XunitExtensionsTests.Utility
         
         [TestScenarioWithInvalidScenarioDiscoverer]
         public void Method_with_invalid_scenario_wrong_discoverer() {}
+        
+        [NullScenario]
+        public void Method_with_null_scenario() {}
     }
 }

@@ -81,7 +81,7 @@ namespace IntegROS.XunitExtensions
         
         protected virtual ScenarioTest CreateTest(IXunitTestCase testCase, IScenarioIdentifier scenarioIdentifier)
         {
-            var displayName = testCase.DisplayName + $"(scenario: \"{scenarioIdentifier}\")";
+            var displayName = $"{testCase.DisplayName}(scenario: \"{scenarioIdentifier}\")";
             return new ScenarioTest(testCase, displayName, scenarioIdentifier);
         }
 
@@ -104,7 +104,7 @@ namespace IntegROS.XunitExtensions
             return runSummary;
         }
 
-        RunSummary RunTestScenarioDiscoveryException()
+        private RunSummary RunTestScenarioDiscoveryException()
         {
             var test = new XunitTest(TestCase, DisplayName);
 
