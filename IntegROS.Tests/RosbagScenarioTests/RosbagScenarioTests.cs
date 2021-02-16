@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using IntegROS.Rosbag;
+using IntegROS.Scenarios;
 using Moq;
 using Xunit;
 
@@ -10,34 +11,23 @@ namespace IntegROS.Tests.RosbagScenarioTests
     public class RosbagScenarioTests
     {
         [Fact]
-        public void Accessing_messages_before_loading_them_causes_exception()
+        public void Initialize_Rosbag_Scenario_with_null_is_not_allowed()
         {
-            var target = new RosbagScenario();
+            Action target = () => new RosbagScenario(null);
             
-            target.Invoking(s => s.Messages)
+            target
                 .Should()
-                .Throw<InvalidOperationException>();
+                .Throw<ArgumentNullException>();
         }
 
         [Fact]
-        public void If_no_bagfile_loaded_Bagname_is_null()
+        public void Bagname_is_set_from_constructor()
         {
-            var target = new RosbagScenario();
-
-            target.RosbagFile.Should().BeNull();
-        }
-
-        [Fact]
-        public void Bagfile_name_is_set_on_load()
-        {
-            const string ExpectedBagFileName = "filepath.bag";
-            RosbagReader.Instance = new Mock<IRosbagReader>().Object;
+            const string ExpectedBagName = "My/File/Path.bag";
             
-            var target = new RosbagScenario();
+            var target = new RosbagScenario(ExpectedBagName);
 
-            target.Load(ExpectedBagFileName);
-            
-            target.RosbagFile.Should().Be(ExpectedBagFileName);
+            target.RosbagFile.Should().BeSameAs(ExpectedBagName);
         }
 
         [Fact]
@@ -51,9 +41,7 @@ namespace IntegROS.Tests.RosbagScenarioTests
                 .Returns(Enumerable.Empty<IRecordedMessage>());
 
             RosbagReader.Instance = rosbagReaderMock.Object;
-            var target = new RosbagScenario();
-
-            target.Load(ExpectedBagFileName);
+            var target = new RosbagScenario(ExpectedBagFileName);
             
             target.Messages.Should().NotBeNull();
         }
@@ -69,26 +57,11 @@ namespace IntegROS.Tests.RosbagScenarioTests
                 .Returns(Enumerable.Empty<IRecordedMessage>());
 
             RosbagReader.Instance = rosbagReaderMock.Object;
-            var target = new RosbagScenario();
+            var target = new RosbagScenario(ExpectedBagFileName);
 
-            target.Load(ExpectedBagFileName);
-            target.Load(ExpectedBagFileName);
+            target.Messages.Should().NotBeNull();
             
             rosbagReaderMock.Verify(x => x.Read(ExpectedBagFileName), Times.Once);
-        }
-
-        [Fact]
-        public void Load_throws_exception_if_called_twice_for_different_bagfiles()
-        {
-            RosbagReader.Instance = new Mock<IRosbagReader>().Object;
-            
-            var target = new RosbagScenario();
-
-            target.Load("rosbag1.bag");
-
-            target.Invoking(t => t.Load("rosbagFAILED.bag"))
-                .Should()
-                .Throw<InvalidOperationException>();
         }
     }
 }
