@@ -106,7 +106,7 @@ namespace Examples.TurtleSimTests
         }
 
         [ExpectThat]
-        [NullScenario()]
+        [NullScenario]
         public void Null_scenario_returns_no_scenario()
         {
             Scenario.Should().BeNull();
