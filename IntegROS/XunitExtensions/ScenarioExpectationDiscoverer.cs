@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using IntegROS.Scenarios;
 using IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -153,7 +152,7 @@ namespace IntegROS.XunitExtensions
         /// </summary>
         /// <param name="testFrameworkDiscoveryOptions"></param>
         /// <returns>true if pre-enumeration is supported, false otherwise</returns>
-        private bool IsPreEnumerationSupported(ITestFrameworkDiscoveryOptions testFrameworkDiscoveryOptions)
+        protected virtual bool IsPreEnumerationSupported(ITestFrameworkDiscoveryOptions testFrameworkDiscoveryOptions)
         {
             var preEnumerateTheories = testFrameworkDiscoveryOptions.PreEnumerateTheories();
             if (preEnumerateTheories.HasValue && !preEnumerateTheories.Value)
@@ -200,51 +199,6 @@ namespace IntegROS.XunitExtensions
                     testMethod,
                     $"No scenario specified for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}.{Environment.NewLine}Make sure to add at least one ScenarioAttribute to the test method or class.")
             };
-        }
-    }
-
-    public class DummyScenarioDiscoverer : IScenarioDiscoverer
-    {
-        public IScenarioIdentifier GetScenarioIdentifier(IAttributeInfo scenarioAttribute)
-        {
-            var displayName = scenarioAttribute != null
-                ? ScenarioAttribute.GetAttributeDefinition(scenarioAttribute)
-                : "unknown";
-
-            return new DummyScenarioIdentifier(displayName);
-        }
-
-        public IScenario GetScenario(IScenarioIdentifier scenarioIdentifier)
-        {
-            return null;
-        }
-    }
-    
-    public class DummyScenarioIdentifier : IScenarioIdentifier
-    {
-        public DummyScenarioIdentifier(string displayName)
-        {
-            DisplayName = displayName;
-            UniqueScenarioId = $"DUMMYSCENARIO:{HashCode.Combine(DisplayName)}";
-        }
-
-        public void Deserialize(IXunitSerializationInfo info)
-        {
-            DisplayName = info.GetValue<string>(nameof(DisplayName));
-            UniqueScenarioId = info.GetValue<string>(nameof(UniqueScenarioId));
-        }
-
-        public void Serialize(IXunitSerializationInfo info)
-        {
-            info.AddValue(nameof(DisplayName), DisplayName);
-            info.AddValue(nameof(UniqueScenarioId), UniqueScenarioId);
-        }
-
-        public string DisplayName { get; private set; }
-        public string UniqueScenarioId { get; private set; }
-        public Type ScenarioDiscovererType
-        {
-            get => typeof(DummyScenarioDiscoverer);
         }
     }
 }
