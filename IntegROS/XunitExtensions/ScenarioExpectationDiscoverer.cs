@@ -86,7 +86,7 @@ namespace IntegROS.XunitExtensions
                                 discoveryOptions.MethodDisplayOrDefault(),
                                 discoveryOptions.MethodDisplayOptionsOrDefault(),
                                 testMethod,
-                                $"Scenario is null for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier.DisplayName}."
+                                $"Scenario is null for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier}."
                             )
                         );
 
@@ -105,7 +105,7 @@ namespace IntegROS.XunitExtensions
                                 discoveryOptions.MethodDisplayOrDefault(),
                                 discoveryOptions.MethodDisplayOptionsOrDefault(),
                                 testMethod,
-                                $"{e.Message} for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier.DisplayName}."
+                                $"{e.Message} for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier}."
                             )
                         );
 
