@@ -12,10 +12,8 @@ namespace IntegROS.Tests.XunitExtensionsTests.Utility
         {
         }
         
-        public NullScenarioIdentifier(Type scenarioDiscovererType, string displayName = null)
+        public NullScenarioIdentifier(Type scenarioDiscovererType, string displayName = null) : base(scenarioDiscovererType, displayName)
         {
-            ScenarioDiscovererType = scenarioDiscovererType;
-            DisplayName = displayName;
         }
             
         protected override string GetUniqueId()
