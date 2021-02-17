@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
-using IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
@@ -11,7 +10,6 @@ namespace IntegROS.XunitExtensions
     public class ScenarioTestCaseRunner : XunitTestCaseRunner
     {
         public IMessageSink DiagnosticMessageSink { get; }
-        public IScenarioIdentifier ScenarioIdentifier { get; }
         
         public ScenarioTestCaseRunner(ScenarioTestCase scenarioTestCase, string displayName, string skipReason,
             object[] constructorArguments, IMessageSink diagnosticMessageSink, IMessageBus messageBus,
@@ -20,7 +18,6 @@ namespace IntegROS.XunitExtensions
                 aggregator, cancellationTokenSource)
         {
             DiagnosticMessageSink = diagnosticMessageSink;
-            ScenarioIdentifier = scenarioTestCase.ScenarioIdentifier;
         }
 
         protected override ITest CreateTest(IXunitTestCase testCase, string displayName)
