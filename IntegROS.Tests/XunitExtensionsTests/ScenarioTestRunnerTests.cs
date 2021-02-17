@@ -96,12 +96,12 @@ namespace IntegROS.Tests.XunitExtensionsTests
             var testMethod = XunitMocks.TestMethod(testClass, testMethodName);
             var expectThatAttribute = XunitMocks.ExpectThatAttribute();
             var testCases = testCaseDiscoverer.Discover(new TestFrameworkOptions(), testMethod, expectThatAttribute);
-            var testCase = testCases.SingleOrDefault() as ScenarioTestCaseBase;
+            var testCase = testCases.SingleOrDefault() as ScenarioTestCase;
 
             if (testCase == null)
-                throw new NotSupportedException("Test case is not a ScenarioTestCaseBase");
+                throw new NotSupportedException("Test case is not a ScenarioTestCase");
             
-            var test = new ScenarioTest(testCase, testCase.DisplayName, testCase.ScenarioIdentifier);
+            var test = new ScenarioTest(testCase, testCase.DisplayName);
             
             var runner = new ScenarioTestRunnerMock(test,
                 new NullMessageSink(),
@@ -145,7 +145,6 @@ namespace IntegROS.Tests.XunitExtensionsTests
                 OnInvokeTestMethod();
                 return Task.Run(() => (decimal) 0);
             }
-
         }
     }
 }

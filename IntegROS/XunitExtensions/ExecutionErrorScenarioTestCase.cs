@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using IntegROS.XunitExtensions.ScenarioDiscovery;
@@ -7,30 +7,9 @@ using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
-    public interface IScenarioTestCase : IXunitTestCase
-    {
-        IScenarioIdentifier ScenarioIdentifier { get; }
-    }
-
-    public abstract class ScenarioTestCaseBase : XunitTestCase, IScenarioTestCase
+    public class ExecutionErrorScenarioTestCase : ExecutionErrorTestCase, IScenarioTestCase
     {
         private IScenarioIdentifier _scenarioIdentifier;
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
-        public ScenarioTestCaseBase() {}
-
-        public ScenarioTestCaseBase(IMessageSink diagnosticMessageSink,
-            TestMethodDisplay defaultMethodDisplay,
-            TestMethodDisplayOptions defaultMethodDisplayOptions,
-            ITestMethod testMethod,
-            IScenarioIdentifier scenarioIdentifier,
-            object[] testMethodArguments = null) : base(diagnosticMessageSink, defaultMethodDisplay,
-            defaultMethodDisplayOptions, testMethod,
-            testMethodArguments)
-        {
-            _scenarioIdentifier = scenarioIdentifier;
-        }
 
         public IScenarioIdentifier ScenarioIdentifier
         {
@@ -44,6 +23,19 @@ namespace IntegROS.XunitExtensions
                 EnsureInitialized();
                 _scenarioIdentifier = value;
             }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
+        public ExecutionErrorScenarioTestCase() {}
+        
+        public ExecutionErrorScenarioTestCase(IMessageSink diagnosticMessageSink,
+            TestMethodDisplay methodDisplayOrDefault, TestMethodDisplayOptions methodDisplayOptionsOrDefault,
+            ITestMethod testMethod, IScenarioIdentifier scenarioIdentifier, string errorMessage)
+            : base(diagnosticMessageSink, methodDisplayOrDefault, methodDisplayOptionsOrDefault, testMethod,
+                errorMessage)
+        {
+            _scenarioIdentifier = scenarioIdentifier;
         }
 
         protected override void Initialize()

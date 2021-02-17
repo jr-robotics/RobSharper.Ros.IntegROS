@@ -81,8 +81,8 @@ namespace IntegROS.XunitExtensions
         
         protected virtual ScenarioTest CreateTest(IXunitTestCase testCase, IScenarioIdentifier scenarioIdentifier)
         {
-            var displayName = $"{testCase.DisplayName}(scenario: \"{scenarioIdentifier}\")";
-            return new ScenarioTest(testCase, displayName, scenarioIdentifier);
+            var displayName = $"{testCase.DisplayName} (Scenario: {scenarioIdentifier})";
+            return new ScenarioTest((MultipleScenariosTestCase) testCase, scenarioIdentifier, displayName);
         }
 
         protected override XunitTestRunner CreateTestRunner(ITest test, IMessageBus messageBus, Type testClass, object[] constructorArguments,

@@ -7,9 +7,21 @@ namespace IntegROS.XunitExtensions
     {
         public IScenarioIdentifier ScenarioIdentifier { get; }
 
-        public ScenarioTest(IXunitTestCase testCase, string displayName, IScenarioIdentifier scenarioIdentifier) : base(testCase, displayName)
+        public ScenarioTest(ScenarioTestCase testCase, string displayName) 
+            : base(testCase, displayName)
+        {
+            ScenarioIdentifier = testCase.ScenarioIdentifier;
+        }
+
+        public ScenarioTest(MultipleScenariosTestCase testCase, IScenarioIdentifier scenarioIdentifier, string displayName) 
+            : base(testCase, displayName)
         {
             ScenarioIdentifier = scenarioIdentifier;
+        }
+        
+        protected ScenarioTest(IXunitTestCase testCase, IScenarioIdentifier scenarioIdentifier, string displayName) 
+            : base(testCase, displayName)
+        {
         }
     }
 }

@@ -80,11 +80,12 @@ namespace IntegROS.XunitExtensions
                     if (scenario == null)
                     {
                         testCases.Add(
-                            new ExecutionErrorTestCase(
+                            new ExecutionErrorScenarioTestCase(
                                 DiagnosticMessageSink,
                                 discoveryOptions.MethodDisplayOrDefault(),
                                 discoveryOptions.MethodDisplayOptionsOrDefault(),
                                 testMethod,
+                                scenarioIdentifier,
                                 $"Scenario is null for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier}."
                             )
                         );
@@ -99,11 +100,12 @@ namespace IntegROS.XunitExtensions
                     if (skipReason == null)
                     {
                         testCases.Add(
-                            new ExecutionErrorTestCase(
+                            new ExecutionErrorScenarioTestCase(
                                 DiagnosticMessageSink,
                                 discoveryOptions.MethodDisplayOrDefault(),
                                 discoveryOptions.MethodDisplayOptionsOrDefault(),
                                 testMethod,
+                                scenarioIdentifier,
                                 $"{e.Message} for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier}."
                             )
                         );

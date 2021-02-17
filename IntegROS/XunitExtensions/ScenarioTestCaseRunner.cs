@@ -25,7 +25,7 @@ namespace IntegROS.XunitExtensions
 
         protected override ITest CreateTest(IXunitTestCase testCase, string displayName)
         {
-            return new ScenarioTest(testCase, displayName, ScenarioIdentifier);
+            return new ScenarioTest((ScenarioTestCase) testCase, displayName);
         }
 
         protected override XunitTestRunner CreateTestRunner(ITest test, IMessageBus messageBus, Type testClass, object[] constructorArguments,

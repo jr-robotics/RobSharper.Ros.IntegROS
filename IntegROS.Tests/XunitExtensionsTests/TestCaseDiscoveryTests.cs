@@ -169,7 +169,7 @@ namespace IntegROS.Tests.XunitExtensionsTests
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(1);
 
-            testCases.First().Should().BeOfType<ExecutionErrorTestCase>();
+            testCases.First().Should().BeOfType<ExecutionErrorScenarioTestCase>();
         }
         
         [Fact]
@@ -182,7 +182,7 @@ namespace IntegROS.Tests.XunitExtensionsTests
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(1);
 
-            testCases.First().Should().BeOfType<ExecutionErrorTestCase>();
+            testCases.First().Should().BeOfType<ExecutionErrorScenarioTestCase>();
         }
         
         [Fact]
@@ -195,7 +195,7 @@ namespace IntegROS.Tests.XunitExtensionsTests
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(1);
 
-            testCases.First().Should().BeOfType<ExecutionErrorTestCase>();
+            testCases.First().Should().BeOfType<ExecutionErrorScenarioTestCase>();
         }
     }
 }
