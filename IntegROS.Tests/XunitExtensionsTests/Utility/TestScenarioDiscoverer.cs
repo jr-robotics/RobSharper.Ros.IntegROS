@@ -10,28 +10,30 @@ namespace IntegROS.Tests.XunitExtensionsTests.Utility
     {
         public IScenarioIdentifier GetScenarioIdentifier(IAttributeInfo scenarioAttribute)
         {
-            var key = ((scenarioAttribute as ReflectionAttributeInfo)?.Attribute as TestScenarioAttribute)?.Key;
-            return new TestScenarioIdentifier(key ?? Guid.NewGuid().ToString("D"));
+            var testScenarioAttribute = (scenarioAttribute as ReflectionAttributeInfo)?.Attribute as TestScenarioAttribute;
+            
+            var key = testScenarioAttribute?.Key ?? Guid.NewGuid().ToString("D");
+            var behavior = testScenarioAttribute != null
+                ? testScenarioAttribute.DiscoveryBehavior
+                : TestScenarioDiscoveryBehavior.Default;
+            
+            return new TestScenarioIdentifier(key, behavior);
         }
 
         public IScenario GetScenario(IScenarioIdentifier scenarioIdentifier)
         {
-            return new TestScenario();
-        }
-    }
+            var si = (TestScenarioIdentifier) scenarioIdentifier;
 
-    public class TestScenarioIdentifier : DummyScenarioIdentifier
-    {
-        [Obsolete("Called by the de-serializer; should only be called by deriving classes for de-serialization purposes")]
-        public TestScenarioIdentifier() {}
-        
-        public TestScenarioIdentifier(string id) : base(id)
-        {
-        }
-
-        public override Type ScenarioDiscovererType
-        {
-            get => typeof(TestScenarioDiscoverer);
+            switch (si.DiscoveryBehavior)
+            {
+                case TestScenarioDiscoveryBehavior.Null:
+                    return null;
+                case TestScenarioDiscoveryBehavior.Exception:
+                    throw new InvalidOperationException("Scenario discovery throws exception");
+                case TestScenarioDiscoveryBehavior.Default:
+                default:
+                    return new TestScenario();
+            };
         }
     }
 }

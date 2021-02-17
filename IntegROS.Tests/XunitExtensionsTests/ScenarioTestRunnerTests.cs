@@ -72,6 +72,21 @@ namespace IntegROS.Tests.XunitExtensionsTests
             invokeCalls.Should().Be(0);
         }
         
+        [Fact]
+        public async void Discovery_Exception_scenario()
+        {
+            var runner = CreateRunner(typeof(XunitExtensionsTestCases),
+                nameof(XunitExtensionsTestCases.Method_with_exception_scenario));
+
+            var invokeCalls = 0;
+            runner.OnInvokeTestMethod = () => invokeCalls++;
+            
+            var result = await runner.RunAsync();
+            
+            AssertRunSummary(result, failed: 1);
+            invokeCalls.Should().Be(0);
+        }
+        
         
         protected ExceptionAggregator Aggregator { get; }
         protected Mock<IMessageBus> MessageBus { get; }

@@ -13,13 +13,13 @@ namespace IntegROS.XunitExtensions.ScenarioDiscovery
             UniqueScenarioId = $"DUMMYSCENARIO:{HashCode.Combine(DisplayName)}";
         }
 
-        public void Deserialize(IXunitSerializationInfo info)
+        public virtual void Deserialize(IXunitSerializationInfo info)
         {
             DisplayName = info.GetValue<string>(nameof(DisplayName));
             UniqueScenarioId = info.GetValue<string>(nameof(UniqueScenarioId));
         }
 
-        public void Serialize(IXunitSerializationInfo info)
+        public virtual void Serialize(IXunitSerializationInfo info)
         {
             info.AddValue(nameof(DisplayName), DisplayName);
             info.AddValue(nameof(UniqueScenarioId), UniqueScenarioId);

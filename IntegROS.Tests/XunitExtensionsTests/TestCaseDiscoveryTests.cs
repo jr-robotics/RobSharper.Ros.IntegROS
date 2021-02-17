@@ -120,7 +120,7 @@ namespace IntegROS.Tests.XunitExtensionsTests
 
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(1);
-            testCases.First().Should().BeOfType<ScenarioTestCase>();
+            testCases.Cast<ScenarioTestCase>().Should().NotContainNulls();
         }
         
         [Fact]
@@ -132,7 +132,7 @@ namespace IntegROS.Tests.XunitExtensionsTests
 
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(1);
-            testCases.First().Should().BeOfType<ScenarioTestCase>();
+            testCases.Cast<ScenarioTestCase>().Should().NotContainNulls();
         }
         
         [Fact]
@@ -144,7 +144,7 @@ namespace IntegROS.Tests.XunitExtensionsTests
 
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(2);
-            testCases.First().Should().BeOfType<ScenarioTestCase>();
+            testCases.Cast<ScenarioTestCase>().Should().NotContainNulls();
         }
         
         [Fact]
@@ -156,7 +156,7 @@ namespace IntegROS.Tests.XunitExtensionsTests
 
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(2);
-            testCases.First().Should().BeOfType<ScenarioTestCase>();
+            testCases.Cast<ScenarioTestCase>().Should().NotContainNulls();
         }
         
         [Fact]
@@ -194,8 +194,31 @@ namespace IntegROS.Tests.XunitExtensionsTests
 
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(1);
+            testCases.Cast<ScenarioTestCase>().Should().NotContainNulls();
+        }
+        
+        [Fact]
+        public void Method_with_exception_scenario()
+        {
+            ITestMethod testMethod = XunitMocks.TestMethod(typeof(XunitExtensionsTestCases), nameof(XunitExtensionsTestCases.Method_with_exception_scenario));
 
-            testCases.First().Should().BeOfType<ScenarioTestCase>();
+            var testCases = Discoverer.Discover(Options, testMethod, ExpectThatAttribute);
+
+            testCases.Should().NotBeNull();
+            testCases.Count().Should().Be(1);
+            testCases.Cast<ScenarioTestCase>().Should().NotContainNulls();
+        }
+        
+        [Fact]
+        public void Method_with_successful_and_null_and_exception_scenarios()
+        {
+            ITestMethod testMethod = XunitMocks.TestMethod(typeof(XunitExtensionsTestCases), nameof(XunitExtensionsTestCases.Method_with_successful_and_null_and_exception_scenarios));
+
+            var testCases = Discoverer.Discover(Options, testMethod, ExpectThatAttribute);
+
+            testCases.Should().NotBeNull();
+            testCases.Count().Should().Be(3);
+            testCases.Cast<ScenarioTestCase>().Should().NotContainNulls();
         }
     }
 }

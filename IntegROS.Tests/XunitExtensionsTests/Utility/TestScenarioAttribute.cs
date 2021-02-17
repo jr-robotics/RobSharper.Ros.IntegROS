@@ -10,6 +10,8 @@ namespace IntegROS.Tests.XunitExtensionsTests.Utility
 
         public string Key => _key;
 
+        public TestScenarioDiscoveryBehavior DiscoveryBehavior { get; set; } = TestScenarioDiscoveryBehavior.Default;
+
 
         public TestScenarioAttribute() : this(null)
         {
@@ -25,23 +27,6 @@ namespace IntegROS.Tests.XunitExtensionsTests.Utility
         public override int GetScenarioHashCode()
         {
             return HashCode.Combine(_key);
-        }
-    }
-    
-    public class TestScenarioWithoutScenarioDiscovererAttribute : ScenarioAttribute
-    {
-        public override int GetScenarioHashCode()
-        {
-            return GetHashCode();
-        }
-    }
-    
-    [ScenarioDiscoverer("IntegROS.Tests.XunitExtensionsTests.Utility.NotExistingTestScenarioDiscoverer", "IntegROS.Tests")]
-    public class TestScenarioWithInvalidScenarioDiscovererAttribute : ScenarioAttribute
-    {
-        public override int GetScenarioHashCode()
-        {
-            return GetHashCode();
         }
     }
 }

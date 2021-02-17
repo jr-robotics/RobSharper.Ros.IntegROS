@@ -53,6 +53,71 @@ namespace IntegROS.Tests.XunitExtensionsTests
             runner.ScenarioDiscoveryException.Should().BeNull();
             AssertRunSummary(result, skipped: 1);
         }
+            
+        [Fact]
+        public async void Method_with_null_scenario()
+        {
+            var runner = CreateRunner(typeof(XunitExtensionsTestCases),
+                nameof(XunitExtensionsTestCases.Method_with_null_scenario));
+            
+            var result = await runner.RunAsync();
+            
+            runner.TestRunners.Count().Should().Be(1);
+            runner.ScenarioDiscoveryException.Should().BeNull();
+            AssertRunSummary(result, failed: 1);
+        }
+            
+        [Fact]
+        public async void Method_with_exception_scenario()
+        {
+            var runner = CreateRunner(typeof(XunitExtensionsTestCases),
+                nameof(XunitExtensionsTestCases.Method_with_exception_scenario));
+            
+            var result = await runner.RunAsync();
+            
+            runner.TestRunners.Count().Should().Be(1);
+            runner.ScenarioDiscoveryException.Should().BeNull();
+            AssertRunSummary(result, failed: 1);
+        }
+            
+        [Fact]
+        public async void Method_with_successful_and_skipped_scenarios()
+        {
+            var runner = CreateRunner(typeof(XunitExtensionsTestCases),
+                nameof(XunitExtensionsTestCases.Method_with_successful_and_skipped_scenarios));
+            
+            var result = await runner.RunAsync();
+            
+            runner.TestRunners.Count().Should().Be(2);
+            runner.ScenarioDiscoveryException.Should().BeNull();
+            AssertRunSummary(result, failed:0, skipped:1, succeeded:1);
+        }
+            
+        [Fact]
+        public async void Method_with_successful_and_null_scenarios()
+        {
+            var runner = CreateRunner(typeof(XunitExtensionsTestCases),
+                nameof(XunitExtensionsTestCases.Method_with_successful_and_null_scenarios));
+            
+            var result = await runner.RunAsync();
+            
+            runner.TestRunners.Count().Should().Be(2);
+            runner.ScenarioDiscoveryException.Should().BeNull();
+            AssertRunSummary(result, failed:1, skipped:0, succeeded:1);
+        }
+            
+        [Fact]
+        public async void Method_with_successful_and_invalid_scenarios()
+        {
+            var runner = CreateRunner(typeof(XunitExtensionsTestCases),
+                nameof(XunitExtensionsTestCases.Method_with_successful_and_invalid_scenario));
+            
+            var result = await runner.RunAsync();
+            
+            runner.TestRunners.Count().Should().Be(2);
+            runner.ScenarioDiscoveryException.Should().BeNull();
+            AssertRunSummary(result, failed:1, skipped:0, succeeded:1);
+        }
         
         
         protected ExceptionAggregator Aggregator { get; }
