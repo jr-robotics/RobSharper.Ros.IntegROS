@@ -13,13 +13,16 @@ namespace IntegROS.XunitExtensions
     public class MultipleScenariosTestCaseRunner : XunitTestCaseRunner
     {
         private readonly List<XunitTestRunner> _testRunners = new List<XunitTestRunner>();
-        private Exception _scenarioDiscoveryException;
 
         /// <summary>
         /// Gets the message sink used to report <see cref="IDiagnosticMessage"/> messages.
         /// </summary>
         protected IMessageSink DiagnosticMessageSink { get; }
-        
+
+        protected IList<XunitTestRunner> TestRunners => _testRunners;
+
+        protected Exception ScenarioDiscoveryException { get; set; }
+
         public MultipleScenariosTestCaseRunner(MultipleScenariosTestCase testCase, string displayName, string skipReason,
             object[] constructorArguments, IMessageSink diagnosticMessageSink, IMessageBus messageBus,
             ExceptionAggregator aggregator, CancellationTokenSource cancellationTokenSource) : base(testCase,
@@ -46,7 +49,7 @@ namespace IntegROS.XunitExtensions
                 foreach (var scenarioAttribute in scenarioAttributes)
                 {
                     IScenarioIdentifier scenarioIdentifier = null;
-                    var aggregator = new ExceptionAggregator(Aggregator);
+                    var testRunnerAggregator = new ExceptionAggregator(Aggregator);
                     var skipReason = scenarioAttribute.GetNamedArgument<string>("Skip");
 
                     try
@@ -57,12 +60,12 @@ namespace IntegROS.XunitExtensions
                     catch (Exception exception)
                     {
                         scenarioIdentifier = new DummyScenarioDiscoverer().GetScenarioIdentifier(scenarioAttribute);
-                        aggregator.Add(exception);
+                        testRunnerAggregator.Add(exception);
                     }
 
                     var test = CreateTest(TestCase, scenarioIdentifier);
                     var testRunner = new ScenarioTestRunner(test, DiagnosticMessageSink, MessageBus, TestClass, ConstructorArguments, TestMethod,
-                        TestMethodArguments, skipReason, BeforeAfterAttributes, aggregator,
+                        TestMethodArguments, skipReason, BeforeAfterAttributes, testRunnerAggregator,
                         CancellationTokenSource);
                     
                     _testRunners.Add(testRunner);
@@ -70,7 +73,7 @@ namespace IntegROS.XunitExtensions
             }
             catch (Exception ex)
             {
-                _scenarioDiscoveryException = ex;
+                ScenarioDiscoveryException = ex;
             }
         }
 
@@ -94,11 +97,11 @@ namespace IntegROS.XunitExtensions
         
         protected override async Task<RunSummary> RunTestAsync()
         {
-            if (_scenarioDiscoveryException != null)
+            if (ScenarioDiscoveryException != null)
                 return RunTestScenarioDiscoveryException();
 
             var runSummary = new RunSummary();
-            foreach (var testRunner in _testRunners)
+            foreach (var testRunner in TestRunners)
                 runSummary.Aggregate(await testRunner.RunAsync());
 
             return runSummary;
@@ -110,7 +113,7 @@ namespace IntegROS.XunitExtensions
 
             if (!MessageBus.QueueMessage(new TestStarting(test)))
                 CancellationTokenSource.Cancel();
-            else if (!MessageBus.QueueMessage(new TestFailed(test, 0, null, _scenarioDiscoveryException.Unwrap())))
+            else if (!MessageBus.QueueMessage(new TestFailed(test, 0, null, ScenarioDiscoveryException.Unwrap())))
                 CancellationTokenSource.Cancel();
             if (!MessageBus.QueueMessage(new TestFinished(test, 0, null)))
                 CancellationTokenSource.Cancel();

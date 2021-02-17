@@ -195,7 +195,7 @@ namespace IntegROS.Tests.XunitExtensionsTests
             testCases.Should().NotBeNull();
             testCases.Count().Should().Be(1);
 
-            testCases.First().Should().BeOfType<ExecutionErrorScenarioTestCase>();
+            testCases.First().Should().BeOfType<ScenarioTestCase>();
         }
     }
 }
