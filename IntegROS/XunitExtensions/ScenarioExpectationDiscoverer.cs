@@ -75,23 +75,6 @@ namespace IntegROS.XunitExtensions
                     var scenarioDiscoverer =
                         ScenarioDiscovererFactory.GetDiscoverer(DiagnosticMessageSink, scenarioAttribute);
                     scenarioIdentifier = scenarioDiscoverer.GetScenarioIdentifier(scenarioAttribute);
-
-                    var scenario = scenarioDiscoverer.GetScenario(scenarioIdentifier);
-                    if (scenario == null)
-                    {
-                        testCases.Add(
-                            new ExecutionErrorScenarioTestCase(
-                                DiagnosticMessageSink,
-                                discoveryOptions.MethodDisplayOrDefault(),
-                                discoveryOptions.MethodDisplayOptionsOrDefault(),
-                                testMethod,
-                                scenarioIdentifier,
-                                $"Scenario is null for {testMethod.TestClass.Class.Name}.{testMethod.Method.Name}, Scenario {scenarioIdentifier}."
-                            )
-                        );
-
-                        continue;
-                    }
                 }
                 catch (Exception e)
                 {
@@ -114,20 +97,9 @@ namespace IntegROS.XunitExtensions
                     }
                 }
 
-                if (skipReason != null)
-                {
-                    var skippedScenarioTestCase = new SkippedScenarioTestCase(DiagnosticMessageSink,
-                        discoveryOptions.MethodDisplayOrDefault(),
-                        discoveryOptions.MethodDisplayOptionsOrDefault(),
-                        testMethod, scenarioIdentifier, skipReason, null);
-
-                    testCases.Add(skippedScenarioTestCase);
-                    continue;
-                }
-
                 var testCase = new ScenarioTestCase(DiagnosticMessageSink,
                     discoveryOptions.MethodDisplayOrDefault(), discoveryOptions.MethodDisplayOptionsOrDefault(),
-                    testMethod, scenarioIdentifier);
+                    testMethod, scenarioIdentifier, skipReason);
 
                 testCases.Add(testCase);
             }

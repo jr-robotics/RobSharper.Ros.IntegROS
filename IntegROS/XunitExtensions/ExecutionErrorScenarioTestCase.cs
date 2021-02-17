@@ -7,7 +7,7 @@ using Xunit.Sdk;
 
 namespace IntegROS.XunitExtensions
 {
-    public class ExecutionErrorScenarioTestCase : ExecutionErrorTestCase, IScenarioTestCase
+    public class ExecutionErrorScenarioTestCase : ExecutionErrorTestCase
     {
         private IScenarioIdentifier _scenarioIdentifier;
 

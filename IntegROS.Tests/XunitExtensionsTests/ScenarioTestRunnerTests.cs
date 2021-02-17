@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using IntegROS.Tests.XunitExtensionsTests.Utility;
 using IntegROS.XunitExtensions;
-using IntegROS.XunitExtensions.ScenarioDiscovery;
 using Moq;
 using Xunit;
 using Xunit.Abstractions;
