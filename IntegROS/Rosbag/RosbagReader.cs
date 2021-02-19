@@ -6,9 +6,9 @@ namespace IntegROS.Rosbag
 {
     public static class RosbagReader
     {
-        // TODO: Avoid default hardcoded initialization
         public static IRosbagReader Instance { get; set; }
 
+        // TODO: Avoid default hardcoded initialization
         static RosbagReader()
         {
             var serializer = new RosMessageSerializer(new MessageTypeRegistry());

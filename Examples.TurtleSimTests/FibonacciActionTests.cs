@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using IntegROS;
+using Messages.actionlib_msgs;
 
 namespace Examples.TurtleSimTests
 {
+    [RosbagScenario(FibonacciActionServerBagFiles.Fibonacci5)]
     public class FibonacciActionTests : ForScenario
     {
         [ExpectThat]
@@ -17,11 +19,24 @@ namespace Examples.TurtleSimTests
                 .Should()
                 .OnlyContain(x => x.ResultState == ActionStatus.Succeeded);
         }
+        
+        [ExpectThat]
+        public void Can_get_status_messages()
+        {
+            var statusMessages = Scenario.Messages
+                .ForAction("/fibonacci")
+                .StatusMessages
+                .ToList();
+
+            statusMessages.Should().NotBeNull();
+
+            statusMessages.First().Value.Should().NotBeNull();
+        }
     }
 
     public static class RecordedMessageActionExtensions
     {
-        public static IEnumerable<IRosActionCall> ForAction(this IEnumerable<IRecordedMessage> messages, string actionName)
+        public static ActionCallCollection ForAction(this IEnumerable<IRecordedMessage> messages, string actionName)
         {
             if (actionName == null) throw new ArgumentNullException(nameof(actionName));
             
@@ -43,11 +58,13 @@ namespace Examples.TurtleSimTests
         private IEnumerable<IRecordedMessage> _actionMessages;
         public string ActionName { get; }
 
-        public IEnumerable<IRecordedMessage> StatusMessages
+        public IEnumerable<IRecordedMessage<GoalStatusArray>> StatusMessages
         {
             get
             {
-                return _actionMessages.InTopic(ActionName + "/status");
+                return _actionMessages
+                    .InTopic(ActionName + "/status")
+                    .WithMessageType<GoalStatusArray>();
             }
         }
         
