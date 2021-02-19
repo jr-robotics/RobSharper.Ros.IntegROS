@@ -47,6 +47,13 @@ namespace IntegROS.XunitExtensions
                 {
                     throw new InvalidOperationException("Scenario is null (ScenarioDiscoverer returned no scenario).");
                 }
+
+                if (Scenario is IExecutableScenario executableScenario)
+                {
+                    Aggregator
+                        .RunAsync(() => executableScenario.ExecuteAsync())
+                        .Wait();
+                }
             }
             catch (Exception e)
             {
