@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using IntegROS;
+using IntegROS.Ros.Actionlib;
+using IntegROS.Ros.MessageEssentials;
+using IntegROS.Rosbag;
 using Messages.actionlib_msgs;
 
 namespace Examples.TurtleSimTests
@@ -23,13 +26,34 @@ namespace Examples.TurtleSimTests
         [ExpectThat]
         public void Can_get_status_messages()
         {
+            var allMessages = Scenario
+                .Messages
+                .ForAction("/fibonacci")
+                .ActionMessages
+                .ToList();
+            
             var statusMessages = Scenario.Messages
                 .ForAction("/fibonacci")
                 .StatusMessages
                 .ToList();
 
-            statusMessages.Should().NotBeNull();
+            var goals = allMessages
+                .InTopic("/fibonacci/goal")
+                .WithMessageType<ActionGoal>()
+                .ToList();
 
+            var goal = goals.First();
+            goal.Value.Should().NotBeNull();
+            
+            var feedbacks = allMessages
+                .InTopic("/fibonacci/feedback")
+                .ToList();
+            
+            var results = allMessages
+                .InTopic("/fibonacci/result")
+                .ToList();
+            
+            statusMessages.Should().NotBeNull();
             statusMessages.First().Value.Should().NotBeNull();
         }
     }
@@ -55,8 +79,10 @@ namespace Examples.TurtleSimTests
 
     public class ActionCallCollection : IEnumerable<IRosActionCall>
     {
-        private IEnumerable<IRecordedMessage> _actionMessages;
+        private readonly IEnumerable<IRecordedMessage> _actionMessages;
         public string ActionName { get; }
+
+        public IEnumerable<IRecordedMessage> ActionMessages => _actionMessages;
 
         public IEnumerable<IRecordedMessage<GoalStatusArray>> StatusMessages
         {
@@ -88,6 +114,10 @@ namespace Examples.TurtleSimTests
     public interface IRosActionCall
     {
         ActionStatus ResultState { get; }
+    }
+
+    public class RosActionCall
+    {
     }
 
     public enum ActionStatus

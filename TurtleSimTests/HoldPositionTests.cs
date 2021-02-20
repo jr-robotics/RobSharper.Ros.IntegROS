@@ -1,8 +1,8 @@
 using System;
 using FluentAssertions;
-using Messages.geometry_msgs;
 using RosComponentTesting;
 using RosComponentTesting.RosNet;
+using Uml.Robotics.Ros.Messages.geometry_msgs;
 using Xunit;
 using Xunit.Abstractions;
 using Pose = Messages.turtlesim.Pose;

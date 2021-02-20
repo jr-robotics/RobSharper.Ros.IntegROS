@@ -1,4 +1,4 @@
-using RobSharper.Ros.Adapters.UmlRobotics;
+using IntegROS.Ros.MessageEssentials;
 using RobSharper.Ros.MessageEssentials;
 using RobSharper.Ros.MessageEssentials.Serialization;
 
@@ -6,6 +6,7 @@ namespace IntegROS.Rosbag
 {
     public static class RosbagReader
     {
+        public static RosMessageSerializer MessageSerializer { get; set; }
         public static IRosbagReader Instance { get; set; }
 
         // TODO: Avoid default hardcoded initialization
@@ -13,9 +14,10 @@ namespace IntegROS.Rosbag
         {
             var serializer = new RosMessageSerializer(new MessageTypeRegistry());
             
-            serializer.MessageFormatters.Add(new UmlRoboticsRosMessageFormatter());
-            serializer.MessageTypeRegistry.RosMessageTypeInfoFactories.Add(new UmlRoboticsMessageTypeInfoFactory());
-            
+            serializer.UseUmlRoboticsRos();
+            serializer.UseIntegROSActions();
+
+            MessageSerializer = serializer;
             Instance = new RobSharperRosbagReaderAdapter(serializer);
         }
     }
