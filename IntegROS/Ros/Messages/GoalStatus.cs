@@ -45,6 +45,5 @@ namespace IntegROS.Ros.Messages
         
         [RosMessageField(12, "uint8", "LOST")]
         public const GoalStatusValue Lost = GoalStatusValue.Lost;
-        
     }
 }

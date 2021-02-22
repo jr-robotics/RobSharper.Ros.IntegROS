@@ -5,9 +5,7 @@ using System.Linq;
 using FluentAssertions;
 using IntegROS;
 using IntegROS.Ros.Actionlib;
-using IntegROS.Ros.MessageEssentials;
-using IntegROS.Rosbag;
-using Messages.actionlib_msgs;
+using IntegROS.Ros.Messages;
 
 namespace Examples.TurtleSimTests
 {
