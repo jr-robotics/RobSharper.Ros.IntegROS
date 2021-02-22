@@ -36,16 +36,36 @@ namespace IntegROS.Ros.Actionlib
             IDictionary<Type, Func<SerializationContext, RosBinaryReader, IRosMessageTypeInfo, RosMessageSerializer, object>> Deserializers =
                 new Dictionary<Type, Func<SerializationContext, RosBinaryReader, IRosMessageTypeInfo, RosMessageSerializer, object>>()
                 {
-                    {typeof(ActionGoal), DeserializeActionGoal}
+                    {typeof(ActionGoal), DeserializeActionGoal},
+                    {typeof(ActionFeedback), DeserializeActionFeedback},
+                    {typeof(ActionResult), DeserializeActionResult}
                 };
-        
+
         private static ActionGoal DeserializeActionGoal(SerializationContext context, RosBinaryReader reader, IRosMessageTypeInfo messageTypeInfo, RosMessageSerializer serializer)
         {
             var header = Deserialize<Header>(context, reader);
             var goalId = Deserialize<GoalID>(context, reader);
-            var goalMessageDeserializer = PartialMessageDeserializer.CreateFromStream(context.Stream, serializer);
+            var partialMessageDeserializer = PartialMessageDeserializer.CreateFromStream(context.Stream, serializer);
             
-            return new ActionGoal(header, goalId, goalMessageDeserializer);
+            return new ActionGoal(header, goalId, partialMessageDeserializer);
+        }
+
+        private static object DeserializeActionFeedback(SerializationContext context, RosBinaryReader reader, IRosMessageTypeInfo messageTypeInfo, RosMessageSerializer serializer)
+        {
+            var header = Deserialize<Header>(context, reader);
+            var goalStatus = Deserialize<GoalStatus>(context, reader);
+            var partialMessageDeserializer = PartialMessageDeserializer.CreateFromStream(context.Stream, serializer);
+
+            return new ActionFeedback(header, goalStatus, partialMessageDeserializer);
+        }
+
+        private static object DeserializeActionResult(SerializationContext context, RosBinaryReader reader, IRosMessageTypeInfo messageTypeInfo, RosMessageSerializer serializer)
+        {
+            var header = Deserialize<Header>(context, reader);
+            var goalStatus = Deserialize<GoalStatus>(context, reader);
+            var partialMessageDeserializer = PartialMessageDeserializer.CreateFromStream(context.Stream, serializer);
+
+            return new ActionResult(header, goalStatus, partialMessageDeserializer);
         }
         
         private static T Deserialize<T>(SerializationContext context, RosBinaryReader reader)

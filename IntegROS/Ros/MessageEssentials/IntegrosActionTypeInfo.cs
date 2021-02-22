@@ -10,7 +10,9 @@ namespace IntegROS.Ros.MessageEssentials
         public static readonly IDictionary<Type, IntegrosActionTypeInfo> Types =
             new Dictionary<Type, IntegrosActionTypeInfo>()
             {
-                {typeof(ActionGoal), new IntegrosActionTypeInfo(typeof(ActionGoal))}
+                {typeof(ActionGoal), new IntegrosActionTypeInfo(typeof(ActionGoal))},
+                {typeof(ActionFeedback), new IntegrosActionTypeInfo(typeof(ActionFeedback))},
+                {typeof(ActionResult), new IntegrosActionTypeInfo(typeof(ActionResult))}
             };
         
         public RosType RosType { get; }
