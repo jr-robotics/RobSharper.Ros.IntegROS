@@ -27,4 +27,8 @@
       <ProjectReference Include="..\IntegROS\IntegROS.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="RosActionsTests" />
+    </ItemGroup>
+
 </Project>

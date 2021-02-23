@@ -2,7 +2,7 @@ using IntegROS.Ros.MessageEssentials;
 using RobSharper.Ros.MessageEssentials;
 using RobSharper.Ros.MessageEssentials.Serialization;
 
-namespace IntegROS.Rosbag
+namespace IntegROS.Ros.Rosbag
 {
     public static class RosbagReader
     {
