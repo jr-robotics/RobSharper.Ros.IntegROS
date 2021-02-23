@@ -134,58 +134,76 @@ namespace Examples.TurtleSimTests
         [ExpectThat]
         public void Can_get_goal_message_from_action_call()
         {
-            var allMessages = Scenario
+            var fibonacciCalls = Scenario
                 .Messages
                 .ForAction("/fibonacci")
                 .Calls
-                .Select(x => x.GoalMessage)
                 .ToList();
 
-            allMessages.Should().NotBeNull();
-            allMessages.Should().NotBeEmpty();
-            
-            allMessages
-                .Select(x => x.Value)
-                .ToList()
-                .Should().NotBeEmpty();
+            fibonacciCalls.Should().NotBeNull();
+            fibonacciCalls.Should().NotBeEmpty();
+
+            foreach (var fibonacciCall in fibonacciCalls)
+            {
+                fibonacciCall.Should().NotBeNull();
+                
+                fibonacciCall.GoalMessage.Should().NotBeNull();
+                fibonacciCall.GoalMessage.Value.Should().NotBeNull();
+                fibonacciCall.GoalMessage.Value.GoalId.Id.Should().BeEquivalentTo(fibonacciCall.GoalId);
+            }
         }
 
         [ExpectThat]
         public void Can_get_result_message_from_action_call()
         {
-            var allMessages = Scenario
+            var fibonacciCalls = Scenario
                 .Messages
                 .ForAction("/fibonacci")
                 .Calls
-                .Select(x => x.ResultMessage)
                 .ToList();
 
-            allMessages.Should().NotBeNull();
-            allMessages.Should().NotBeEmpty();
-            
-            allMessages
-                .Select(x => x.Value)
-                .ToList()
-                .Should().NotBeEmpty();
+            fibonacciCalls.Should().NotBeNull();
+            fibonacciCalls.Should().NotBeEmpty();
+
+            foreach (var fibonacciCall in fibonacciCalls)
+            {
+                fibonacciCall.Should().NotBeNull();
+                
+                fibonacciCall.ResultMessage.Should().NotBeNull();
+                fibonacciCall.ResultMessage.Value.Should().NotBeNull();
+                fibonacciCall.ResultMessage.Value.GoalStatus.GoalId.Id.Should().BeEquivalentTo(fibonacciCall.GoalId);
+            }
         }
 
         [ExpectThat]
         public void Can_get_all_feedback_messages_from_action_call()
         {
-            var callFeedbackMessages = Scenario
+            var fibonacciCalls = Scenario
                 .Messages
                 .ForAction("/fibonacci")
                 .Calls
-                .Select(x => x.FeedbackMessages)
                 .ToList();
 
-            callFeedbackMessages.Should().NotBeNull();
-            callFeedbackMessages.Should().NotBeEmpty();
+            fibonacciCalls.Should().NotBeNull();
+            fibonacciCalls.Should().NotBeEmpty();
 
-            foreach (var feedbackMessages in callFeedbackMessages)
+            foreach (var fibonacciCall in fibonacciCalls)
             {
+                fibonacciCall.Should().NotBeNull();
+
+                var callGoalId = fibonacciCall.GoalId;
+                var feedbackMessages = fibonacciCall
+                    .FeedbackMessages
+                    .ToList();
+                
                 feedbackMessages.Should().NotBeNull();
                 feedbackMessages.Should().NotBeEmpty();
+
+                feedbackMessages
+                    .Select(x => x.Value.GoalStatus.GoalId.Id)
+                    .Distinct()
+                    .Should()
+                    .BeEquivalentTo(callGoalId);
             
                 feedbackMessages
                     .Select(x => x.Value)
