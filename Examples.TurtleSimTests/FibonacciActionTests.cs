@@ -218,6 +218,12 @@ namespace Examples.TurtleSimTests
                     .Should().BeInAscendingOrder();
             }
         }
+
+        [ExpectThat]
+        public void Fibonacci_is_a_valid_action()
+        {
+            Messages.HasAction("/fibonacci").Should().BeTrue();
+        }
         
         [ExpectThat]
         [RosbagScenario(FibonacciActionServerBagFiles.FibonacciCancel, Skip = "Should not hold for canceled scenario")]

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using IntegROS;
 using IntegROS.Ros.Messages;
 
 namespace IntegROS.Ros.Actionlib
