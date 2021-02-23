@@ -123,8 +123,7 @@ namespace Examples.TurtleSimTests
         {
             var allMessages = Scenario
                 .Messages
-                .ForAction("/fibonacci")
-                .Calls
+                .ForActionCalls("/fibonacci")
                 .ToList();
 
             allMessages.Should().NotBeNull();
@@ -136,8 +135,7 @@ namespace Examples.TurtleSimTests
         {
             var fibonacciCalls = Scenario
                 .Messages
-                .ForAction("/fibonacci")
-                .Calls
+                .ForActionCalls("/fibonacci")
                 .ToList();
 
             fibonacciCalls.Should().NotBeNull();
@@ -158,8 +156,7 @@ namespace Examples.TurtleSimTests
         {
             var fibonacciCalls = Scenario
                 .Messages
-                .ForAction("/fibonacci")
-                .Calls
+                .ForActionCalls("/fibonacci")
                 .ToList();
 
             fibonacciCalls.Should().NotBeNull();
@@ -180,8 +177,7 @@ namespace Examples.TurtleSimTests
         {
             var fibonacciCalls = Scenario
                 .Messages
-                .ForAction("/fibonacci")
-                .Calls
+                .ForActionCalls("/fibonacci")
                 .ToList();
 
             fibonacciCalls.Should().NotBeNull();
@@ -217,8 +213,7 @@ namespace Examples.TurtleSimTests
         {
             var callStatusChanges = Scenario
                 .Messages
-                .ForAction("/fibonacci")
-                .Calls
+                .ForActionCalls("/fibonacci")
                 .Select(x => x.StatusChanges)
                 .ToList();
 
@@ -247,12 +242,10 @@ namespace Examples.TurtleSimTests
         [RosbagScenario(FibonacciActionServerBagFiles.FibonacciCancel, Skip = "Should not hold for canceled scenario")]
         [RosbagScenario(FibonacciActionServerBagFiles.FibonacciPreempted, Skip = "Should not hold for preempted scenario")]
         [RosbagScenario(FibonacciActionServerBagFiles.FibonacciSuccessfulAndPreempted, Skip = "Should not hold for preempted scenario")]
-        public void All_actions_succeed()
+        public void All_action_calls_succeed()
         {
             Scenario.Messages
-                .ForAction("/fibonacci")
-                .Calls
-                .ToList()
+                .ForActionCalls("/fibonacci")
                 .Should()
                 .OnlyContain(x => x.FinalState == GoalStatusValue.Succeeded);
         }
@@ -267,8 +260,7 @@ namespace Examples.TurtleSimTests
                 .ToList();
 
             var actionCallGoals = Messages
-                .ForAction("/fibonacci")
-                .Calls
+                .ForActionCalls("/fibonacci")
                 .Select(x => x.GoalId)
                 .ToList();
 

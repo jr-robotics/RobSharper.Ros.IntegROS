@@ -1,78 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using IntegROS.Ros.Messages;
 
 namespace IntegROS.Ros.Actionlib
 {
-    public class ActionCallCollection
+    public class ActionCallCollection : IEnumerable<RosActionCall>
     {
-        private readonly IEnumerable<IRecordedMessage> _allActionMessages;
-        public string ActionName { get; }
+        public ActionMessages ActionMessages { get; }
 
-        public IEnumerable<IRecordedMessage> AllActionMessages => _allActionMessages;
-
-        public IEnumerable<IRecordedMessage<GoalStatusArray>> StatusMessages
+        public ActionCallCollection(ActionMessages actionMessages)
         {
-            get
-            {
-                return RecordedMessageExtensions.InTopic(_allActionMessages, ActionName + "/status")
-                    .WithMessageType<GoalStatusArray>();
-            }
+            ActionMessages = actionMessages ?? throw new ArgumentNullException(nameof(actionMessages));
         }
-        
-        public IEnumerable<IRecordedMessage<ActionGoal>> GoalMessages
+
+        public IEnumerator<RosActionCall> GetEnumerator()
         {
-            get
+            var goals = ActionMessages.GoalMessages.ToList();
+
+            foreach (var goal in goals)
             {
-                return RecordedMessageExtensions.InTopic(_allActionMessages, ActionName + "/goal")
-                    .WithMessageType<ActionGoal>();
+                yield return new RosActionCall(goal, ActionMessages);
             }
         }
 
-        public IEnumerable<IRecordedMessage<ActionResult>> ResultMessages
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            get
-            {
-                return RecordedMessageExtensions.InTopic(_allActionMessages, ActionName + "/result")
-                    .WithMessageType<ActionResult>();
-            }
-        }
-
-        public IEnumerable<IRecordedMessage<ActionFeedback>> FeedbackMessages
-        {
-            get
-            {
-                return RecordedMessageExtensions.InTopic(_allActionMessages, ActionName + "/feedback")
-                    .WithMessageType<ActionFeedback>();
-            }
-        }
-
-        public IEnumerable<IRecordedMessage<GoalID>> CancelMessages
-        {
-            get
-            {
-                return RecordedMessageExtensions.InTopic(_allActionMessages, ActionName + "/cancel")
-                    .WithMessageType<GoalID>();
-            }
-        }
-
-        public IEnumerable<RosActionCall> Calls
-        {
-            get
-            {
-                var goals = GoalMessages.ToList();
-
-                foreach (var goal in goals)
-                {
-                    yield return new RosActionCall(goal, this);
-                }
-            }
-        }
-
-        public ActionCallCollection(string actionName, IEnumerable<IRecordedMessage> allActionMessages)
-        {
-            ActionName = actionName;
-            _allActionMessages = allActionMessages;
+            return GetEnumerator();
         }
     }
 }

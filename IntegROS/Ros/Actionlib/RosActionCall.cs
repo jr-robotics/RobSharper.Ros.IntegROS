@@ -9,11 +9,11 @@ namespace IntegROS.Ros.Actionlib
     {
         private readonly IRecordedMessage<ActionGoal> _goal;
         private IRecordedMessage<ActionResult> _result;
-        private readonly ActionCallCollection _actionCallCollection;
+        private readonly ActionMessages _actionMessages;
         private GoalStatusValue? _finalState;
         private List<Tuple<DateTime,GoalStatusValue>> _statusChanges;
 
-        public string ActionName => _actionCallCollection.ActionName;
+        public string ActionName => _actionMessages.ActionName;
         public string GoalId => _goal.Value.GoalId.Id;
 
         public GoalStatusValue FinalState
@@ -39,7 +39,7 @@ namespace IntegROS.Ros.Actionlib
             {
                 if (_result == null)
                 {
-                    _result = _actionCallCollection
+                    _result = _actionMessages
                         .ResultMessages
                         .FirstOrDefault(x => x.Value.GoalStatus.GoalId.Id == GoalId);
                 }
@@ -52,7 +52,7 @@ namespace IntegROS.Ros.Actionlib
         {
             get
             {
-                return _actionCallCollection
+                return _actionMessages
                     .FeedbackMessages
                     .Where(x => x.Value.GoalStatus.GoalId.Id == GoalId);
             }
@@ -71,7 +71,7 @@ namespace IntegROS.Ros.Actionlib
                     // 4) Select the first element of each group
 
                     // ReSharper disable once PossibleInvalidOperationException
-                    _statusChanges = _actionCallCollection.StatusMessages
+                    _statusChanges = _actionMessages.StatusMessages
                         .Select(x => new
                         {
                             Stamp = x.Value.Header.Stamp,
@@ -88,10 +88,10 @@ namespace IntegROS.Ros.Actionlib
             }
         }
 
-        public RosActionCall(IRecordedMessage<ActionGoal> goal, ActionCallCollection actionCallCollection)
+        public RosActionCall(IRecordedMessage<ActionGoal> goal, ActionMessages actionMessages)
         {
             _goal = goal ?? throw new ArgumentNullException(nameof(goal));
-            _actionCallCollection = actionCallCollection ?? throw new ArgumentNullException(nameof(actionCallCollection));
+            _actionMessages = actionMessages ?? throw new ArgumentNullException(nameof(actionMessages));
         }
     }
 }

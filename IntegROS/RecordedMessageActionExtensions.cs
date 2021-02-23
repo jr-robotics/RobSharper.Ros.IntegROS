@@ -7,12 +7,25 @@ namespace IntegROS
 {
     public static class RecordedMessageActionExtensions
     {
-        public static ActionCallCollection ForAction(this IEnumerable<IRecordedMessage> messages, string actionName)
+        public static ActionMessages ForAction(this IEnumerable<IRecordedMessage> messages, string actionName)
         {
             if (actionName == null) throw new ArgumentNullException(nameof(actionName));
             var actionMessages = FilterActionMessages(actionName, messages);
             
-            return new ActionCallCollection(actionName, actionMessages);
+            return new ActionMessages(actionName, actionMessages);
+        }
+
+        public static ActionCallCollection Calls(this ActionMessages actionMessages)
+        {
+            return new ActionCallCollection(actionMessages);
+        }
+
+        public static ActionCallCollection ForActionCalls(this IEnumerable<IRecordedMessage> messages,
+            string actionName)
+        {
+            return messages
+                .ForAction(actionName)
+                .Calls();
         }
 
         public static bool HasAction(this IEnumerable<IRecordedMessage> messages, string actionName)
