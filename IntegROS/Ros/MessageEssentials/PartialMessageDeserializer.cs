@@ -7,6 +7,7 @@ namespace IntegROS.Ros.MessageEssentials
     {
         private readonly MemoryStream _data;
         private readonly RosMessageSerializer _serializer;
+        private object _value;
 
         private PartialMessageDeserializer(MemoryStream data, RosMessageSerializer serializer)
         {
@@ -16,8 +17,14 @@ namespace IntegROS.Ros.MessageEssentials
 
         public T DeserializeAs<T>()
         {
+            if (_value != null && typeof(T) == _value.GetType())
+                return (T) _value;
+            
             _data.Position = 0;
-            return _serializer.Deserialize<T>(_data);
+            var value = _serializer.Deserialize<T>(_data);
+            _value = value;
+
+            return value;
         }
 
         public static PartialMessageDeserializer CreateFromStream(Stream stream, RosMessageSerializer serializer)

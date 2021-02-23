@@ -10,7 +10,12 @@ namespace IntegROS.Ros.Actionlib
         public Header Header { get;}
         
         public GoalID GoalId { get; }
-        
+
+        public TGoal Goal<TGoal>()
+        {
+            return _goalMessageDeserializer.DeserializeAs<TGoal>();
+        }
+
         public ActionGoal(Header header, GoalID goalId, PartialMessageDeserializer goalMessageDeserializer)
         {
             _goalMessageDeserializer = goalMessageDeserializer;

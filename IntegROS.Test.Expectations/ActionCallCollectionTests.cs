@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using IntegROS.Ros.Messages;
+using RobSharper.Ros.MessageEssentials;
 
 namespace IntegROS.Test.Expectations
 {
@@ -46,6 +48,21 @@ namespace IntegROS.Test.Expectations
         }
 
         [ExpectThat]
+        public void Can_get_gaol_message_content()
+        {
+            var allActionGoals = Scenario
+                .Messages
+                .ForActionCalls("/fibonacci")
+                .Select(x => x.GoalMessage.Value.Goal<FibonacciGoal>())
+                .ToList();
+
+            foreach (var goal in allActionGoals)
+            {
+                goal.Order.Should().BePositive();
+            }
+        }
+
+        [ExpectThat]
         public void Can_get_result_message_from_action_call()
         {
             var fibonacciCalls = Scenario
@@ -63,6 +80,59 @@ namespace IntegROS.Test.Expectations
                 fibonacciCall.ResultMessage.Should().NotBeNull();
                 fibonacciCall.ResultMessage.Value.Should().NotBeNull();
                 fibonacciCall.ResultMessage.Value.GoalStatus.GoalId.Id.Should().BeEquivalentTo(fibonacciCall.GoalId);
+            }
+        }
+
+        [ExpectThat]
+        public void Can_get_result_message_content()
+        {
+            var actionResults = Scenario
+                .Messages
+                .ForActionCalls("/fibonacci")
+                .Select(x => x.ResultMessage.Value.Result<FibonacciResult>())
+                .ToList();
+
+            foreach (var result in actionResults)
+            {
+                result.Sequence.Should().BeInAscendingOrder();
+            }
+        }
+
+        [ExpectThat]
+        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciCancel, Skip = "not for preempted calls")]
+        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciPreempted, Skip = "not for preempted calls")]
+        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciSuccessfulAndPreempted, Skip = "not for preempted calls")]
+        public void Fibonacci_calculation_is_valid()
+        {
+            var actionCalls = Scenario
+                .Messages
+                .ForActionCalls("/fibonacci")
+                .Select(x => new
+                {
+                    GoalOrder = x.GoalMessage.Value.Goal<FibonacciGoal>().Order,
+                    Result = x.ResultMessage.Value.Result<FibonacciResult>().Sequence,
+                    FinalState = x.FinalState
+                });
+
+            foreach (var actionCall in actionCalls)
+            {
+                actionCall.FinalState.Should().Be(GoalStatus.Succeeded);
+                actionCall.Result.Count().Should().Be(actionCall.GoalOrder + 2);
+
+                for (var i = 0; i < actionCall.Result.Count(); i++)
+                {
+                    if (i == 0 || i == 1)
+                        actionCall.Result.Skip(i).First().Should().Be(i, "first two fibonaccis should be 0 and 1");
+                    else
+                    {
+                        var items = actionCall.Result
+                            .Skip(i - 2)
+                            .Take(3)
+                            .ToList();
+
+                        items[2].Should().Be(items[0] + items[1]);
+                    }
+                }
             }
         }
 
@@ -154,5 +224,19 @@ namespace IntegROS.Test.Expectations
 
             actionCallGoals.Should().BeEquivalentTo(actionGoals);
         }
+    }
+
+    [RosMessage("actionlib_tutorials/FibonacciGoal")]
+    public class FibonacciGoal
+    {
+        [RosMessageField("int32", "order", 1)]
+        public int Order { get; set; }
+    }
+
+    [RosMessage("actionlib_tutorials/FibonacciResult")]
+    public class FibonacciResult
+    {
+        [RosMessageField("int32[]", "sequence", 1)]
+        public IEnumerable<int> Sequence { get; set; }
     }
 }

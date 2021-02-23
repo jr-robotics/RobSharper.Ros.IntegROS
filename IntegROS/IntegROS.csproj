@@ -8,7 +8,7 @@
       <PackageReference Include="FluentAssertions" Version="5.10.3" />
       <PackageReference Include="RobSharper.Ros.Adapters.UmlRobotics" Version="1.0.0" />
       <PackageReference Include="RobSharper.Ros.BagReader" Version="1.0.0-rc1" />
-      <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.0.8-rc1" />
+      <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.0.8-rc2" />
       <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
       <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
     </ItemGroup>
