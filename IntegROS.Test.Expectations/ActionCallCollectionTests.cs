@@ -1,9 +1,8 @@
-using System.Linq;
+﻿using System.Linq;
 using FluentAssertions;
-using IntegROS;
 using IntegROS.Ros.Messages;
 
-namespace Examples.TurtleSimTests
+namespace IntegROS.Test.Expectations
 {
     [RosbagScenario(FibonacciActionServerBagFiles.Fibonacci5)]
     [RosbagScenario(FibonacciActionServerBagFiles.Fibonacci20)]
@@ -11,113 +10,8 @@ namespace Examples.TurtleSimTests
     [RosbagScenario(FibonacciActionServerBagFiles.FibonacciCancel)]
     [RosbagScenario(FibonacciActionServerBagFiles.FibonacciPreempted)]
     [RosbagScenario(FibonacciActionServerBagFiles.FibonacciSuccessfulAndPreempted)]
-    public class FibonacciActionTests : ForScenario
+    public class ActionCallCollectionTests : ForScenario
     {
-        [ExpectThat]
-        public void Can_get_action_name()
-        {
-            var actionName = Scenario
-                .Messages
-                .ForAction("/fibonacci")
-                .ActionName;
-
-            actionName.Should().NotBeNull();
-            actionName.Should().Be("/fibonacci");
-        }
-        
-        [ExpectThat]
-        public void Can_get_all_status_messages()
-        {
-            var allMessages = Scenario
-                .Messages
-                .ForAction("/fibonacci")
-                .StatusMessages
-                .ToList();
-
-            allMessages.Should().NotBeNull();
-            allMessages.Should().NotBeEmpty();
-
-            allMessages
-                .Select(x => x.Value)
-                .ToList()
-                .Should().NotBeEmpty();
-        }
-
-        [ExpectThat]
-        public void Can_get_all_goal_messages()
-        {
-            var allMessages = Scenario
-                .Messages
-                .ForAction("/fibonacci")
-                .GoalMessages
-                .ToList();
-
-            allMessages.Should().NotBeNull();
-            allMessages.Should().NotBeEmpty();
-
-            allMessages
-                .Select(x => x.Value)
-                .ToList()
-                .Should().NotBeEmpty();
-        }
-
-        [ExpectThat]
-        public void Can_get_all_feedback_messages()
-        {
-            var allMessages = Scenario
-                .Messages
-                .ForAction("/fibonacci")
-                .FeedbackMessages
-                .ToList();
-
-            allMessages.Should().NotBeNull();
-            allMessages.Should().NotBeEmpty();
-
-            allMessages
-                .Select(x => x.Value)
-                .ToList()
-                .Should().NotBeEmpty();
-        }
-
-        [ExpectThat]
-        public void Can_get_all_result_messages()
-        {
-            var allMessages = Scenario
-                .Messages
-                .ForAction("/fibonacci")
-                .ResultMessages
-                .ToList();
-
-            allMessages.Should().NotBeNull();
-            allMessages.Should().NotBeEmpty();
-
-            allMessages
-                .Select(x => x.Value)
-                .ToList()
-                .Should().NotBeEmpty();
-        }
-
-        [ExpectThat]
-        public void Can_get_all_cancel_messages()
-        {
-            var allMessages = Scenario
-                .Messages
-                .ForAction("/fibonacci")
-                .CancelMessages
-                .ToList();
-
-            allMessages.Should().NotBeNull();
-            
-            // Cancel may be empty
-            if (allMessages.Any())
-            {
-                allMessages
-                    .Select(x => x.Value)
-                    .ToList()
-                    .Should().NotBeEmpty();
-            }
-        }
-
         [ExpectThat]
         public void Can_get_all_action_calls()
         {
@@ -232,12 +126,6 @@ namespace Examples.TurtleSimTests
             }
         }
 
-        [ExpectThat]
-        public void Fibonacci_is_a_valid_action()
-        {
-            Messages.HasAction("/fibonacci").Should().BeTrue();
-        }
-        
         [ExpectThat]
         [RosbagScenario(FibonacciActionServerBagFiles.FibonacciCancel, Skip = "Should not hold for canceled scenario")]
         [RosbagScenario(FibonacciActionServerBagFiles.FibonacciPreempted, Skip = "Should not hold for preempted scenario")]
