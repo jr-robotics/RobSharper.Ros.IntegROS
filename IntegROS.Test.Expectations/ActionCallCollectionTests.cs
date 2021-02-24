@@ -97,45 +97,7 @@ namespace IntegROS.Test.Expectations
                 result.Sequence.Should().BeInAscendingOrder();
             }
         }
-
-        [ExpectThat]
-        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciCancel, Skip = "not for preempted calls")]
-        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciPreempted, Skip = "not for preempted calls")]
-        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciSuccessfulAndPreempted, Skip = "not for preempted calls")]
-        public void Fibonacci_calculation_is_valid()
-        {
-            var actionCalls = Scenario
-                .Messages
-                .ForActionCalls("/fibonacci")
-                .Select(x => new
-                {
-                    GoalOrder = x.GoalMessage.Value.Goal<FibonacciGoal>().Order,
-                    Result = x.ResultMessage.Value.Result<FibonacciResult>().Sequence,
-                    FinalState = x.FinalState
-                });
-
-            foreach (var actionCall in actionCalls)
-            {
-                actionCall.FinalState.Should().Be(GoalStatus.Succeeded);
-                actionCall.Result.Count().Should().Be(actionCall.GoalOrder + 2);
-
-                for (var i = 0; i < actionCall.Result.Count(); i++)
-                {
-                    if (i == 0 || i == 1)
-                        actionCall.Result.Skip(i).First().Should().Be(i, "first two fibonaccis should be 0 and 1");
-                    else
-                    {
-                        var items = actionCall.Result
-                            .Skip(i - 2)
-                            .Take(3)
-                            .ToList();
-
-                        items[2].Should().Be(items[0] + items[1]);
-                    }
-                }
-            }
-        }
-
+        
         [ExpectThat]
         public void Can_get_all_feedback_messages_from_action_call()
         {
