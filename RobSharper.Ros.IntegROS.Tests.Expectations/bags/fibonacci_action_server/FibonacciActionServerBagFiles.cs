@@ -1,4 +1,4 @@
-namespace RobSharper.Ros.IntegROS.Test.Expectations
+namespace RobSharper.Ros.IntegROS.Tests.Expectations
 {
     public class FibonacciActionServerBagFiles
     {

@@ -1,15 +1,15 @@
 using System.Linq;
 using FluentAssertions;
 
-namespace RobSharper.Ros.IntegROS.Test.Expectations
+namespace RobSharper.Ros.IntegROS.Tests.Expectations
 {
-    [RosbagScenario(FibonacciActionServerBagFiles.FibonacciWithoutCalls)] // We need a valid scenario
-    public class InvalidActionMessagesTests : ForScenario
+    [RosbagScenario(FibonacciActionServerBagFiles.FibonacciWithoutCalls)]
+    public class NoCallActionMessagesTests : ForScenario
     {
         [ExpectThat]
         public void Has_Action()
         {
-            Scenario.Messages.HasAction("/unknownAction").Should().BeFalse();
+            Scenario.Messages.HasAction("/fibonacci").Should().BeTrue();
         }
         
         [ExpectThat]
@@ -17,10 +17,10 @@ namespace RobSharper.Ros.IntegROS.Test.Expectations
         {
             var exists = Scenario
                 .Messages
-                .ForAction("/unknownAction")
+                .ForAction("/fibonacci")
                 .Exists;
                 
-            exists.Should().BeFalse();
+            exists.Should().BeTrue();
         }
         
         [ExpectThat]
@@ -28,10 +28,10 @@ namespace RobSharper.Ros.IntegROS.Test.Expectations
         {
             var actionName = Scenario
                 .Messages
-                .ForAction("/unknownAction")
+                .ForAction("/fibonacci")
                 .ActionName;
 
-            actionName.Should().Be("/unknownAction");
+            actionName.Should().Be("/fibonacci");
         }
         
         [ExpectThat]
@@ -39,12 +39,17 @@ namespace RobSharper.Ros.IntegROS.Test.Expectations
         {
             var allMessages = Scenario
                 .Messages
-                .ForAction("/unknownAction")
+                .ForAction("/fibonacci")
                 .StatusMessages
                 .ToList();
 
             allMessages.Should().NotBeNull();
-            allMessages.Should().BeEmpty();
+            allMessages.Should().NotBeEmpty();
+
+            allMessages
+                .Select(x => x.Value)
+                .ToList()
+                .Should().NotBeEmpty();
         }
 
         [ExpectThat]
@@ -52,7 +57,7 @@ namespace RobSharper.Ros.IntegROS.Test.Expectations
         {
             var allMessages = Scenario
                 .Messages
-                .ForAction("/unknownAction")
+                .ForAction("/fibonacci")
                 .GoalMessages
                 .ToList();
 
@@ -65,7 +70,7 @@ namespace RobSharper.Ros.IntegROS.Test.Expectations
         {
             var allMessages = Scenario
                 .Messages
-                .ForAction("/unknownAction")
+                .ForAction("/fibonacci")
                 .FeedbackMessages
                 .ToList();
 
@@ -78,7 +83,7 @@ namespace RobSharper.Ros.IntegROS.Test.Expectations
         {
             var allMessages = Scenario
                 .Messages
-                .ForAction("/unknownAction")
+                .ForAction("/fibonacci")
                 .ResultMessages
                 .ToList();
 
@@ -91,7 +96,7 @@ namespace RobSharper.Ros.IntegROS.Test.Expectations
         {
             var allMessages = Scenario
                 .Messages
-                .ForAction("/unknownAction")
+                .ForAction("/fibonacci")
                 .CancelMessages
                 .ToList();
 

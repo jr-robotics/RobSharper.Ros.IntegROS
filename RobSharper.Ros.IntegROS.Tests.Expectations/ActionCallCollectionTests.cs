@@ -3,7 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using RobSharper.Ros.MessageEssentials;
 
-namespace RobSharper.Ros.IntegROS.Test.Expectations
+namespace RobSharper.Ros.IntegROS.Tests.Expectations
 {
     [RosbagScenario(FibonacciActionServerBagFiles.Fibonacci5)]
     [RosbagScenario(FibonacciActionServerBagFiles.Fibonacci20)]

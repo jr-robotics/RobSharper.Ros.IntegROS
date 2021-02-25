@@ -1,7 +1,7 @@
 using FluentAssertions;
 using RobSharper.Ros.IntegROS.Ros.Messages;
 
-namespace RobSharper.Ros.IntegROS.Test.Expectations
+namespace RobSharper.Ros.IntegROS.Tests.Expectations
 {
     public class ActionCallCollectionSpecialCasesTests : ForScenario
     {
