@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using IntegROS.Rosbag;
+using IntegROS.Ros.Rosbag;
 
 namespace IntegROS.Scenarios
 {

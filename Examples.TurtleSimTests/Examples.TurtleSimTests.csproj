@@ -9,7 +9,7 @@
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
         <PackageReference Include="Moq" Version="4.15.2" />
-        <PackageReference Include="ROS.Messages.common_msgs" Version="0.0.2" />
+        <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.0.8-rc2" />
         <PackageReference Include="Uml.Robotics.Ros.MessageBase" Version="1.0.10" />
         <PackageReference Include="Uml.Robotics.Ros.Messages.common_msgs" Version="1.12.7" />
         <PackageReference Include="xunit" Version="2.4.1" />
@@ -34,24 +34,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="bags\turtlesim\hit_wall_2020-12-11-11-34-39.bag">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="bags\turtlesim\move_backwards_2020-12-11-11-32-19.bag">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="bags\turtlesim\move_forward_2020-12-11-11-27-40.bag">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="bags\turtlesim\move_random_2020-12-11-11-33-25.bag">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="bags\turtlesim\turn_clockwise_2020-12-11-11-28-42.bag">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="bags\turtlesim\turn_counterclockwiwise_2020-12-11-11-29-11.bag">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="bags\turtlesim\*.bag">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="bags\fibonacci_action_server\*.bag">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
       <None Update="xunit.runner.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>

@@ -1,4 +1,4 @@
-namespace Examples.TurtleSimTests
+namespace IntegROS.Test.Expectations
 {
     public class TurtleSimBagFiles
     {

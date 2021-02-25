@@ -4,6 +4,7 @@ using Messages.geometry_msgs;
 using Messages.turtlesim;
 using RosComponentTesting;
 using RosComponentTesting.RosNet;
+using Uml.Robotics.Ros.Messages.geometry_msgs;
 using Xunit;
 using Pose = Messages.turtlesim.Pose;
 
