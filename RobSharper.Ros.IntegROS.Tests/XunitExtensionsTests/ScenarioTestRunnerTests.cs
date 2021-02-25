@@ -5,14 +5,14 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using IntegROS.Tests.XunitExtensionsTests.Utility;
 using Moq;
+using RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility;
 using RobSharper.Ros.IntegROS.XunitExtensions;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegROS.Tests.XunitExtensionsTests
+namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests
 {
     public class ScenarioTestRunnerTests
     {

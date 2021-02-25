@@ -1,13 +1,13 @@
 using System.Linq;
 using FluentAssertions;
-using IntegROS.Tests.XunitExtensionsTests.Utility;
+using RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility;
 using RobSharper.Ros.IntegROS.XunitExtensions;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
-using TestFrameworkOptions = IntegROS.Tests.XunitExtensionsTests.Utility.TestFrameworkOptions;
+using TestFrameworkOptions = RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility.TestFrameworkOptions;
 
-namespace IntegROS.Tests.XunitExtensionsTests
+namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests
 {
     public class ScenarioExpectationDiscovererTests
     {

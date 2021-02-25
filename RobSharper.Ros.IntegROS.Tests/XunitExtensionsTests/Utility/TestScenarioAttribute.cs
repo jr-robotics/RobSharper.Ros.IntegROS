@@ -1,10 +1,9 @@
 using System;
-using RobSharper.Ros.IntegROS;
 using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 
-namespace IntegROS.Tests.XunitExtensionsTests.Utility
+namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility
 {
-    [ScenarioDiscoverer("IntegROS.Tests.XunitExtensionsTests.Utility.TestScenarioDiscoverer", "IntegROS.Tests")]
+    [ScenarioDiscoverer("RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility.TestScenarioDiscoverer", "RobSharper.Ros.IntegROS.Tests")]
     public class TestScenarioAttribute : ScenarioAttribute
     {
         private readonly string _key;

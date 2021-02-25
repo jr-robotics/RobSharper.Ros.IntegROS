@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Moq;
-using RobSharper.Ros.IntegROS;
-using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegROS.Tests.XunitExtensionsTests.Utility
+namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility
 {
     public class XunitMocks
     {

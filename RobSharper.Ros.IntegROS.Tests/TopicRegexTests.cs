@@ -1,9 +1,8 @@
 using System;
 using FluentAssertions;
-using RobSharper.Ros.IntegROS;
 using Xunit;
 
-namespace IntegROS.Tests
+namespace RobSharper.Ros.IntegROS.Tests
 {
     public class TopicRegexTests
     {

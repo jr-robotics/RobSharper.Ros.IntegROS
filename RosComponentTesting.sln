@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{7D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples.TurtleSimTests", "Examples.TurtleSimTests\Examples.TurtleSimTests.csproj", "{BAF8003E-4E02-44D4-AB72-F14842D015AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegROS.Tests", "IntegROS.Tests\IntegROS.Tests.csproj", "{6FE836DB-1E04-40F1-A4F7-6D81643A4117}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.Tests", "RobSharper.Ros.IntegROS.Tests\RobSharper.Ros.IntegROS.Tests.csproj", "{6FE836DB-1E04-40F1-A4F7-6D81643A4117}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegROS.Test.Expectations", "IntegROS.Test.Expectations\IntegROS.Test.Expectations.csproj", "{5E90AD93-5FD8-4CCE-B68F-1AB3487C2F05}"
 EndProject

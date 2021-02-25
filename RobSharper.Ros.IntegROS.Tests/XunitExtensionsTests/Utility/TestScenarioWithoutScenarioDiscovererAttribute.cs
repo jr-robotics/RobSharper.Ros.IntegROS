@@ -1,6 +1,4 @@
-﻿using RobSharper.Ros.IntegROS;
-
-namespace IntegROS.Tests.XunitExtensionsTests.Utility
+﻿namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility
 {
     public class TestScenarioWithoutScenarioDiscovererAttribute : ScenarioAttribute
     {

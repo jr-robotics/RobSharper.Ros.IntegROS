@@ -2,7 +2,7 @@
 using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 
-namespace IntegROS.Tests.XunitExtensionsTests.Utility
+namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility
 {
     public class TestScenarioIdentifier : DummyScenarioIdentifier
     {
