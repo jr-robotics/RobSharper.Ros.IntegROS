@@ -19,6 +19,7 @@ test IntegROS:
     - 'dotnet tool install dotnet-reportgenerator-globaltool --tool-path dotnet-tools'
   script:
     - 'cd RobSharper.Ros.IntegROS.Tests'
+    - 'dotnet add package JunitXml.TestLogger'
     - "dotnet test --logger \"junit\" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=\"$PWD/coverage/\" /p:Exclude=\"[xunit*]*%2C[RobSharper.Ros.IntegROS.Tests]*\" /p:ExcludeByAttribute=\"GeneratedCodeAttribute%2CObsolete%2CCompilerGeneratedAttribute\""
     - '../dotnet-tools/reportgenerator -reports:coverage/coverage.opencover.xml -targetdir:coverage/report -reporttypes:Html -verbosity:Warning'
   coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
@@ -37,6 +38,7 @@ test Expectations:
     - 'dotnet tool install dotnet-reportgenerator-globaltool --tool-path dotnet-tools'
   script:
     - 'cd RobSharper.Ros.IntegROS.Tests.Expectations'
+    - 'dotnet add package JUnitTestLogger'
     - "dotnet test --logger \"junit\" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=\"$PWD/coverage/\" /p:Exclude=\"[xunit*]*%2C[RobSharper.Ros.IntegROS.Tests.Expectations]*\" /p:ExcludeByAttribute=\"GeneratedCodeAttribute%2CObsolete%2CCompilerGeneratedAttribute\""
     - '../dotnet-tools/reportgenerator -reports:coverage/coverage.opencover.xml -targetdir:coverage/report -reporttypes:Html -verbosity:Warning'
   coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
