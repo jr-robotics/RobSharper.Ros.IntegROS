@@ -51,7 +51,7 @@ Coverage Report:
     paths:
       - 'coverage'
   tags:
-    -docker-executor
+    - docker-executor
 
 # Create a versioned NuGet package
 # This task is only executed for the branches develop and master as well as version tags
