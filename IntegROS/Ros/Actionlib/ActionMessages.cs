@@ -7,6 +7,8 @@ namespace IntegROS.Ros.Actionlib
     public class ActionMessages
     {
         public string ActionName { get; }
+
+        public bool Exists => AllMessages.HasAction(ActionName);
         
         public IEnumerable<IRecordedMessage> AllMessages { get; }
 

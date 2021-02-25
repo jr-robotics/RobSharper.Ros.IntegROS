@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using IntegROS.Ros.Messages;
 using RobSharper.Ros.MessageEssentials;
 
 namespace IntegROS.Test.Expectations
@@ -156,18 +155,6 @@ namespace IntegROS.Test.Expectations
                     .ToList()
                     .Should().BeInAscendingOrder();
             }
-        }
-
-        [ExpectThat]
-        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciCancel, Skip = "Should not hold for canceled scenario")]
-        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciPreempted, Skip = "Should not hold for preempted scenario")]
-        [RosbagScenario(FibonacciActionServerBagFiles.FibonacciSuccessfulAndPreempted, Skip = "Should not hold for preempted scenario")]
-        public void All_action_calls_succeed()
-        {
-            Scenario.Messages
-                .ForActionCalls("/fibonacci")
-                .Should()
-                .OnlyContain(x => x.FinalState == GoalStatusValue.Succeeded);
         }
 
         [ExpectThat]

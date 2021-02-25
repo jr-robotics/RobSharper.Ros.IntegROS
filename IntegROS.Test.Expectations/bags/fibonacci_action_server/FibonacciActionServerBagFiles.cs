@@ -10,5 +10,6 @@ namespace IntegROS.Test.Expectations
         public const string FibonacciPreempted = BasePath + "action_fibonacci_parallel_2021-02-18-10-05-25.bag";
         public const string FibonacciSuccessfulAndPreempted = BasePath + "action_fibonacci_success_and_preempted_2021-02-18-10-07-23.bag";
         public const string FibonacciCancel = BasePath + "action_fibonacci_cancel_2021-02-22-17-24-33.bag";
+        public const string FibonacciWithoutCalls = BasePath + "fibonacci_no_calls_2021-02-25-14-48-01.bag";
     }
 }
