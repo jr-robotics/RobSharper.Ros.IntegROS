@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AF5376E2-3B53-46A8-B4DB-1DFCEB12D2A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegROS", "IntegROS\IntegROS.csproj", "{A7DF3489-C44A-434F-8BA4-5679479D5EF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS", "RobSharper.Ros.IntegROS\RobSharper.Ros.IntegROS.csproj", "{A7DF3489-C44A-434F-8BA4-5679479D5EF4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{7DF59F14-A3A2-48B8-AD77-29EAEC95692E}"
 EndProject

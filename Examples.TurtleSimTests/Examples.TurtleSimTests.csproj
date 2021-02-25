@@ -30,10 +30,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\IntegROS\IntegROS.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <None Update="bags\turtlesim\*.bag">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -43,6 +39,10 @@
       <None Update="xunit.runner.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RobSharper.Ros.IntegROS\RobSharper.Ros.IntegROS.csproj" />
     </ItemGroup>
 
 </Project>

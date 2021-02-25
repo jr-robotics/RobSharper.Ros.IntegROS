@@ -21,10 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\IntegROS\IntegROS.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <None Update="bags\fibonacci_action_server\*.bag">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -35,6 +31,10 @@
 
     <ItemGroup>
       <Folder Include="bags" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\RobSharper.Ros.IntegROS\RobSharper.Ros.IntegROS.csproj" />
     </ItemGroup>
 
 </Project>

@@ -24,11 +24,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\IntegROS\IntegROS.csproj" />
+      <Folder Include="RosActionsTests" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="RosActionsTests" />
+      <ProjectReference Include="..\RobSharper.Ros.IntegROS\RobSharper.Ros.IntegROS.csproj" />
     </ItemGroup>
 
 </Project>
