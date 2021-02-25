@@ -9,9 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAssertions" Version="5.8.0" />
+        <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-        <PackageReference Include="ROS.Messages.common_msgs" Version="0.0.1" />
+        <PackageReference Include="Uml.Robotics.Ros.MessageBase" Version="1.0.10" />
+        <PackageReference Include="Uml.Robotics.Ros.Messages.geometry_msgs" Version="1.12.7" />
         <PackageReference Include="xunit" Version="2.4.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     </ItemGroup>
