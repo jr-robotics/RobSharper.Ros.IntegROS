@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using RobSharper.Ros.IntegROS;
 using RobSharper.Ros.MessageEssentials;
 
-namespace IntegROS.Test.Expectations
+namespace RobSharper.Ros.IntegROS.Test.Expectations
 {
     [RosbagScenario(FibonacciActionServerBagFiles.Fibonacci5)]
     [RosbagScenario(FibonacciActionServerBagFiles.Fibonacci20)]

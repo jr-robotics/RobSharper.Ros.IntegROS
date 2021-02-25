@@ -1,8 +1,7 @@
 using System.Linq;
 using FluentAssertions;
-using RobSharper.Ros.IntegROS;
 
-namespace IntegROS.Test.Expectations
+namespace RobSharper.Ros.IntegROS.Test.Expectations
 {
     [RosbagScenario(FibonacciActionServerBagFiles.FibonacciWithoutCalls)] // We need a valid scenario
     public class InvalidActionMessagesTests : ForScenario

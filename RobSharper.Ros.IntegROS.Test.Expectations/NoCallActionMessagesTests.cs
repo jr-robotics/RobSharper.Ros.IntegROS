@@ -1,8 +1,7 @@
 using System.Linq;
 using FluentAssertions;
-using RobSharper.Ros.IntegROS;
 
-namespace IntegROS.Test.Expectations
+namespace RobSharper.Ros.IntegROS.Test.Expectations
 {
     [RosbagScenario(FibonacciActionServerBagFiles.FibonacciWithoutCalls)]
     public class NoCallActionMessagesTests : ForScenario

@@ -1,4 +1,4 @@
-namespace IntegROS.Test.Expectations
+namespace RobSharper.Ros.IntegROS.Test.Expectations
 {
     public class TurtleSimBagFiles
     {
