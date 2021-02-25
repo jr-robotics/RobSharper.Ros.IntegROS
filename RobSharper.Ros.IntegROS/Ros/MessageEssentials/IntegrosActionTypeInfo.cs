@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using IntegROS.Ros.Actionlib;
+using RobSharper.Ros.IntegROS.Ros.Actionlib;
 using RobSharper.Ros.MessageEssentials;
 
-namespace IntegROS.Ros.MessageEssentials
+namespace RobSharper.Ros.IntegROS.Ros.MessageEssentials
 {
     public sealed class IntegrosActionTypeInfo : IRosMessageTypeInfo
     {

@@ -1,4 +1,4 @@
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     public class RosConfiguration
     {

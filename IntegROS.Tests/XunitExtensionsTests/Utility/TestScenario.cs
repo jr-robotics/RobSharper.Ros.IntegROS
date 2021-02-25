@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using IntegROS.Scenarios;
+using RobSharper.Ros.IntegROS;
+using RobSharper.Ros.IntegROS.Scenarios;
 
 namespace IntegROS.Tests.XunitExtensionsTests.Utility
 {

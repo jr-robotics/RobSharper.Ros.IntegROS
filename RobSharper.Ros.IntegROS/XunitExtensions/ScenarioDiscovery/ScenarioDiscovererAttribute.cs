@@ -1,7 +1,7 @@
 ﻿using System;
 using Xunit.Sdk;
 
-namespace IntegROS.XunitExtensions.ScenarioDiscovery
+namespace RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery
 {
     /// <summary>
     /// An attribute used to decorate classes which derive from <see cref="DataAttribute"/>,

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IntegROS.Ros.Messages;
+using RobSharper.Ros.IntegROS.Ros.Messages;
 
-namespace IntegROS.Ros.Actionlib
+namespace RobSharper.Ros.IntegROS.Ros.Actionlib
 {
     public class RosActionCall
     {

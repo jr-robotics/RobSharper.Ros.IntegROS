@@ -4,7 +4,7 @@ using System.Reflection;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegROS.XunitExtensions.ScenarioDiscovery
+namespace RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery
 {
     public static class ScenarioDiscovererFactory
     {

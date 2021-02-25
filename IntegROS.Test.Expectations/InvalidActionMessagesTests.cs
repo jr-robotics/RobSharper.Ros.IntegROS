@@ -1,5 +1,6 @@
 using System.Linq;
 using FluentAssertions;
+using RobSharper.Ros.IntegROS;
 
 namespace IntegROS.Test.Expectations
 {

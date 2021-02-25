@@ -2,7 +2,7 @@
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     /// <summary>
     /// Base Class for all scenario attributes.

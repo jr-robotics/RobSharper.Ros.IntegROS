@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IntegROS.Ros.Actionlib
+namespace RobSharper.Ros.IntegROS.Ros.Actionlib
 {
     public class ActionCallCollection : IEnumerable<RosActionCall>
     {

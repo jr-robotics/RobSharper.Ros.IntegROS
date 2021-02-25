@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace IntegROS.RosCoreActions
+namespace RobSharper.Ros.IntegROS.RosCoreActions
 {
     public class ScriptAction : IRosCoreConnectionAction
     {

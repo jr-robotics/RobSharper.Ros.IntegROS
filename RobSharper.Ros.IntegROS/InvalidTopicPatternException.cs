@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     public class InvalidTopicPatternException : ArgumentException
     {

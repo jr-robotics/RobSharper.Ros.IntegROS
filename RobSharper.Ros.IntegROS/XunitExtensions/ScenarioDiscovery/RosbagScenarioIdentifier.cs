@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using Xunit.Abstractions;
 
-namespace IntegROS.XunitExtensions.ScenarioDiscovery
+namespace RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery
 {
     public class RosbagScenarioIdentifier : ScenarioIdentifierBase
     {

@@ -1,7 +1,7 @@
 using System.Linq;
 using FluentAssertions;
 using IntegROS.Tests.XunitExtensionsTests.Utility;
-using IntegROS.XunitExtensions;
+using RobSharper.Ros.IntegROS.XunitExtensions;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;

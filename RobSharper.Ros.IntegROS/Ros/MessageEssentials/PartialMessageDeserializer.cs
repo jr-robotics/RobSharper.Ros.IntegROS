@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using RobSharper.Ros.MessageEssentials.Serialization;
 
-namespace IntegROS.Ros.MessageEssentials
+namespace RobSharper.Ros.IntegROS.Ros.MessageEssentials
 {
     public class PartialMessageDeserializer
     {

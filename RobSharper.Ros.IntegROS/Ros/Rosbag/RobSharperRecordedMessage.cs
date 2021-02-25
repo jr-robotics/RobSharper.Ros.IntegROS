@@ -3,7 +3,7 @@ using RobSharper.Ros.BagReader;
 using RobSharper.Ros.MessageEssentials;
 using RobSharper.Ros.MessageEssentials.Serialization;
 
-namespace IntegROS.Ros.Rosbag
+namespace RobSharper.Ros.IntegROS.Ros.Rosbag
 {
     public class RobSharperRecordedMessage : IRecordedMessage
     {

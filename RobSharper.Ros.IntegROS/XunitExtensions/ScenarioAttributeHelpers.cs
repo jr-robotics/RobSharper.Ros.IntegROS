@@ -4,7 +4,7 @@ using System.Linq;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegROS.XunitExtensions
+namespace RobSharper.Ros.IntegROS.XunitExtensions
 {
     public static class ScenarioAttributeHelpers
     {

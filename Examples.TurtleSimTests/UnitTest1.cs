@@ -1,9 +1,7 @@
 using System;
 using System.ComponentModel;
 using FluentAssertions;
-using IntegROS;
-using IntegROS.Scenarios;
-using IntegROS.XunitExtensions.ScenarioDiscovery;
+using RobSharper.Ros.IntegROS;
 using Xunit;
 using Xunit.Abstractions;
 

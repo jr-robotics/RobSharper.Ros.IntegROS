@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using IntegROS.Ros.Rosbag;
+using RobSharper.Ros.IntegROS.Ros.Rosbag;
 
-namespace IntegROS.Scenarios
+namespace RobSharper.Ros.IntegROS.Scenarios
 {
     public class RosbagScenario : IScenario
     {

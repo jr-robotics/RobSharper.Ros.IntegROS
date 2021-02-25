@@ -1,7 +1,7 @@
 ﻿using System;
 using RobSharper.Ros.MessageEssentials;
 
-namespace IntegROS.Ros.Messages
+namespace RobSharper.Ros.IntegROS.Ros.Messages
 {
     [RosMessage("actionlib_msgs/GoalID")]
     public class GoalID

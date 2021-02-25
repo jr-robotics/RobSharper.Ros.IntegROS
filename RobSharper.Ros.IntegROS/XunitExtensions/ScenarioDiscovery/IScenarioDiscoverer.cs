@@ -1,7 +1,7 @@
-﻿using IntegROS.Scenarios;
+﻿using RobSharper.Ros.IntegROS.Scenarios;
 using Xunit.Abstractions;
 
-namespace IntegROS.XunitExtensions.ScenarioDiscovery
+namespace RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery
 {
     public interface IScenarioDiscoverer
     {

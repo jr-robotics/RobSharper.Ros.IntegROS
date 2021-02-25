@@ -1,12 +1,12 @@
 ﻿using System;
-using IntegROS.XunitExtensions.ScenarioDiscovery;
+using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     /// <summary>
     /// Scenario attribute for a recorded ROSBAG file.
     /// </summary>
-    [ScenarioDiscoverer("IntegROS.XunitExtensions.ScenarioDiscovery.RosbagScenarioDiscoverer", "IntegROS")]
+    [ScenarioDiscoverer("RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery.RosbagScenarioDiscoverer", "RobSharper.Ros.IntegROS")]
     public class RosbagScenarioAttribute : ScenarioAttribute
     {
         /// <summary>

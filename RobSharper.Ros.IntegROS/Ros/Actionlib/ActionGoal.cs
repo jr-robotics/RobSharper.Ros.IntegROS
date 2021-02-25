@@ -1,7 +1,7 @@
-﻿using IntegROS.Ros.MessageEssentials;
-using IntegROS.Ros.Messages;
+﻿using RobSharper.Ros.IntegROS.Ros.MessageEssentials;
+using RobSharper.Ros.IntegROS.Ros.Messages;
 
-namespace IntegROS.Ros.Actionlib
+namespace RobSharper.Ros.IntegROS.Ros.Actionlib
 {
     public class ActionGoal
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     public interface IRosApplication
     {

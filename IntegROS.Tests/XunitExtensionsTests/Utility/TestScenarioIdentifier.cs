@@ -1,5 +1,5 @@
 ﻿using System;
-using IntegROS.XunitExtensions.ScenarioDiscovery;
+using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 
 namespace IntegROS.Tests.XunitExtensionsTests.Utility

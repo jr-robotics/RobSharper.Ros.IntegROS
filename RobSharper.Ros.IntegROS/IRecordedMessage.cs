@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using RobSharper.Ros.MessageEssentials;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     public interface IRecordedMessage
     {

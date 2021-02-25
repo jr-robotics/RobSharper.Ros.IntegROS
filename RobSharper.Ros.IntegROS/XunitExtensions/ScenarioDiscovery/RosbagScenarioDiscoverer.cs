@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
-using IntegROS.Scenarios;
+using RobSharper.Ros.IntegROS.Scenarios;
 using Xunit.Abstractions;
 
-namespace IntegROS.XunitExtensions.ScenarioDiscovery
+namespace RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery
 {
     /// <summary>
-    /// Scenario discoverer for scenarios provided by <see cref="IntegROS.RosbagScenarioAttribute"/>
+    /// Scenario discoverer for scenarios provided by <see cref="RobSharper.Ros.IntegROS.RosbagScenarioAttribute"/>
     /// </summary>
     public class RosbagScenarioDiscoverer : IScenarioDiscoverer
     {

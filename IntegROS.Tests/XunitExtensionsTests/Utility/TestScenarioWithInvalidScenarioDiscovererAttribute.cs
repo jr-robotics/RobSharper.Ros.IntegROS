@@ -1,4 +1,5 @@
-﻿using IntegROS.XunitExtensions.ScenarioDiscovery;
+﻿using RobSharper.Ros.IntegROS;
+using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 
 namespace IntegROS.Tests.XunitExtensionsTests.Utility
 {

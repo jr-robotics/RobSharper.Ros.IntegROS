@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace IntegROS.Scenarios
+namespace RobSharper.Ros.IntegROS.Scenarios
 {
     public interface IExecutableScenario : IScenario
     {

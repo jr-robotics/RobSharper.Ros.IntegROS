@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using IntegROS.Ros.Rosbag;
-using IntegROS.Scenarios;
 using Moq;
+using RobSharper.Ros.IntegROS;
+using RobSharper.Ros.IntegROS.Ros.Rosbag;
+using RobSharper.Ros.IntegROS.Scenarios;
 using Xunit;
 
 namespace IntegROS.Tests.RosbagScenarioTests

@@ -1,6 +1,6 @@
 using Xunit.Sdk;
 
-namespace IntegROS.XunitExtensions
+namespace RobSharper.Ros.IntegROS.XunitExtensions
 {
     /// <summary>
     /// Diagnostics messages which outputs message in call to ToString()

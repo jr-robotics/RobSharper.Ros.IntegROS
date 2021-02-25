@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using IntegROS.Ros.Actionlib;
+using RobSharper.Ros.IntegROS.Ros.Actionlib;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     public static class RecordedMessageActionExtensions
     {

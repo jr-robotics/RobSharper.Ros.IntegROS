@@ -1,8 +1,7 @@
 ﻿using System;
-using IntegROS.Ros.Actionlib;
 using RobSharper.Ros.MessageEssentials;
 
-namespace IntegROS.Ros.MessageEssentials
+namespace RobSharper.Ros.IntegROS.Ros.MessageEssentials
 {
     public sealed class IntegrosActionTypeInfoFactory : IRosMessageTypeInfoFactory
     {

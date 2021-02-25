@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace IntegROS.Scenarios
+namespace RobSharper.Ros.IntegROS.Scenarios
 {
     public interface IScenario
     {

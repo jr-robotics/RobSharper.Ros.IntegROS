@@ -1,8 +1,8 @@
-﻿using IntegROS.Ros.Actionlib;
-using RobSharper.Ros.Adapters.UmlRobotics;
+﻿using RobSharper.Ros.Adapters.UmlRobotics;
+using RobSharper.Ros.IntegROS.Ros.Actionlib;
 using RobSharper.Ros.MessageEssentials.Serialization;
 
-namespace IntegROS.Ros.MessageEssentials
+namespace RobSharper.Ros.IntegROS.Ros.MessageEssentials
 {
     public static class RosMessageSerializerExtensions
     {

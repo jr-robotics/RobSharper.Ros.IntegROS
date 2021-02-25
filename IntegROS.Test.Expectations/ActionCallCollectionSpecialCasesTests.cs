@@ -1,5 +1,6 @@
 using FluentAssertions;
-using IntegROS.Ros.Messages;
+using RobSharper.Ros.IntegROS;
+using RobSharper.Ros.IntegROS.Ros.Messages;
 
 namespace IntegROS.Test.Expectations
 {

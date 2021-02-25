@@ -1,3 +1,5 @@
+using RobSharper.Ros.IntegROS;
+
 namespace IntegROS.Tests.XunitExtensionsTests.Utility
 {
     internal class XunitExtensionsTestCases : ForScenario

@@ -2,9 +2,9 @@ using System;
 using Xunit;
 using Xunit.Sdk;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
-    [XunitTestCaseDiscoverer("IntegROS.XunitExtensions.ScenarioExpectationDiscoverer", "IntegROS")]
+    [XunitTestCaseDiscoverer("RobSharper.Ros.IntegROS.XunitExtensions.ScenarioExpectationDiscoverer", "RobSharper.Ros.IntegROS")]
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class ExpectThatAttribute : FactAttribute
     {

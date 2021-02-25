@@ -1,7 +1,7 @@
 using System;
-using IntegROS.RosCoreActions;
+using RobSharper.Ros.IntegROS.RosCoreActions;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     public class RosCore
     {

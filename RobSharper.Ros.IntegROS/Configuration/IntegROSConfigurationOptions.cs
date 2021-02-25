@@ -1,7 +1,7 @@
 using System;
-using IntegROS.RosCoreActions;
+using RobSharper.Ros.IntegROS.RosCoreActions;
 
-namespace IntegROS.Configuration
+namespace RobSharper.Ros.IntegROS.Configuration
 {
     public class IntegROSConfigurationOptions
     {

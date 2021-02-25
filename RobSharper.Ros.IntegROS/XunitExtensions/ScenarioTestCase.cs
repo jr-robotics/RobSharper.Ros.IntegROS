@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using IntegROS.XunitExtensions.ScenarioDiscovery;
+using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegROS.XunitExtensions
+namespace RobSharper.Ros.IntegROS.XunitExtensions
 {
     public class ScenarioTestCase : XunitTestCase
     {

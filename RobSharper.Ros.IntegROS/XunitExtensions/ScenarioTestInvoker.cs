@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
-using IntegROS.Scenarios;
+using RobSharper.Ros.IntegROS.Scenarios;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegROS.XunitExtensions
+namespace RobSharper.Ros.IntegROS.XunitExtensions
 {
     public class ScenarioTestInvoker : XunitTestInvoker
     {

@@ -1,4 +1,4 @@
-namespace IntegROS.Ros.Messages
+namespace RobSharper.Ros.IntegROS.Ros.Messages
 {
     public static class GoalStatusValueExtensions
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     public static class RecordedMessageExtensions
     {

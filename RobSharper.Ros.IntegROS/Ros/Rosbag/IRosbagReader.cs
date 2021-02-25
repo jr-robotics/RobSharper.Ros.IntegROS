@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace IntegROS.Ros.Rosbag
+namespace RobSharper.Ros.IntegROS.Ros.Rosbag
 {
     public interface IRosbagReader
     {

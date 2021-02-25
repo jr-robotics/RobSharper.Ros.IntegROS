@@ -1,7 +1,7 @@
 ﻿using System;
 using RobSharper.Ros.MessageEssentials;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     public class RecordedMessage<TType> : IRecordedMessage<TType> where TType : class
     {

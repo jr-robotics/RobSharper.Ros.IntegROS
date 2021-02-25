@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace IntegROS.XunitExtensions
+namespace RobSharper.Ros.IntegROS.XunitExtensions
 {
     internal static class ExceptionExtensions
     {

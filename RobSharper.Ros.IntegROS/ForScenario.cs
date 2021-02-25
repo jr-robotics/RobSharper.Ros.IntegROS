@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using IntegROS.Scenarios;
+using RobSharper.Ros.IntegROS.Scenarios;
 using Xunit.Abstractions;
 
-namespace IntegROS
+namespace RobSharper.Ros.IntegROS
 {
     /// <summary>
     /// Base class for scenario dependent test classes.

@@ -1,4 +1,4 @@
-namespace IntegROS.RosCoreActions
+namespace RobSharper.Ros.IntegROS.RosCoreActions
 {
     public interface IRosCoreConnectionAction
     {

@@ -1,6 +1,6 @@
 using System;
-using IntegROS.Scenarios;
-using IntegROS.XunitExtensions.ScenarioDiscovery;
+using RobSharper.Ros.IntegROS.Scenarios;
+using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 

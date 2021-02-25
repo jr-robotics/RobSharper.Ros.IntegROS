@@ -1,7 +1,7 @@
-﻿using IntegROS.XunitExtensions.ScenarioDiscovery;
+﻿using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Sdk;
 
-namespace IntegROS.XunitExtensions
+namespace RobSharper.Ros.IntegROS.XunitExtensions
 {
     public class ScenarioTest : XunitTest
     {
