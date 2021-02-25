@@ -2,7 +2,7 @@
 using Examples.FibonacciActionTests.Helpers;
 using Examples.FibonacciActionTests.Messages;
 using FluentAssertions;
-using IntegROS;
+using RobSharper.Ros.IntegROS;
 
 namespace Examples.FibonacciActionTests
 {

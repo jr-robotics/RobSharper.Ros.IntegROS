@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Examples.FibonacciActionTests.Messages;
 using FluentAssertions;
-using IntegROS;
-using IntegROS.Ros.Messages;
+using RobSharper.Ros.IntegROS;
+using RobSharper.Ros.IntegROS.Ros.Messages;
 
 namespace Examples.FibonacciActionTests
 {
