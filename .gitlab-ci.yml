@@ -24,6 +24,7 @@ test IntegROS:
       - 'RobSharper.Ros.IntegROS.Tests/TestResults'
     reports:
       junit: 'RobSharper.Ros.IntegROS.Tests/TestResults/TestResults.xml'
+      cobertura: 'RobSharper.Ros.IntegROS.Tests/TestResults/*/coverage.cobertura.xml'
   tags:
     - docker-executor
     
@@ -38,6 +39,7 @@ test Expectations:
       - 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults'
     reports:
       junit: 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults/TestResults.xml'
+      cobertura: 'RobSharper.Ros.IntegROS.Tests/TestResults/*/coverage.cobertura.xml'
   tags:
     - docker-executor
 
@@ -46,10 +48,10 @@ Coverage Report:
   before_script:
     - 'dotnet tool install dotnet-reportgenerator-globaltool --tool-path dotnet-tools'
   script:
-    - 'dotnet-tools/reportgenerator -reports:*/TestResults/*/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html -verbosity:Warning'
+    - 'dotnet-tools/reportgenerator -reports:*/TestResults/*/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html'
   artifacts:
     paths:
-      - 'coverage'
+      - 'coverage-report'
   tags:
     - docker-executor
 
