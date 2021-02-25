@@ -15,18 +15,13 @@ build Solution:
 
 test IntegROS:
   stage: test
-  before_script:
-    - 'dotnet tool install dotnet-reportgenerator-globaltool --tool-path dotnet-tools'
   script:
     - 'cd RobSharper.Ros.IntegROS.Tests'
     - 'dotnet test --logger "junit" --collect:"XPlat Code Coverage"'
-    #- "dotnet test --logger \"junit\" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=\"$PWD/coverage/\" /p:Exclude=\"[xunit*]*%2C[RobSharper.Ros.IntegROS.Tests]*\" /p:ExcludeByAttribute=\"GeneratedCodeAttribute%2CObsolete%2CCompilerGeneratedAttribute\""
-    - '../dotnet-tools/reportgenerator -reports:coverage/coverage.cobertura.xml -targetdir:coverage/report -reporttypes:Html -verbosity:Warning'
   coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
   artifacts:
     paths:
-      - 'RobSharper.Ros.IntegROS.Tests/coverage'
-      - 'RobSharper.Ros.IntegROS.Tests/TestResults/TestResults.xml'
+      - 'RobSharper.Ros.IntegROS.Tests/TestResults'
     reports:
       junit: 'RobSharper.Ros.IntegROS.Tests/TestResults/TestResults.xml'
   tags:
@@ -34,22 +29,29 @@ test IntegROS:
     
 test Expectations:
   stage: test
-  before_script:
-    - 'dotnet tool install dotnet-reportgenerator-globaltool --tool-path dotnet-tools'
   script:
     - 'cd RobSharper.Ros.IntegROS.Tests.Expectations'
-    - "dotnet test --logger \"junit\" /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=\"$PWD/coverage/\" /p:Exclude=\"[xunit*]*%2C[RobSharper.Ros.IntegROS.Tests.Expectations]*\" /p:ExcludeByAttribute=\"GeneratedCodeAttribute%2CObsolete%2CCompilerGeneratedAttribute\""
-    - '../dotnet-tools/reportgenerator -reports:coverage/coverage.opencover.xml -targetdir:coverage/report -reporttypes:Html -verbosity:Warning'
+    - 'dotnet test --logger "junit" --collect:"XPlat Code Coverage"'
   coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
   artifacts:
     paths:
-      - 'RobSharper.Ros.IntegROS.Tests.Expectations/coverage'
-      - 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults/TestResults.xml'
+      - 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults'
     reports:
       junit: 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults/TestResults.xml'
   tags:
     - docker-executor
 
+Coverage Report:
+  stage: publish
+  before_script:
+    - 'dotnet tool install dotnet-reportgenerator-globaltool --tool-path dotnet-tools'
+  script:
+    - 'dotnet-tools/reportgenerator -reports:*/TestResults/*/coverage.cobertura.xml -targetdir:coveragereport -reporttypes:Html -verbosity:Warning'
+  artifacts:
+    paths:
+      - 'coverage'
+  tags:
+    -docker-executor
 
 # Create a versioned NuGet package
 # This task is only executed for the branches develop and master as well as version tags
