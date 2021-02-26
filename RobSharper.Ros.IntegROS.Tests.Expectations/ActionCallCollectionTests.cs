@@ -160,13 +160,13 @@ namespace RobSharper.Ros.IntegROS.Tests.Expectations
         [ExpectThat]
         public void For_every_goal_message_an_action_call_object_exists()
         {
-            var actionGoals = Messages
+            var actionGoals = Scenario.Messages
                 .ForAction("/fibonacci")
                 .GoalMessages
                 .Select(x => x.Value.GoalId.Id)
                 .ToList();
 
-            var actionCallGoals = Messages
+            var actionCallGoals = Scenario.Messages
                 .ForActionCalls("/fibonacci")
                 .Select(x => x.GoalId)
                 .ToList();

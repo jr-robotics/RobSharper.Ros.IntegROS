@@ -9,7 +9,6 @@ namespace RobSharper.Ros.IntegROS
         public static bool IsInTopic(this IRecordedMessage message, string topicNamePattern)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
-            if (topicNamePattern == null) throw new ArgumentNullException(nameof(topicNamePattern));
 
             var regex = TopicRegx.Create(topicNamePattern);
             return regex.IsMatch(message.Topic);

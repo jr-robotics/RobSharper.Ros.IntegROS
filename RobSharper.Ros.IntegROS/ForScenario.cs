@@ -24,12 +24,7 @@ namespace RobSharper.Ros.IntegROS
         /// The scenario can be configured via <see cref="ScenarioAttribute"/> attributes and is set by the
         /// testing framework.
         /// </summary>
-        public IScenario Scenario { get; internal set; }
-
-        /// <summary>
-        /// Returns the recorded messages from the scenario.
-        /// </summary>
-        public IEnumerable<IRecordedMessage> Messages => Scenario?.Messages;
+        public IScenario Scenario { get; protected internal set; }
 
         public ForScenario()
         {
