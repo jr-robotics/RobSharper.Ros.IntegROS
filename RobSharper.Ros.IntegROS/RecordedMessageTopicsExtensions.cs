@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace RobSharper.Ros.IntegROS
 {
-    public static class RecordedMessageExtensions
+    public static class RecordedMessageTopicsExtensions
     {
         public static bool IsInTopic(this IRecordedMessage message, string topicNamePattern)
         {
