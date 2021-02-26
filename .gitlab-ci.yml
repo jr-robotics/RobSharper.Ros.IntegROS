@@ -39,7 +39,7 @@ test Expectations:
       - 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults'
     reports:
       junit: 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults/TestResults.xml'
-      cobertura: 'RobSharper.Ros.IntegROS.Tests/TestResults/*/coverage.cobertura.xml'
+      cobertura: 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults/*/coverage.cobertura.xml'
   tags:
     - docker-executor
 
