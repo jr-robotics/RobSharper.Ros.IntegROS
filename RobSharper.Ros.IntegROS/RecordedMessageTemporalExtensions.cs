@@ -174,5 +174,53 @@ namespace RobSharper.Ros.IntegROS
         }
         
         #endregion
+
+        #region LastBefore
+
+        public static IRecordedMessage LastBefore(this IEnumerable<IRecordedMessage> messages, DateTime timeStamp)
+        {
+            return Before(messages, timeStamp).Last();
+        }
+
+        public static IRecordedMessage LastBefore(this IEnumerable<IRecordedMessage> messages, ITimestampMessage other)
+        {
+            return Before(messages, other).Last();
+        }
+
+        public static IRecordedMessage<T> LastBefore<T>(this IEnumerable<IRecordedMessage<T>> messages, DateTime timeStamp)
+        {
+            return Before(messages, timeStamp).Last();
+        }
+
+        public static IRecordedMessage<T> LastBefore<T>(this IEnumerable<IRecordedMessage<T>> messages, ITimestampMessage other)
+        {
+            return Before(messages, other).Last();
+        }
+
+        #endregion
+
+        #region FirstAfter
+
+        public static IRecordedMessage FirstAfter(this IEnumerable<IRecordedMessage> messages, DateTime timeStamp)
+        {
+            return After(messages, timeStamp).First();
+        }
+
+        public static IRecordedMessage FirstAfter(this IEnumerable<IRecordedMessage> messages, ITimestampMessage other)
+        {
+            return After(messages, other).First();
+        }
+
+        public static IRecordedMessage<T> FirstAfter<T>(this IEnumerable<IRecordedMessage<T>> messages, DateTime timeStamp)
+        {
+            return After(messages, timeStamp).First();
+        }
+
+        public static IRecordedMessage<T> FirstAfter<T>(this IEnumerable<IRecordedMessage<T>> messages, ITimestampMessage other)
+        {
+            return After(messages, other).First();
+        }
+
+        #endregion
     }
 }

@@ -164,6 +164,79 @@ namespace RobSharper.Ros.IntegROS.Tests
             }
         }
         
+        public class LastBefore
+        {
+            [Fact]
+            public void Can_get_messages_with_timestamp()
+            {
+                var start = new DateTime(2020, 7, 26, 13, 05, 00);
+                var end = new DateTime(2020, 7, 26, 13, 05, 59);
+                var interval = 1.Seconds();
+                
+                var messages = CreateMessages(start, end, interval);
+
+                var beforeTimeStamp = start.AddSeconds(30);
+
+                var lastBefore = messages.LastBefore(beforeTimeStamp);
+                var expectedMessage = messages.LastOrDefault(x => x.TimeStamp < beforeTimeStamp);
+
+                lastBefore.Should().NotBeNull();
+                lastBefore.Should().Be(expectedMessage);
+            }
+            
+            [Fact]
+            public void Can_get_generic_messages_with_timestamp()
+            {
+                var start = new DateTime(2020, 7, 26, 13, 05, 00);
+                var end = new DateTime(2020, 7, 26, 13, 05, 59);
+                var interval = 1.Seconds();
+                
+                var messages = CreateMessages<object>(start, end, interval);
+
+                var beforeTimeStamp = start.AddSeconds(30);
+
+                var lastBefore = messages.LastBefore(beforeTimeStamp);
+                var expectedMessage = messages.LastOrDefault(x => x.TimeStamp < beforeTimeStamp);
+
+                lastBefore.Should().NotBeNull();
+                lastBefore.Should().Be(expectedMessage);
+            }
+            
+            [Fact]
+            public void Can_get_messages_with_other_message()
+            {
+                var start = new DateTime(2020, 7, 26, 13, 05, 00);
+                var end = new DateTime(2020, 7, 26, 13, 05, 59);
+                var interval = 1.Seconds();
+                
+                var messages = CreateMessages(start, end, interval);
+
+                var beforeMessage = messages.Skip(10).First();
+
+                var lastBefore = messages.LastBefore(beforeMessage);
+
+                lastBefore.Should().NotBeNull();
+                lastBefore.Should().BeEquivalentTo(messages.Skip(9).FirstOrDefault());
+            }
+            
+            [Fact]
+            public void Can_get_messages_with_other_generic_message()
+            {
+                var start = new DateTime(2020, 7, 26, 13, 05, 00);
+                var end = new DateTime(2020, 7, 26, 13, 05, 59);
+                var interval = 1.Seconds();
+                
+                var messages = CreateMessages<object>(start, end, interval);
+
+                var beforeMessage = messages.Skip(10).First();
+
+                var lastBefore = messages.LastBefore(beforeMessage);
+
+                lastBefore.Should().NotBeNull();
+                lastBefore.Should().BeEquivalentTo(messages.Skip(9).FirstOrDefault());
+            }
+        }
+        
         public class After
         {
             [Fact]
@@ -315,6 +388,77 @@ namespace RobSharper.Ros.IntegROS.Tests
                 filteredMessages.Should().NotBeEmpty();
                 filteredMessages.Should().HaveCount(messages.Count() - 10);
                 filteredMessages.Should().BeEquivalentTo(messages.Skip(10));
+            }
+        }
+        
+        public class FirstAfter
+        {
+            [Fact]
+            public void Can_get_messages_with_timestamp()
+            {
+                var start = new DateTime(2020, 7, 26, 13, 05, 00);
+                var end = new DateTime(2020, 7, 26, 13, 05, 59);
+                var interval = 1.Seconds();
+                
+                var messages = CreateMessages(start, end, interval);
+
+                var afterTimeStamp = start.AddSeconds(30);
+
+                var firstAfter = messages.FirstAfter(afterTimeStamp);
+
+                firstAfter.Should().NotBeNull();
+                firstAfter.Should().BeEquivalentTo(messages.FirstOrDefault(x => x.TimeStamp > afterTimeStamp));
+            }
+            
+            [Fact]
+            public void Can_get_generic_messages_with_timestamp()
+            {
+                var start = new DateTime(2020, 7, 26, 13, 05, 00);
+                var end = new DateTime(2020, 7, 26, 13, 05, 59);
+                var interval = 1.Seconds();
+                
+                var messages = CreateMessages<object>(start, end, interval);
+
+                var afterTimeStamp = start.AddSeconds(30);
+
+                var firstAfter = messages.FirstAfter(afterTimeStamp);
+
+                firstAfter.Should().NotBeNull();
+                firstAfter.Should().BeEquivalentTo(messages.FirstOrDefault(x => x.TimeStamp > afterTimeStamp));
+            }
+            
+            [Fact]
+            public void Can_get_messages_with_other_message()
+            {
+                var start = new DateTime(2020, 7, 26, 13, 05, 00);
+                var end = new DateTime(2020, 7, 26, 13, 05, 59);
+                var interval = 1.Seconds();
+                
+                var messages = CreateMessages(start, end, interval);
+
+                var afterMessage = messages.Skip(10).First();
+
+                var firstAfter = messages.FirstAfter(afterMessage);
+
+                firstAfter.Should().NotBeNull();
+                firstAfter.Should().Be(messages.Skip(11).FirstOrDefault());
+            }
+            
+            [Fact]
+            public void Can_get_messages_with_other_generic_message()
+            {
+                var start = new DateTime(2020, 7, 26, 13, 05, 00);
+                var end = new DateTime(2020, 7, 26, 13, 05, 59);
+                var interval = 1.Seconds();
+                
+                var messages = CreateMessages<object>(start, end, interval);
+
+                var afterMessage = messages.Skip(10).First();
+
+                var firstAfter = messages.FirstAfter(afterMessage);
+
+                firstAfter.Should().NotBeNull();
+                firstAfter.Should().Be(messages.Skip(11).FirstOrDefault());
             }
         }
 

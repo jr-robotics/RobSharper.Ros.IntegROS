@@ -8,10 +8,8 @@ namespace RobSharper.Ros.IntegROS
     {
         public static bool IsInTopic(this IRecordedMessage message, string topicNamePattern)
         {
+            if (message == null) throw new ArgumentNullException(nameof(message));
             if (topicNamePattern == null) throw new ArgumentNullException(nameof(topicNamePattern));
-
-            if (message == null)
-                return false;
 
             var regex = TopicRegx.Create(topicNamePattern);
             return regex.IsMatch(message.Topic);
@@ -24,11 +22,6 @@ namespace RobSharper.Ros.IntegROS
         
         public static IRecordedMessage<TType> SetMessageType<TType>(this IRecordedMessage message) where TType : class
         {
-            if (message is IRecordedMessage<TType>)
-            {
-                return (IRecordedMessage<TType>) message;
-            }
-            
             return new RecordedMessage<TType>(message);
         }
 
