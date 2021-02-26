@@ -17,7 +17,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -35,7 +35,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 
@@ -53,7 +53,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -72,7 +72,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 
@@ -94,7 +94,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -112,7 +112,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 
@@ -130,7 +130,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -149,7 +149,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 
@@ -171,7 +171,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -189,7 +189,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 
@@ -207,7 +207,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -226,7 +226,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 
@@ -248,7 +248,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -266,7 +266,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 
@@ -284,7 +284,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -303,7 +303,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 
@@ -325,7 +325,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages(start, end, interval);
 
@@ -339,7 +339,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             {
                 var start = new DateTime(2020, 7, 26, 13, 05, 00);
                 var end = new DateTime(2020, 7, 26, 13, 05, 59);
-                var interval = TimeSpan.FromSeconds(1);
+                var interval = 1.Seconds();
                 
                 var messages = CreateMessages<object>(start, end, interval);
 

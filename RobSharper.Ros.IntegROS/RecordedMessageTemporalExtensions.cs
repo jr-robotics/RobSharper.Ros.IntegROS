@@ -65,7 +65,6 @@ namespace RobSharper.Ros.IntegROS
         
         #endregion
         
-        
         #region BeforeOrOn
 
         public static IEnumerable<IRecordedMessage> BeforeOrOn(this IEnumerable<IRecordedMessage> messages, DateTime timeStamp)
