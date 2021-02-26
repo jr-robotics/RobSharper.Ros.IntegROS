@@ -20,9 +20,15 @@ namespace RobSharper.Ros.IntegROS
         /// </summary>
         public string Skip { get; set; }
 
+        /// <summary>
+        /// Compares the scenarios of two scenario attributes.
+        /// This method does not take DisplayName or Skip reason into account. 
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns>True if the two attributes represent the same scenario, false otherwise</returns>
         public virtual bool ScenarioEquals(ScenarioAttribute other)
         {
-            if (other == null || other.GetType() != this.GetType())
+            if (other == null)
                 return false;
 
             return GetScenarioHashCode() == other.GetScenarioHashCode();

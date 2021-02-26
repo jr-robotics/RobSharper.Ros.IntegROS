@@ -16,7 +16,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageExtensions.InTopic(AllMessages, ActionName + "/status")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/status")
                     .WithMessageType<GoalStatusArray>();
             }
         }
@@ -25,7 +25,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageExtensions.InTopic(AllMessages, ActionName + "/goal")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/goal")
                     .WithMessageType<ActionGoal>();
             }
         }
@@ -34,7 +34,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageExtensions.InTopic(AllMessages, ActionName + "/result")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/result")
                     .WithMessageType<ActionResult>();
             }
         }
@@ -43,7 +43,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageExtensions.InTopic(AllMessages, ActionName + "/feedback")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/feedback")
                     .WithMessageType<ActionFeedback>();
             }
         }
@@ -52,7 +52,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageExtensions.InTopic(AllMessages, ActionName + "/cancel")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/cancel")
                     .WithMessageType<GoalID>();
             }
         }

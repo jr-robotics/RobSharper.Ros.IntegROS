@@ -57,7 +57,7 @@ namespace RobSharper.Ros.IntegROS
         private static IEnumerable<IRecordedMessage> FilterActionMessages(string actionName, IEnumerable<IRecordedMessage> messages)
         {
             var actionFilter = actionName + "/*";
-            var actionMessages = messages.Where(m => RecordedMessageExtensions.IsInTopic(m, actionFilter));
+            var actionMessages = messages.Where(m => RecordedMessageTopicsExtensions.IsInTopic(m, actionFilter));
             return actionMessages;
         }
     }

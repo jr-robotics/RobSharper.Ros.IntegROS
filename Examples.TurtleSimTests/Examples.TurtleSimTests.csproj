@@ -24,12 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="ROS.Messages.turtlesim_msgs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>..\lib\ROS.Messages.turtlesim_msgs.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
         <None Update="bags\turtlesim\*.bag">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
