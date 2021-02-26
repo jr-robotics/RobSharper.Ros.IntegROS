@@ -60,7 +60,7 @@ Coverage Report:
 nuget-pack:
   stage: publish
   only:
-    - develop
+    #- develop
     - master
     - /^v.*$/
   script:
