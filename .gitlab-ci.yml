@@ -13,35 +13,43 @@ build Solution:
   tags:
     - docker-executor
 
-test IntegROS:
+
+.test:
   stage: test
   script:
-    - 'cd RobSharper.Ros.IntegROS.Tests'
+    - 'cd $PROJECT_NAME'
     - 'dotnet test --logger junit /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=TestResults/'
   coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
   artifacts:
     paths:
-      - 'RobSharper.Ros.IntegROS.Tests/TestResults'
+      - '$PROJECT_NAME/TestResults'
     reports:
-      junit: 'RobSharper.Ros.IntegROS.Tests/TestResults/TestResults.xml'
-      cobertura: 'RobSharper.Ros.IntegROS.Tests/TestResults/coverage.cobertura.xml'
+      junit: '$PROJECT_NAME/TestResults/TestResults.xml'
+      cobertura: '$PROJECT_NAME/TestResults/coverage.cobertura.xml'
   tags:
     - docker-executor
+
+
+test IntegROS:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests'
     
 test Expectations:
-  stage: test
-  script:
-    - 'cd RobSharper.Ros.IntegROS.Tests.Expectations'
-    - 'dotnet test --logger junit /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=TestResults/'
-  coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
-  artifacts:
-    paths:
-      - 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults'
-    reports:
-      junit: 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults/TestResults.xml'
-      cobertura: 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults/coverage.cobertura.xml'
-  tags:
-    - docker-executor
+  extends: .test
+  variables:
+    PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests.Expectations'
+
+run examples TurtleSim:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'Examples.TurtleSimTests'
+
+run examples Fibonacci Action:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'Examples.FibonacciActionTests'
+
 
 Coverage Report:
   stage: publish
@@ -79,7 +87,7 @@ nuget-pack:
 # Deploy to JR BaGet server
 # This is done for all pushes of version tags (v*) automatically
 # Pushes to the master branch and web pipeline triggers must be deployed manually
-.baget_base: &baget_base
+.baget_base:
   stage: deploy
   dependencies:
     - nuget-pack
@@ -95,7 +103,7 @@ nuget-pack:
     - docker-executor
 
 baget auto:
-  <<: *baget_base
+  extends: .baget_base
   only:
     - /^v.*$/
   except:
@@ -103,7 +111,7 @@ baget auto:
     - schedules
 
 baget manual:
-  <<: *baget_base
+  extends: .baget_base
   only:
     - develop
     - master
