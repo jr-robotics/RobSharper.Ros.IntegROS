@@ -6,7 +6,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="coverlet.msbuild" Version="3.0.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
+        <PackageReference Include="JunitXml.TestLogger" Version="2.1.81" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
         <PackageReference Include="Moq" Version="4.16.1" />
         <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.0.8-rc2" />
@@ -14,10 +19,6 @@
         <PackageReference Include="Uml.Robotics.Ros.Messages.common_msgs" Version="1.12.7" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="3.0.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
