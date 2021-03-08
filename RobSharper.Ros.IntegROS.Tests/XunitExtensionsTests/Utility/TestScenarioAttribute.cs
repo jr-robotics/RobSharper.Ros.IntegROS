@@ -20,7 +20,7 @@ namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility
         public TestScenarioAttribute(string key)
         {
             if (string.IsNullOrEmpty(key))
-                _key = Guid.NewGuid().ToString("D");
+                key = Guid.NewGuid().ToString("D");
             
             _key = key;
         }

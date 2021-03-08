@@ -61,7 +61,7 @@ namespace RobSharper.Ros.IntegROS.XunitExtensions
         /// <param name="methodAttributeInfos"></param>
         /// <param name="classAttributeInfos"></param>
         /// <returns></returns>
-        public static IEnumerable<IAttributeInfo> MergeScenarioAttributes(IEnumerable<IAttributeInfo> methodAttributeInfos, IEnumerable<IAttributeInfo> classAttributeInfos)
+        private static IEnumerable<IAttributeInfo> MergeScenarioAttributes(IEnumerable<IAttributeInfo> methodAttributeInfos, IEnumerable<IAttributeInfo> classAttributeInfos)
         {
             var mergedAttributeInfos = methodAttributeInfos?.ToList() ?? new List<IAttributeInfo>();
 
