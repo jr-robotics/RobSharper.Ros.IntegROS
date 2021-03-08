@@ -24,6 +24,7 @@ namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility
             
             _key = key;
         }
+        
         public override int GetScenarioHashCode()
         {
             return HashCode.Combine(_key);
