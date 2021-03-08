@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard1.0</TargetFramework>
+        <IncludeBuildOutput>False</IncludeBuildOutput>
+        <IncludeSource>False</IncludeSource>
+        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+        <OutputPath>$(TemplatesFolder)</OutputPath>
+        <EnableDefaultItems>False</EnableDefaultItems>
+        <IsPackable>true</IsPackable>
+        <NoPackageAnalysis>true</NoPackageAnalysis>
+        <NoWarn>2008;NU5125</NoWarn>
+
+        <PackageId>RobSharper.Ros.IntegROS.ProjectTemplates.3.1</PackageId>
+        <Authors>Guido Breitenhuber</Authors>
+        <Description>IntegROS Test Templates for Microsoft Template Engine</Description>
+        <language>en-US</language>
+        <PackageProjectUrl>https://github.com/jr-robotics/RobSharper.Ros.IntegROS</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageType>Template</PackageType>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <Content Include="Content\**">
+            <PackagePath>content</PackagePath>
+        </Content>
+    </ItemGroup>
+</Project>
