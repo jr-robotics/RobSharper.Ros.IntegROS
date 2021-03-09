@@ -14,19 +14,19 @@ namespace Examples.TurtleSimTests.Messages
             float32 angular_velocity
         */
             
-        [RosMessageField(1, "float32", "x" )]
+        [RosMessageField("float32", "x", 1)]
         public float X { get; set; }
             
-        [RosMessageField(2, "float32", "y" )]
+        [RosMessageField("float32", "y", 2)]
         public float Y { get; set; }
             
-        [RosMessageField(3, "float32", "theta" )]
+        [RosMessageField("float32", "theta", 3)]
         public float Theta { get; set; }
             
-        [RosMessageField(4, "float32", "linear_velocity" )]
+        [RosMessageField("float32", "linear_velocity", 4)]
         public float LinearVelocity { get; set; }
             
-        [RosMessageField(5, "float32", "angular_velocity" )]
+        [RosMessageField("float32", "angular_velocity", 5)]
         public float AngularVelocity { get; set; }
     }
 }
