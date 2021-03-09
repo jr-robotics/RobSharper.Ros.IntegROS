@@ -4,7 +4,7 @@
   "classifications": ["Test", "IntegROS"],
   "name": "IntegROS Test Project",
   "generatorVersions": "[1.0.0.0-*)",
-  "description": "A project that contains RobSharper.Ros.IntegROS tests that can run on .NET Core on Windows, Linux and macOS",
+  "description": "A project that contains RobSharper.Ros.IntegROS tests that can run on .NET Core on Windows, Linux and MacOS.",
   "groupIdentity": "RobSharper.Ros.IntegROS",
   "precedence": "6000",
   "identity": "RobSharper.Ros.IntegROS.3.1",
@@ -40,7 +40,7 @@
       "type": "parameter",
       "datatype": "bool",
       "defaultValue": "false",
-      "description": "Whether or not to enable packaging (via (\"dotnet pack\") for the project."
+      "description": "Whether or not to enable packaging (via \"dotnet pack\") for the project."
     },
     "HostIdentifier": {
       "type": "bind",
