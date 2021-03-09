@@ -5,9 +5,9 @@
   "name": "IntegROS Test Project",
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project that contains RobSharper.Ros.IntegROS tests that can run on .NET Core on Windows, Linux and macOS",
-  "groupIdentity": "Microsoft.Test.xUnit",
+  "groupIdentity": "RobSharper.Ros.IntegROS",
   "precedence": "6000",
-  "identity": "Microsoft.Test.xUnit.CSharp.3.1",
+  "identity": "RobSharper.Ros.IntegROS.3.1",
   "shortName": "integros",
   "tags": {
     "language": "C#",
