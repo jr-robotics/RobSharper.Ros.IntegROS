@@ -5,28 +5,28 @@ namespace RobSharper.Ros.IntegROS
 {
     public interface ITimestampMessage
     {
-        public DateTime TimeStamp { get; }
+        DateTime TimeStamp { get; }
     }
     
     public interface IRecordedMessage : ITimestampMessage
     {
-        public string Topic { get; }
+        string Topic { get; }
         
-        public RosType Type { get; }
+        RosType Type { get; }
         
-        public DateTime TimeStamp { get; }
+        DateTime TimeStamp { get; }
 
-        public object GetMessage(Type type);
-        public TType GetMessage<TType>();
+        object GetMessage(Type type);
+        TType GetMessage<TType>();
     }
 
     public interface IRecordedMessage<out TMessage> : ITimestampMessage
     {
-        public string Topic { get; }
+        string Topic { get; }
         
-        public RosType Type { get; }
+        RosType Type { get; }
         
-        public DateTime TimeStamp { get; }
+        DateTime TimeStamp { get; }
         
         TMessage Value { get; }
     }

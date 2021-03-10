@@ -5,10 +5,10 @@ namespace RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery
 {
     public interface IScenarioIdentifier : IXunitSerializable
     {
-        public string DisplayName { get; }
+        string DisplayName { get; }
         
-        public string UniqueScenarioId { get; }
+        string UniqueScenarioId { get; }
         
-        public Type ScenarioDiscovererType { get; }
+        Type ScenarioDiscovererType { get; }
     }
 }
