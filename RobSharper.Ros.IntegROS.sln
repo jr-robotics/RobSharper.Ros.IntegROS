@@ -15,6 +15,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples.FibonacciActionTests", "Examples.FibonacciActionTests\Examples.FibonacciActionTests.csproj", "{52FDF6CF-0567-4825-9DB2-2E23406A8AAA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{D1D48F00-80B4-48EB-B56D-55BD17AC56ED}"
+ProjectSection(SolutionItems) = preProject
+	ProjectTemplates\IntegrationTests.NuGet.config = ProjectTemplates\IntegrationTests.NuGet.config
+EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.3.1", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.3.1\RobSharper.Ros.IntegROS.ProjectTemplates.3.1.csproj", "{04340446-0A01-457D-911F-04BECCD1270B}"
 EndProject

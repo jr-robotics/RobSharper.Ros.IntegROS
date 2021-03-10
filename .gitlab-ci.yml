@@ -4,6 +4,7 @@ stages:
   - build
   - test
   - publish
+  - test-templates
   - deploy
 
 build Solution:
@@ -67,10 +68,10 @@ Coverage Report:
 # This task is only executed for the branches develop and master as well as version tags
 nuget-pack:
   stage: publish
-  only:
+  #only:
     #- develop
-    - master
-    - /^v.*$/
+    #- master
+    #- /^v.*$/
   script:
     - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
     - 'echo Publishing version $X_CI_VERSION'
@@ -82,6 +83,34 @@ nuget-pack:
       - 'RobSharper.Ros.IntegROS/bin/Release/'
   tags:
     - docker-executor
+
+
+templates pack:
+  stage: publish
+  script:
+    - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
+    - 'echo Publishing templates version $X_CI_VERSION'
+    - 'cd ProjectTemplates'
+    - 'dotnet pack -c Release -o ../nuget/ -p:Version=$X_CI_VERSTION'
+  artifacts:
+    paths:
+      - 'nuget'
+  tags:
+    - docker-executor
+
+
+template 3.1 test:
+  stage: test-templates
+  script:
+    - 'mkdir TemplateTest'
+    - 'cd TemplateTest'
+    - 'dotnet new integros'
+    - 'dotnet restore'
+    - 'dotnet build --no-restore'
+    - 'dotnet test --no-build --verbosity normal'
+  tags:
+    - docker-executor
+
 
 
 # Deploy to JR BaGet server
