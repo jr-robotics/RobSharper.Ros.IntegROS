@@ -2,7 +2,16 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <Company>JOANNEUM RESEARCH Forschungsgesellschaft mbH</Company>
+        <Authors>Guido Breitenhuber</Authors>
+        <Copyright>JOANNEUM RESEARCH Forschungsgesellschaft mbH</Copyright>
+        <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+        <Description>
+            RobSharper.Ros.IntegROS is a testing framework for ROS applications
+        </Description>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/jr-robotics/RobSharper.Ros.IntegROS.git</RepositoryUrl>
+        <PackageTags>ROS;RobSharper;RobSharper.Ros;Testing;unit-testing;ROS-testing</PackageTags>
+        <NoWarn>3021</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
