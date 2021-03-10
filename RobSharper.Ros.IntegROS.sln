@@ -18,6 +18,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "Project
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.3.1", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.3.1\RobSharper.Ros.IntegROS.ProjectTemplates.3.1.csproj", "{04340446-0A01-457D-911F-04BECCD1270B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.Tests.WithoutUmlRoboticsSupport", "RobSharper.Ros.IntegROS.Tests.WithoutUmlRoboticsSupport\RobSharper.Ros.IntegROS.Tests.WithoutUmlRoboticsSupport.csproj", "{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport", "RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport\RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport.csproj", "{AE6C2A13-0174-432E-9384-8BB44DF65EB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,14 @@ Global
 		{04340446-0A01-457D-911F-04BECCD1270B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04340446-0A01-457D-911F-04BECCD1270B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{04340446-0A01-457D-911F-04BECCD1270B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE6C2A13-0174-432E-9384-8BB44DF65EB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE6C2A13-0174-432E-9384-8BB44DF65EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE6C2A13-0174-432E-9384-8BB44DF65EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE6C2A13-0174-432E-9384-8BB44DF65EB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BAF8003E-4E02-44D4-AB72-F14842D015AC} = {7DF59F14-A3A2-48B8-AD77-29EAEC95692E}
@@ -55,5 +67,7 @@ Global
 		{5E90AD93-5FD8-4CCE-B68F-1AB3487C2F05} = {AF5376E2-3B53-46A8-B4DB-1DFCEB12D2A1}
 		{52FDF6CF-0567-4825-9DB2-2E23406A8AAA} = {7DF59F14-A3A2-48B8-AD77-29EAEC95692E}
 		{04340446-0A01-457D-911F-04BECCD1270B} = {D1D48F00-80B4-48EB-B56D-55BD17AC56ED}
+		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170} = {AF5376E2-3B53-46A8-B4DB-1DFCEB12D2A1}
+		{AE6C2A13-0174-432E-9384-8BB44DF65EB4} = {AF5376E2-3B53-46A8-B4DB-1DFCEB12D2A1}
 	EndGlobalSection
 EndGlobal

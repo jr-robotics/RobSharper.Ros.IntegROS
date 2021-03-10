@@ -14,6 +14,7 @@
         <PackageReference Include="JunitXml.TestLogger" Version="2.1.81" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
         <PackageReference Include="Moq" Version="4.16.1" />
+        <PackageReference Include="RobSharper.Ros.Adapters.UmlRobotics" Version="1.0.0" />
         <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.1.0" />
         <PackageReference Include="Uml.Robotics.Ros.MessageBase" Version="1.0.10" />
         <PackageReference Include="Uml.Robotics.Ros.Messages.common_msgs" Version="1.12.7" />
