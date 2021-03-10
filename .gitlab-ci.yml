@@ -10,7 +10,7 @@ stages:
 build Solution:
   stage: build
   script:
-    - 'dotnet build'
+    - 'dotnet build RobSharper.Ros.IntegROS.sln'
   tags:
     - docker-executor
 
