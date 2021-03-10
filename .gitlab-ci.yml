@@ -90,7 +90,7 @@ templates pack:
   script:
     - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
     - 'echo Publishing templates version $X_CI_VERSION'
-    - 'dotnet pack RobSharper.Ros.IntegROS.ProjectTemplates.sln -c Release -o ./nuget/ -p:Version=$X_CI_VERSTION'
+    - 'dotnet pack ./ProjectTemplates/RobSharper.Ros.IntegROS.ProjectTemplates.3.1/RobSharper.Ros.IntegROS.ProjectTemplates.3.1.csproj -c Release -o ./nuget/ -p:Version=$X_CI_VERSTION'
   artifacts:
     paths:
       - 'nuget'
