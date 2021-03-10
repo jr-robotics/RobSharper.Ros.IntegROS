@@ -1,11 +1,12 @@
 using System;
+using System.Linq;
 using FluentAssertions;
 using RobSharper.Ros.IntegROS;
 
 namespace Company.TestProject1
 {
-    [RosBagScenario(BagFiles.MyRecordedBag)]
-    public class IntegROSTest1 : ForScenario
+    [RosbagScenario(BagFiles.MyRecordedBag)]
+    public class IntegRosTest1 : ForScenario
     {
         [ExpectThat]
         public void Test_case()
