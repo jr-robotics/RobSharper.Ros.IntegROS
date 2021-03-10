@@ -19,6 +19,7 @@
 
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.1.*" />
+    <PackageReference Include="RobSharper.Ros.BagReader" Version="1.0.*" />
   </ItemGroup>
 
 </Project>
