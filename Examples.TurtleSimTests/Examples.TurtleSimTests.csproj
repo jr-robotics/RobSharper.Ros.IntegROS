@@ -26,15 +26,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="bags\turtlesim\*.bag">
+        <None Update="bags\**\*.bag">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="bags\fibonacci_action_server\*.bag">
+        <None Update="xunit.runner.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-      <None Update="xunit.runner.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
     <ItemGroup>
