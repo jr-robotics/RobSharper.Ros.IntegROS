@@ -14,22 +14,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples.FibonacciActionTests", "Examples.FibonacciActionTests\Examples.FibonacciActionTests.csproj", "{52FDF6CF-0567-4825-9DB2-2E23406A8AAA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{D1D48F00-80B4-48EB-B56D-55BD17AC56ED}"
-ProjectSection(SolutionItems) = preProject
-	ProjectTemplates\IntegrationTests.NuGet.config = ProjectTemplates\IntegrationTests.NuGet.config
-EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.3.1", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.3.1\RobSharper.Ros.IntegROS.ProjectTemplates.3.1.csproj", "{04340446-0A01-457D-911F-04BECCD1270B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.Tests.WithoutUmlRoboticsSupport", "RobSharper.Ros.IntegROS.Tests.WithoutUmlRoboticsSupport\RobSharper.Ros.IntegROS.Tests.WithoutUmlRoboticsSupport.csproj", "{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport", "RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport\RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport.csproj", "{AE6C2A13-0174-432E-9384-8BB44DF65EB4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.5.0", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.5.0\RobSharper.Ros.IntegROS.ProjectTemplates.5.0.csproj", "{68D18DA4-6E83-4031-9532-B982F30806DB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.2.1", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.2.1\RobSharper.Ros.IntegROS.ProjectTemplates.2.1.csproj", "{C6C12893-D773-4766-861A-9172FFFC11E3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.6.0", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.6.0\RobSharper.Ros.IntegROS.ProjectTemplates.6.0.csproj", "{C8F33F83-14E8-4EB5-BD81-5C105F3282B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,10 +44,6 @@ Global
 		{52FDF6CF-0567-4825-9DB2-2E23406A8AAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52FDF6CF-0567-4825-9DB2-2E23406A8AAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52FDF6CF-0567-4825-9DB2-2E23406A8AAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{04340446-0A01-457D-911F-04BECCD1270B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{04340446-0A01-457D-911F-04BECCD1270B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{04340446-0A01-457D-911F-04BECCD1270B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{04340446-0A01-457D-911F-04BECCD1270B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,29 +52,13 @@ Global
 		{AE6C2A13-0174-432E-9384-8BB44DF65EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE6C2A13-0174-432E-9384-8BB44DF65EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE6C2A13-0174-432E-9384-8BB44DF65EB4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68D18DA4-6E83-4031-9532-B982F30806DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68D18DA4-6E83-4031-9532-B982F30806DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68D18DA4-6E83-4031-9532-B982F30806DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68D18DA4-6E83-4031-9532-B982F30806DB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6C12893-D773-4766-861A-9172FFFC11E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6C12893-D773-4766-861A-9172FFFC11E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6C12893-D773-4766-861A-9172FFFC11E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6C12893-D773-4766-861A-9172FFFC11E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C8F33F83-14E8-4EB5-BD81-5C105F3282B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8F33F83-14E8-4EB5-BD81-5C105F3282B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8F33F83-14E8-4EB5-BD81-5C105F3282B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8F33F83-14E8-4EB5-BD81-5C105F3282B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BAF8003E-4E02-44D4-AB72-F14842D015AC} = {7DF59F14-A3A2-48B8-AD77-29EAEC95692E}
 		{6FE836DB-1E04-40F1-A4F7-6D81643A4117} = {AF5376E2-3B53-46A8-B4DB-1DFCEB12D2A1}
 		{5E90AD93-5FD8-4CCE-B68F-1AB3487C2F05} = {AF5376E2-3B53-46A8-B4DB-1DFCEB12D2A1}
 		{52FDF6CF-0567-4825-9DB2-2E23406A8AAA} = {7DF59F14-A3A2-48B8-AD77-29EAEC95692E}
-		{04340446-0A01-457D-911F-04BECCD1270B} = {D1D48F00-80B4-48EB-B56D-55BD17AC56ED}
 		{B4ABFA78-7E15-48E6-8AA5-AC30E36B1170} = {AF5376E2-3B53-46A8-B4DB-1DFCEB12D2A1}
 		{AE6C2A13-0174-432E-9384-8BB44DF65EB4} = {AF5376E2-3B53-46A8-B4DB-1DFCEB12D2A1}
-		{68D18DA4-6E83-4031-9532-B982F30806DB} = {D1D48F00-80B4-48EB-B56D-55BD17AC56ED}
-		{C6C12893-D773-4766-861A-9172FFFC11E3} = {D1D48F00-80B4-48EB-B56D-55BD17AC56ED}
-		{C8F33F83-14E8-4EB5-BD81-5C105F3282B6} = {D1D48F00-80B4-48EB-B56D-55BD17AC56ED}
 	EndGlobalSection
 EndGlobal
