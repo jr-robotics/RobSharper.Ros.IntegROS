@@ -107,7 +107,7 @@ template 3.1 test:
     - 'mkdir ProjectTemplateTest'
     - 'cd ProjectTemplateTest'
     - 'dotnet new integros --no-restore'
-    - 'dotnet add package RobSharper.Ros.IntegROS -v $X_CI_VERSION'
+    - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
     - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
     - 'dotnet build --no-restore'
     - 'dotnet test --no-build --verbosity normal'
