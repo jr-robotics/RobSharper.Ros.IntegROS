@@ -122,41 +122,26 @@ templates pack:
     X_TEMPLATES_VERSION: '3.1'
     X_FRAMEWORK_VERSION: 'netcoreapp3.1'
 
-template 2.1 test:
-  stage: test-templates
+3.1 on .Net Core 2.1:
+  extends: .template-test
   image: mcr.microsoft.com/dotnet/sdk:2.1
-  script:
-    - 'dotnet --list-sdks'
-    - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
-    - 'echo Installing templates version $X_CI_VERSION'
-    - 'dotnet new -i ./nuget/RobSharper.Ros.IntegROS.ProjectTemplates.3.1.$X_CI_VERSION.nupkg'
-    - 'mkdir ProjectTemplateTest'
-    - 'cd ProjectTemplateTest'
-    - 'dotnet new integros --framework netcoreapp2.1 --no-restore'
-    - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
-    - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
-    - 'dotnet build --no-restore'
-    - 'dotnet test --no-build --verbosity normal'
-  tags:
-    - docker-executor
+  variables:
+    X_TEMPLATES_VERSION: '3.1'
+    X_FRAMEWORK_VERSION: 'netcoreapp2.1'
 
-template 5.0 test:
-  stage: test-templates
+3.1 on .Net 5:
+  extends: .template-test
   image: mcr.microsoft.com/dotnet/sdk:5.0
-  script:
-    - 'dotnet --list-sdks'
-    - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
-    - 'echo Installing templates version $X_CI_VERSION'
-    - 'dotnet new -i ./nuget/RobSharper.Ros.IntegROS.ProjectTemplates.3.1.$X_CI_VERSION.nupkg'
-    - 'mkdir ProjectTemplateTest'
-    - 'cd ProjectTemplateTest'
-    - 'dotnet new integros --framework net5.0 --no-restore'
-    - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
-    - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
-    - 'dotnet build --no-restore'
-    - 'dotnet test --no-build --verbosity normal'
-  tags:
-    - docker-executor
+  variables:
+    X_TEMPLATES_VERSION: '3.1'
+    X_FRAMEWORK_VERSION: 'net5.0'
+
+3.1 on .Net 6:
+  extends: .template-test
+  image: mcr.microsoft.com/dotnet/sdk:6.0
+  variables:
+    X_TEMPLATES_VERSION: '3.1'
+    X_FRAMEWORK_VERSION: 'net6.0'
 
 
 
