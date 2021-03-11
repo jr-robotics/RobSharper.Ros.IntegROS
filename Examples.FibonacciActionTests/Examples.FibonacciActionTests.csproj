@@ -14,7 +14,7 @@
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="JunitXml.TestLogger" Version="2.1.81" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
-        <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.0.8-rc2" />
+        <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.1.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="bags\fibonacci_action_server\*.bag">
+        <None Update="bags\**\*.bag">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="xunit.runner.json">

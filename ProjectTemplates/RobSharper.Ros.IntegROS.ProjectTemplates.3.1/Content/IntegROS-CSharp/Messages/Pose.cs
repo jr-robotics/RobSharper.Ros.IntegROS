@@ -1,6 +1,6 @@
 using RobSharper.Ros.MessageEssentials;
 
-namespace Examples.TurtleSimTests.Messages
+namespace Company.TestProject1.Messages
 {
     [RosMessage("turtlesim/Pose")]
     public class Pose

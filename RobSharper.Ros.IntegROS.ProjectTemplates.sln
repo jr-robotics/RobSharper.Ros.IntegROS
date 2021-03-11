@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.3.1", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.3.1\RobSharper.Ros.IntegROS.ProjectTemplates.3.1.csproj", "{E70F930C-CE92-4E12-8AD6-110AC9D41112}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.5.0", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.5.0\RobSharper.Ros.IntegROS.ProjectTemplates.5.0.csproj", "{2B4995C8-30B5-4311-BDA3-08744485D952}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.2.1", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.2.1\RobSharper.Ros.IntegROS.ProjectTemplates.2.1.csproj", "{A8092863-98F9-4B9A-A42A-7E17EEE6972C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.6.0", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.6.0\RobSharper.Ros.IntegROS.ProjectTemplates.6.0.csproj", "{4CBE3BAD-0F76-4EDF-A3A2-28D3431B7316}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E70F930C-CE92-4E12-8AD6-110AC9D41112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70F930C-CE92-4E12-8AD6-110AC9D41112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70F930C-CE92-4E12-8AD6-110AC9D41112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70F930C-CE92-4E12-8AD6-110AC9D41112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B4995C8-30B5-4311-BDA3-08744485D952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B4995C8-30B5-4311-BDA3-08744485D952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B4995C8-30B5-4311-BDA3-08744485D952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B4995C8-30B5-4311-BDA3-08744485D952}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8092863-98F9-4B9A-A42A-7E17EEE6972C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8092863-98F9-4B9A-A42A-7E17EEE6972C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8092863-98F9-4B9A-A42A-7E17EEE6972C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8092863-98F9-4B9A-A42A-7E17EEE6972C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CBE3BAD-0F76-4EDF-A3A2-28D3431B7316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CBE3BAD-0F76-4EDF-A3A2-28D3431B7316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CBE3BAD-0F76-4EDF-A3A2-28D3431B7316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CBE3BAD-0F76-4EDF-A3A2-28D3431B7316}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

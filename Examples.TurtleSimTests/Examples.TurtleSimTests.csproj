@@ -14,7 +14,8 @@
         <PackageReference Include="JunitXml.TestLogger" Version="2.1.81" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.1" />
         <PackageReference Include="Moq" Version="4.16.1" />
-        <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.0.8-rc2" />
+        <PackageReference Include="RobSharper.Ros.Adapters.UmlRobotics" Version="1.0.0" />
+        <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.1.0" />
         <PackageReference Include="Uml.Robotics.Ros.MessageBase" Version="1.0.10" />
         <PackageReference Include="Uml.Robotics.Ros.Messages.common_msgs" Version="1.12.7" />
         <PackageReference Include="xunit" Version="2.4.1" />
@@ -25,15 +26,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="bags\turtlesim\*.bag">
+        <None Update="bags\**\*.bag">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-        <None Update="bags\fibonacci_action_server\*.bag">
+        <None Update="xunit.runner.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-      <None Update="xunit.runner.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
     <ItemGroup>
