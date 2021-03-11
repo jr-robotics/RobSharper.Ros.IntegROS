@@ -1,4 +1,4 @@
-image: mcr.microsoft.com/dotnet/core/sdk:3.1
+image: mcr.microsoft.com/dotnet/sdk:3.1
 
 stages:
   - build
@@ -100,6 +100,7 @@ templates pack:
 
 template 3.1 test:
   stage: test-templates
+  image: mcr.microsoft.com/dotnet/sdk:3.1
   script:
     - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
     - 'echo Installing templates version $X_CI_VERSION'
@@ -107,6 +108,40 @@ template 3.1 test:
     - 'mkdir ProjectTemplateTest'
     - 'cd ProjectTemplateTest'
     - 'dotnet new integros --no-restore'
+    - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
+    - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
+    - 'dotnet build --no-restore'
+    - 'dotnet test --no-build --verbosity normal'
+  tags:
+    - docker-executor
+
+template 2.1 test:
+  stage: test-templates
+  image: mcr.microsoft.com/dotnet/sdk:2.1
+  script:
+    - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
+    - 'echo Installing templates version $X_CI_VERSION'
+    - 'dotnet new -i ./nuget/RobSharper.Ros.IntegROS.ProjectTemplates.3.1.$X_CI_VERSION.nupkg'
+    - 'mkdir ProjectTemplateTest'
+    - 'cd ProjectTemplateTest'
+    - 'dotnet new integros --framework netcoreapp2.1 --no-restore'
+    - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
+    - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
+    - 'dotnet build --no-restore'
+    - 'dotnet test --no-build --verbosity normal'
+  tags:
+    - docker-executor
+
+template 5.0 test:
+  stage: test-templates
+  image: mcr.microsoft.com/dotnet/sdk:5.0
+  script:
+    - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
+    - 'echo Installing templates version $X_CI_VERSION'
+    - 'dotnet new -i ./nuget/RobSharper.Ros.IntegROS.ProjectTemplates.3.1.$X_CI_VERSION.nupkg'
+    - 'mkdir ProjectTemplateTest'
+    - 'cd ProjectTemplateTest'
+    - 'dotnet new integros --framework netcoreapp2.1 --no-restore'
     - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
     - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
     - 'dotnet build --no-restore'
