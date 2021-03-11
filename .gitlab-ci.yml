@@ -102,6 +102,7 @@ template 3.1 test:
   stage: test-templates
   image: mcr.microsoft.com/dotnet/sdk:3.1
   script:
+    - 'dotnet --list-sdks'
     - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
     - 'echo Installing templates version $X_CI_VERSION'
     - 'dotnet new -i ./nuget/RobSharper.Ros.IntegROS.ProjectTemplates.3.1.$X_CI_VERSION.nupkg'
@@ -119,6 +120,7 @@ template 2.1 test:
   stage: test-templates
   image: mcr.microsoft.com/dotnet/sdk:2.1
   script:
+    - 'dotnet --list-sdks'
     - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
     - 'echo Installing templates version $X_CI_VERSION'
     - 'dotnet new -i ./nuget/RobSharper.Ros.IntegROS.ProjectTemplates.3.1.$X_CI_VERSION.nupkg'
@@ -136,12 +138,13 @@ template 5.0 test:
   stage: test-templates
   image: mcr.microsoft.com/dotnet/sdk:5.0
   script:
+    - 'dotnet --list-sdks'
     - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
     - 'echo Installing templates version $X_CI_VERSION'
     - 'dotnet new -i ./nuget/RobSharper.Ros.IntegROS.ProjectTemplates.3.1.$X_CI_VERSION.nupkg'
     - 'mkdir ProjectTemplateTest'
     - 'cd ProjectTemplateTest'
-    - 'dotnet new integros --framework netcoreapp2.1 --no-restore'
+    - 'dotnet new integros --framework net5.0 --no-restore'
     - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
     - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
     - 'dotnet build --no-restore'
