@@ -106,14 +106,22 @@ templates pack:
     - 'dotnet new -i ./nuget/RobSharper.Ros.IntegROS.ProjectTemplates.$X_TEMPLATES_VERSION.$X_CI_VERSION.nupkg'
     - 'mkdir ProjectTemplateTest'
     - 'cd ProjectTemplateTest'
-    - 'echo Create new IntegROS project for framework $X_FRAMEWORK_VERSION'
-    - 'dotnet new integros --framework $X_FRAMEWORK_VERSION --no-restore'
+    - 'echo Create new IntegROS project' 
+    - '[! -z "$X_FRAMEWORK_VERSION" ] Target framework: $X_FRAMEWORK_VERSION'
+    - '[ -z "$X_FRAMEWORK_VERSION" ] && dotnet new integros --no-restore || dotnet new integros --framework $X_FRAMEWORK_VERSION --no-restore'
     - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
     - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
     - 'dotnet build --no-restore'
     - 'dotnet test --no-build --verbosity normal'
   tags:
     - docker-executor
+
+3.1:
+  extends: .template-test
+  image: mcr.microsoft.com/dotnet/sdk:3.1
+  variables:
+    X_TEMPLATES_VERSION: '3.1'
+    X_FRAMEWORK_VERSION: ''
 
 3.1 on .Net Core 3.1:
   extends: .template-test
