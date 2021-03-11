@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.3.1", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.3.1\RobSharper.Ros.IntegROS.ProjectTemplates.3.1.csproj", "{E70F930C-CE92-4E12-8AD6-110AC9D41112}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobSharper.Ros.IntegROS.ProjectTemplates.5.0", "ProjectTemplates\RobSharper.Ros.IntegROS.ProjectTemplates.5.0\RobSharper.Ros.IntegROS.ProjectTemplates.5.0.csproj", "{2B4995C8-30B5-4311-BDA3-08744485D952}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{E70F930C-CE92-4E12-8AD6-110AC9D41112}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E70F930C-CE92-4E12-8AD6-110AC9D41112}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E70F930C-CE92-4E12-8AD6-110AC9D41112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B4995C8-30B5-4311-BDA3-08744485D952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B4995C8-30B5-4311-BDA3-08744485D952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B4995C8-30B5-4311-BDA3-08744485D952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B4995C8-30B5-4311-BDA3-08744485D952}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
