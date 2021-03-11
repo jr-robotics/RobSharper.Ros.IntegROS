@@ -107,7 +107,7 @@ templates pack:
     - 'mkdir ProjectTemplateTest'
     - 'cd ProjectTemplateTest'
     - 'echo Create new IntegROS project' 
-    - '[[! -z "$X_FRAMEWORK_VERSION" ]] Target framework: $X_FRAMEWORK_VERSION'
+    - '[[ ! -z "$X_FRAMEWORK_VERSION" ]] Target framework: $X_FRAMEWORK_VERSION'
     - '[[ -z "$X_FRAMEWORK_VERSION" ]] && dotnet new integros --no-restore || dotnet new integros --framework $X_FRAMEWORK_VERSION --no-restore'
     - 'dotnet add package RobSharper.Ros.IntegROS --version $X_CI_VERSION --no-restore'
     - 'dotnet restore --configfile ../ProjectTemplates/IntegrationTests.NuGet.config'
