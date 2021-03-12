@@ -41,11 +41,21 @@ test Expectations:
   variables:
     PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests.Expectations'
 
+test IntegROS without UML Robotics:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests.WithoutUmlRoboticsSupport'
+
+test IntegROS with UML Robotics:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport'
+
 run examples TurtleSim:
   extends: .test
   variables:
     PROJECT_NAME: 'Examples.TurtleSimTests'
-
+    
 run examples Fibonacci Action:
   extends: .test
   variables:
