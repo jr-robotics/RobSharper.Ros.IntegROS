@@ -11,6 +11,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="JunitXml.TestLogger" Version="2.1.81" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
         <PackageReference Include="RobSharper.Ros.Adapters.UmlRobotics" Version="1.0.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
