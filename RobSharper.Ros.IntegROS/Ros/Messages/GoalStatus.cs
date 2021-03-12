@@ -5,45 +5,45 @@ namespace RobSharper.Ros.IntegROS.Ros.Messages
     [RosMessage("actionlib_msgs/GoalStatus")]
     public class GoalStatus
     {
-        [RosMessageField(1, "GoalID", "goal_id")]
+        [RosMessageField("GoalID", "goal_id", 1)]
         public GoalID GoalId { get; set; }
         
-        [RosMessageField(2, "uint8", "status")]
+        [RosMessageField("uint8", "status", 2)]
         public GoalStatusValue Status { get; set; }
         
-        [RosMessageField(13, "string", "text")]
+        [RosMessageField("string", "text", 13)]
         public string Text { get; set; }
         
         
 
-        [RosMessageField(3, "uint8", "PENDING")]
+        [RosMessageField("uint8", "PENDING", 3)]
         public const GoalStatusValue Pending = GoalStatusValue.Pending;
         
-        [RosMessageField(4, "uint8", "ACTIVE")]
+        [RosMessageField("uint8", "ACTIVE", 4)]
         public const GoalStatusValue Active = GoalStatusValue.Active;
         
-        [RosMessageField(5, "uint8", "PREEMPTED")]
+        [RosMessageField("uint8", "PREEMPTED", 5)]
         public const GoalStatusValue Preempted = GoalStatusValue.Preempted;
         
-        [RosMessageField(6, "uint8", "SUCCEEDED")]
+        [RosMessageField("uint8", "SUCCEEDED", 6)]
         public const GoalStatusValue Succeeded = GoalStatusValue.Succeeded;
         
-        [RosMessageField(7, "uint8", "ABORTED")]
+        [RosMessageField("uint8", "ABORTED", 7)]
         public const GoalStatusValue Aborted = GoalStatusValue.Aborted;
         
-        [RosMessageField(8, "uint8", "REJECTED")]
+        [RosMessageField("uint8", "REJECTED", 8)]
         public const GoalStatusValue Rejected = GoalStatusValue.Rejected;
         
-        [RosMessageField(9, "uint8", "PREEMPTING")]
+        [RosMessageField("uint8", "PREEMPTING", 9)]
         public const GoalStatusValue Preempting = GoalStatusValue.Preempting;
         
-        [RosMessageField(10, "uint8", "RECALLING")]
+        [RosMessageField("uint8", "RECALLING", 10)]
         public const GoalStatusValue Recalling = GoalStatusValue.Recalling;
         
-        [RosMessageField(11, "uint8", "RECALLED")]
+        [RosMessageField("uint8", "RECALLED", 11)]
         public const GoalStatusValue Recalled = GoalStatusValue.Recalled;
         
-        [RosMessageField(12, "uint8", "LOST")]
+        [RosMessageField("uint8", "LOST", 12)]
         public const GoalStatusValue Lost = GoalStatusValue.Lost;
     }
 }

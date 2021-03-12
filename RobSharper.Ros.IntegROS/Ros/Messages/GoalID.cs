@@ -6,10 +6,10 @@ namespace RobSharper.Ros.IntegROS.Ros.Messages
     [RosMessage("actionlib_msgs/GoalID")]
     public class GoalID
     {
-        [RosMessageField(1, "time", "stamp")]
+        [RosMessageField("time", "stamp", 1)]
         public DateTime Stamp { get; set; }
         
-        [RosMessageField(3, "string", "id")]
+        [RosMessageField("string", "id", 3)]
         public string Id { get; set; }
     }
 }
