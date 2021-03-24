@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <Authors>Guido Breitenhuber</Authors>
-        <Copyright>JOANNEUM RESEARCH Forschungsgesellschaft mbH</Copyright>
+        <Copyright>JOANNEUM RESEARCH Forschungsgesellschaft mbH, Guido Breitenhuber</Copyright>
         <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
         <Description>
             RobSharper.Ros.IntegROS is a testing framework for ROS applications
