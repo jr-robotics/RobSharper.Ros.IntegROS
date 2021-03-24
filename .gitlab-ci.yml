@@ -19,7 +19,9 @@ build Solution:
   stage: test
   script:
     - 'cd $PROJECT_NAME'
-    - 'dotnet test --logger junit /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=TestResults/'
+    - 'dotnet nuget add source https://robotics-baget.joanneum.at/v3/index.json -n robotics-baget'
+    - 'dotnet build -p:JRINTERNAL=True'
+    - 'dotnet test --no-build --verbosity normal --logger junit -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura -p:CoverletOutput=TestResults/'
   coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
   artifacts:
     paths:
