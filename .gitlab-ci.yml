@@ -80,10 +80,6 @@ Coverage Report:
 # This task is only executed for the branches develop and master as well as version tags
 nuget-pack:
   stage: publish
-  #only:
-    #- develop
-    #- master
-    #- /^v.*$/
   script:
     - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
     - 'echo Publishing version $X_CI_VERSION'
@@ -108,8 +104,6 @@ include: '/ProjectTemplates/.gitlab-ci.templates.yml'
   stage: deploy
   dependencies:
     - nuget-pack
-  variables:
-    GIT_STRATEGY: none
   environment:
     name: JR BaGet
     url: https://robotics-bage.joanneum.at/
@@ -141,8 +135,6 @@ baget manual:
 #  stage: deploy
 #  dependencies:
 #    - nuget-pack
-#  variables:
-#    GIT_STRATEGY: none
 #  environment:
 #    name: NuGet.org
 #    url: https://www.nuget.org/
