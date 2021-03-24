@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using RobSharper.Ros.IntegROS.Ros.MessageEssentials;
-using Xunit;
 
 namespace RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport
 {
@@ -10,7 +9,7 @@ namespace RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport
     /// </summary>
     public class UmlRoboticsAdapterTypeLoaderTests
     {
-        [Fact]
+        [JrFact]
         public void UmlRobotics_Adapter_is_available()
         {
             var exists = UmlRoboticsAdapterTypeLoader.AssemblyAvailable;
@@ -18,7 +17,7 @@ namespace RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport
             exists.Should().BeTrue();
         }
 
-        [Fact]
+        [JrFact]
         public void Can_create_formatter()
         {
             var item = UmlRoboticsAdapterTypeLoader.CreateFormatter();
@@ -26,7 +25,7 @@ namespace RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport
             item.Should().NotBeNull();
         }
 
-        [Fact]
+        [JrFact]
         public void Can_create_type_info_factory()
         {
             var item = UmlRoboticsAdapterTypeLoader.CreateTypeInfoFactory();
