@@ -27,7 +27,7 @@ namespace RobSharper.Ros.IntegROS.XunitExtensions
             defaultMethodDisplayOptions, testMethod,
             null)
         {
-            _scenarioIdentifier = scenarioIdentifier;
+            _scenarioIdentifier = scenarioIdentifier ?? throw new ArgumentNullException(nameof(scenarioIdentifier));
             _skipReason = skipReason;
         }
 
@@ -73,7 +73,7 @@ namespace RobSharper.Ros.IntegROS.XunitExtensions
             base.Serialize(data);
             
             data.AddValue(nameof(ScenarioIdentifier), _scenarioIdentifier);
-            _skipReason = data.GetValue<string>("SkipReason");
+            data.AddValue("SkipReason", _skipReason, typeof(string));
         }
 
         /// <inheritdoc/>

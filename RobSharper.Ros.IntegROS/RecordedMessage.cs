@@ -16,6 +16,8 @@ namespace RobSharper.Ros.IntegROS
         public string Topic => _innerMessage.Topic;
 
         public RosType Type => _innerMessage.Type;
+
+        public DateTime TimeStamp => _innerMessage.TimeStamp;
         
         public TType Value
         {

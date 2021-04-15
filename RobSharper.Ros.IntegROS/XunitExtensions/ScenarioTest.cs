@@ -18,10 +18,5 @@ namespace RobSharper.Ros.IntegROS.XunitExtensions
         {
             ScenarioIdentifier = scenarioIdentifier;
         }
-        
-        protected ScenarioTest(IXunitTestCase testCase, IScenarioIdentifier scenarioIdentifier, string displayName) 
-            : base(testCase, displayName)
-        {
-        }
     }
 }

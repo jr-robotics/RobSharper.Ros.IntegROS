@@ -3,21 +3,21 @@ using RobSharper.Ros.MessageEssentials;
 
 namespace RobSharper.Ros.IntegROS
 {
-    public interface IRecordedMessage
+    public interface IRecordedMessage : ITimestampMessage
     {
-        public string Topic { get; }
+        string Topic { get; }
         
-        public RosType Type { get; }
+        RosType Type { get; }
 
-        public object GetMessage(Type type);
-        public TType GetMessage<TType>();
+        object GetMessage(Type type);
+        TType GetMessage<TType>();
     }
 
-    public interface IRecordedMessage<out TMessage>
+    public interface IRecordedMessage<out TMessage> : ITimestampMessage
     {
-        public string Topic { get; }
+        string Topic { get; }
         
-        public RosType Type { get; }
+        RosType Type { get; }
         
         TMessage Value { get; }
     }

@@ -19,7 +19,7 @@ namespace RobSharper.Ros.IntegROS
             if (string.Empty.Equals(pattern))
                 throw new InvalidTopicPatternException("Topic name pattern must not be empty", nameof(pattern));
 
-            if (!pattern.StartsWith('/') && !pattern.StartsWith(AnyPlaceholder))
+            if (!pattern.StartsWith("/") && !pattern.StartsWith(AnyPlaceholder))
                 throw new InvalidTopicPatternException("Topic name pattern must be in global format (start with '/')");
             
             if (pattern.EndsWith("/"))

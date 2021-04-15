@@ -1,0 +1,3 @@
+# include ignored NuGet Packages
+!*.nupkg
+!*.snupkg

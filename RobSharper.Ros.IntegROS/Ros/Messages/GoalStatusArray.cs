@@ -6,10 +6,10 @@ namespace RobSharper.Ros.IntegROS.Ros.Messages
     [RosMessage("actionlib_msgs/GoalStatusArray")]
     public class GoalStatusArray
     {
-        [RosMessageField(1, "Header", "header")]
+        [RosMessageField("Header", "header", 1)]
         public Header Header { get; set; }
         
-        [RosMessageField(2, "GoalStatus[]", "status_list")]
+        [RosMessageField("GoalStatus[]", "status_list", 2)]
         public ICollection<GoalStatus> StatusList { get; set; }
     }
 }

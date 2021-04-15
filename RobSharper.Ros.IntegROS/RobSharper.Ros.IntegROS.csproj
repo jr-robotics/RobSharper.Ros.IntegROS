@@ -1,15 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <Company>JOANNEUM RESEARCH Forschungsgesellschaft mbH</Company>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Authors>Guido Breitenhuber</Authors>
+        <Copyright>JOANNEUM RESEARCH Forschungsgesellschaft mbH, Guido Breitenhuber</Copyright>
+        <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+        <Description>
+            RobSharper.Ros.IntegROS is a testing framework for ROS applications
+        </Description>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/jr-robotics/RobSharper.Ros.IntegROS.git</RepositoryUrl>
+        <PackageTags>ROS;RobSharper;RobSharper.Ros;Testing;unit-testing;ROS-testing</PackageTags>
+        <NoWarn>3021</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="FluentAssertions" Version="5.10.3" />
-      <PackageReference Include="RobSharper.Ros.Adapters.UmlRobotics" Version="1.0.0" />
-      <PackageReference Include="RobSharper.Ros.BagReader" Version="1.0.0-rc1" />
-      <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.0.8-rc2" />
+      <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+      <PackageReference Include="RobSharper.Ros.BagReader" Version="1.0.0" />
+      <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.2.0" />
       <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
       <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
     </ItemGroup>

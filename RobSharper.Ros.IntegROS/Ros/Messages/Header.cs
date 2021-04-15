@@ -6,13 +6,13 @@ namespace RobSharper.Ros.IntegROS.Ros.Messages
     [RosMessage("std_msgs/Header")]
     public class Header
     {
-        [RosMessageField(1, "uint32", "seq")]
+        [RosMessageField("uint32", "seq", 1)]
         public uint SequenceId { get; set; }
         
-        [RosMessageField(2, "time", "stamp")]
+        [RosMessageField("time", "stamp", 2)]
         public DateTime Stamp { get; set; }
         
-        [RosMessageField(3, "string", "frame_id")]
+        [RosMessageField("string", "frame_id", 3)]
         public string FrameId { get; set; }
     }
 }

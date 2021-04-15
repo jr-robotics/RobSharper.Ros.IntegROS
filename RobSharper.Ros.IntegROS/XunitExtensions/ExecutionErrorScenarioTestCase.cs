@@ -18,11 +18,6 @@ namespace RobSharper.Ros.IntegROS.XunitExtensions
                 EnsureInitialized();
                 return _scenarioIdentifier;
             }
-            private set
-            {
-                EnsureInitialized();
-                _scenarioIdentifier = value;
-            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -35,7 +30,7 @@ namespace RobSharper.Ros.IntegROS.XunitExtensions
             : base(diagnosticMessageSink, methodDisplayOrDefault, methodDisplayOptionsOrDefault, testMethod,
                 errorMessage)
         {
-            _scenarioIdentifier = scenarioIdentifier;
+            _scenarioIdentifier = scenarioIdentifier ?? throw new ArgumentNullException(nameof(scenarioIdentifier));
         }
 
         protected override void Initialize()

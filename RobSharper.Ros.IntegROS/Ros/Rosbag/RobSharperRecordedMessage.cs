@@ -20,6 +20,8 @@ namespace RobSharper.Ros.IntegROS.Ros.Rosbag
         public string Topic => _bagMessage.Connection.HeaderTopic;
 
         public RosType Type => _bagMessage.Connection.Type;
+
+        public DateTime TimeStamp => _bagMessage.Message.Time;
         
         public object GetMessage(Type type)
         {

@@ -1,5 +1,4 @@
-﻿using RobSharper.Ros.Adapters.UmlRobotics;
-using RobSharper.Ros.IntegROS.Ros.Actionlib;
+﻿using RobSharper.Ros.IntegROS.Ros.Actionlib;
 using RobSharper.Ros.MessageEssentials.Serialization;
 
 namespace RobSharper.Ros.IntegROS.Ros.MessageEssentials
@@ -8,8 +7,14 @@ namespace RobSharper.Ros.IntegROS.Ros.MessageEssentials
     {
         public static void UseUmlRoboticsRos(this RosMessageSerializer serializer)
         {
-            serializer.MessageFormatters.Add(new UmlRoboticsRosMessageFormatter());
-            serializer.MessageTypeRegistry.RosMessageTypeInfoFactories.Add(new UmlRoboticsMessageTypeInfoFactory());
+            if (!UmlRoboticsAdapterTypeLoader.AssemblyAvailable)
+                return;
+
+            var typeInfoFactory = UmlRoboticsAdapterTypeLoader.CreateTypeInfoFactory();
+            var messageFormatter = UmlRoboticsAdapterTypeLoader.CreateFormatter();
+            
+            serializer.MessageTypeRegistry.RosMessageTypeInfoFactories.Add(typeInfoFactory);
+            serializer.MessageFormatters.Add(messageFormatter);
         }
 
         public static void UseIntegROSActions(this RosMessageSerializer serializer)

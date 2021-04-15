@@ -1,54 +1,75 @@
-image: mcr.microsoft.com/dotnet/core/sdk:3.1
+image: mcr.microsoft.com/dotnet/sdk:3.1
 
 stages:
   - build
   - test
   - publish
+  - test-templates
   - deploy
 
 build Solution:
   stage: build
   script:
-    - 'dotnet build'
+    - 'dotnet build RobSharper.Ros.IntegROS.sln'
   tags:
     - docker-executor
 
-test IntegROS:
+
+.test:
   stage: test
   script:
-    - 'cd RobSharper.Ros.IntegROS.Tests'
-    - 'dotnet test --logger "junit" --collect:"XPlat Code Coverage"'
+    - 'cd $PROJECT_NAME'
+    - 'dotnet nuget add source https://robotics-baget.joanneum.at/v3/index.json -n robotics-baget'
+    - 'dotnet build -p:JRINTERNAL=True'
+    - 'dotnet test --no-build --verbosity normal --logger junit -p:CollectCoverage=true -p:CoverletOutputFormat=cobertura -p:CoverletOutput=TestResults/'
   coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
   artifacts:
     paths:
-      - 'RobSharper.Ros.IntegROS.Tests/TestResults'
+      - '$PROJECT_NAME/TestResults'
     reports:
-      junit: 'RobSharper.Ros.IntegROS.Tests/TestResults/TestResults.xml'
-      cobertura: 'RobSharper.Ros.IntegROS.Tests/TestResults/*/coverage.cobertura.xml'
+      junit: '$PROJECT_NAME/TestResults/TestResults.xml'
+      cobertura: '$PROJECT_NAME/TestResults/coverage.cobertura.xml'
   tags:
     - docker-executor
+
+
+test IntegROS:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests'
     
 test Expectations:
-  stage: test
-  script:
-    - 'cd RobSharper.Ros.IntegROS.Tests.Expectations'
-    - 'dotnet test --logger "junit" --collect:"XPlat Code Coverage"'
-  coverage: '/Total\s+\|\s+(\d{0,2}\.\d{1,2}%)/'
-  artifacts:
-    paths:
-      - 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults'
-    reports:
-      junit: 'RobSharper.Ros.IntegROS.Tests.Expectations/TestResults/TestResults.xml'
-      cobertura: 'RobSharper.Ros.IntegROS.Tests/TestResults/*/coverage.cobertura.xml'
-  tags:
-    - docker-executor
+  extends: .test
+  variables:
+    PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests.Expectations'
+
+test IntegROS without UML Robotics:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests.WithoutUmlRoboticsSupport'
+
+test IntegROS with UML Robotics:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'RobSharper.Ros.IntegROS.Tests.WithUmlRoboticsSupport'
+
+run examples TurtleSim:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'Examples.TurtleSimTests'
+    
+run examples Fibonacci Action:
+  extends: .test
+  variables:
+    PROJECT_NAME: 'Examples.FibonacciActionTests'
+
 
 Coverage Report:
   stage: publish
   before_script:
     - 'dotnet tool install dotnet-reportgenerator-globaltool --tool-path dotnet-tools'
   script:
-    - 'dotnet-tools/reportgenerator -reports:*/TestResults/*/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html'
+    - 'dotnet-tools/reportgenerator -reports:*/TestResults/coverage.cobertura.xml -targetdir:coverage-report -reporttypes:Html'
   artifacts:
     paths:
       - 'coverage-report'
@@ -59,10 +80,6 @@ Coverage Report:
 # This task is only executed for the branches develop and master as well as version tags
 nuget-pack:
   stage: publish
-  only:
-    - develop
-    - master
-    - /^v.*$/
   script:
     - 'export X_CI_VERSION=$(git describe | cut -c 2-)'
     - 'echo Publishing version $X_CI_VERSION'
@@ -76,15 +93,17 @@ nuget-pack:
     - docker-executor
 
 
+# Include Packing and Testing jobs for dotnet new templates
+include: '/ProjectTemplates/.gitlab-ci.templates.yml'
+
+
 # Deploy to JR BaGet server
-# This is done for all pushes of version tags (v*) automatically
-# Pushes to the master branch and web pipeline triggers must be deployed manually
-.baget_base: &baget_base
+# This is done automatically for version tags (v*)
+# For all other commits manual deployments can be triggered
+.baget_base:
   stage: deploy
   dependencies:
     - nuget-pack
-  variables:
-    GIT_STRATEGY: none
   environment:
     name: JR BaGet
     url: https://robotics-bage.joanneum.at/
@@ -95,7 +114,7 @@ nuget-pack:
     - docker-executor
 
 baget auto:
-  <<: *baget_base
+  extends: .baget_base
   only:
     - /^v.*$/
   except:
@@ -103,30 +122,28 @@ baget auto:
     - schedules
 
 baget manual:
-  <<: *baget_base
-  only:
-    - develop
-    - master
+  extends: .baget_base
+  except:
+    - /^v.*$/
   when: manual
 
 
 # Deploy to NuGet.org
-# This task has to be triggered manually
-#nuget.org:
-#  stage: deploy
-#  dependencies:
-#    - nuget-pack
-#  variables:
-#    GIT_STRATEGY: none
-#  environment:
-#    name: NuGet.org
-#    url: https://www.nuget.org/
-#  only:
-#    - master
-#    - /^v.*$/
-#  script:
-#    - 'cd nuget'
-#    - 'dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_ORG_API_KEY'
-#  tags:
-#    - docker-executor
-#  when: manual
+# This task has to be triggered manually and is only allowed 
+# for version tags (v*) and the master branch
+nuget.org:
+  stage: deploy
+  dependencies:
+    - nuget-pack
+  environment:
+    name: NuGet.org
+    url: https://www.nuget.org/
+  only:
+    - master
+    - /^v.*$/
+  script:
+    - 'cd nuget'
+    - 'dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_ORG_API_KEY'
+  tags:
+    - docker-executor
+  when: manual

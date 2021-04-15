@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using RobSharper.Ros.IntegROS.Scenarios;
+using RobSharper.Ros.IntegROS.XunitExtensions;
 using RobSharper.Ros.IntegROS.XunitExtensions.ScenarioDiscovery;
 using Xunit.Abstractions;
 using Xunit.Sdk;
@@ -34,6 +36,16 @@ namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility
                 default:
                     return new TestScenario();
             };
+        }
+        
+        public static IScenarioIdentifier CreateScenarioIdentifier(ITestMethod testMethod)
+        {
+            var discoverer = new TestScenarioDiscoverer();
+            var testScenarioAttribute = testMethod
+                .GetScenarioAttributes()
+                .Single();
+            
+            return discoverer.GetScenarioIdentifier(testScenarioAttribute);
         }
     }
 }
