@@ -43,7 +43,8 @@ namespace Examples.TurtleSimTests
         {
             var messages = Scenario.Messages
                 .InTopic("/turtle*/pose")
-                .SelectMessages<Pose>();
+                .WithMessageType<Pose>()
+                .SelectMessages();
 
             var first = messages.First();
 

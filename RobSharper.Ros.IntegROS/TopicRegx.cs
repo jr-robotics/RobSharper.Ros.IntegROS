@@ -7,7 +7,7 @@ namespace RobSharper.Ros.IntegROS
     public class TopicRegx
     {
         private const string AnyPlaceholder = "**";
-        private static Regex InvalidAnyPlaceholder = new Regex("([A-z0-9_]\\*\\*|\\*\\*[A-z0-9_])");
+        private static readonly Regex InvalidAnyPlaceholder = new Regex("([A-z0-9_]\\*\\*|\\*\\*[A-z0-9_])");
         
         public static Regex Create(string pattern)
         {
