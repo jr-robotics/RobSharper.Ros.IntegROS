@@ -7,9 +7,9 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
 {
     public class ActionCallCollection : IEnumerable<RosActionCall>
     {
-        public ActionMessages ActionMessages { get; }
+        public ActionMessagesCollection ActionMessages { get; }
 
-        public ActionCallCollection(ActionMessages actionMessages)
+        public ActionCallCollection(ActionMessagesCollection actionMessages)
         {
             ActionMessages = actionMessages ?? throw new ArgumentNullException(nameof(actionMessages));
         }

@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using RobSharper.Ros.IntegROS.Ros.Messages;
 
 namespace RobSharper.Ros.IntegROS.Ros.Actionlib
 {
-    public class ActionMessages
+    public class ActionMessagesCollection : IEnumerable<IRecordedMessage>
     {
+        private IEnumerable<IRecordedMessage> AllMessages { get; }
+        
         public string ActionName { get; }
 
         public bool Exists => AllMessages.HasAction(ActionName);
-        
-        public IEnumerable<IRecordedMessage> AllMessages { get; }
 
         public IEnumerable<IRecordedMessage<GoalStatusArray>> StatusMessages
         {
@@ -57,10 +58,20 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
             }
         }
 
-        public ActionMessages(string actionName, IEnumerable<IRecordedMessage> messages)
+        public ActionMessagesCollection(string actionName, IEnumerable<IRecordedMessage> messages)
         {
             ActionName = actionName ?? throw new ArgumentNullException(nameof(actionName));
             AllMessages = messages ?? throw new ArgumentNullException(nameof(messages));
+        }
+
+        public IEnumerator<IRecordedMessage> GetEnumerator()
+        {
+            return AllMessages.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -7,15 +7,15 @@ namespace RobSharper.Ros.IntegROS
 {
     public static class RecordedMessageActionExtensions
     {
-        public static ActionMessages ForAction(this IEnumerable<IRecordedMessage> messages, string actionName)
+        public static ActionMessagesCollection ForAction(this IEnumerable<IRecordedMessage> messages, string actionName)
         {
             if (actionName == null) throw new ArgumentNullException(nameof(actionName));
             var actionMessages = FilterActionMessages(actionName, messages);
             
-            return new ActionMessages(actionName, actionMessages);
+            return new ActionMessagesCollection(actionName, actionMessages);
         }
 
-        public static ActionCallCollection Calls(this ActionMessages actionMessages)
+        public static ActionCallCollection Calls(this ActionMessagesCollection actionMessages)
         {
             return new ActionCallCollection(actionMessages);
         }

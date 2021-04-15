@@ -9,7 +9,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
     {
         private readonly IRecordedMessage<ActionGoal> _goal;
         private IRecordedMessage<ActionResult> _result;
-        private readonly ActionMessages _actionMessages;
+        private readonly ActionMessagesCollection _actionMessages;
         private GoalStatusValue? _finalState;
         private List<Tuple<DateTime,GoalStatusValue>> _statusChanges;
 
@@ -88,7 +88,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
             }
         }
 
-        public RosActionCall(IRecordedMessage<ActionGoal> goal, ActionMessages actionMessages)
+        public RosActionCall(IRecordedMessage<ActionGoal> goal, ActionMessagesCollection actionMessages)
         {
             _goal = goal ?? throw new ArgumentNullException(nameof(goal));
             _actionMessages = actionMessages ?? throw new ArgumentNullException(nameof(actionMessages));
