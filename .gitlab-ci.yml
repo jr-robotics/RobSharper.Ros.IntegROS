@@ -98,8 +98,8 @@ include: '/ProjectTemplates/.gitlab-ci.templates.yml'
 
 
 # Deploy to JR BaGet server
-# This is done for all pushes of version tags (v*) automatically
-# Pushes to the master branch and web pipeline triggers must be deployed manually
+# This is done automatically for version tags (v*)
+# For all other commits manual deployments can be triggered
 .baget_base:
   stage: deploy
   dependencies:
@@ -123,27 +123,27 @@ baget auto:
 
 baget manual:
   extends: .baget_base
-  only:
-    - develop
-    - master
+  except:
+    - /^v.*$/
   when: manual
 
 
 # Deploy to NuGet.org
-# This task has to be triggered manually
-#nuget.org:
-#  stage: deploy
-#  dependencies:
-#    - nuget-pack
-#  environment:
-#    name: NuGet.org
-#    url: https://www.nuget.org/
-#  only:
-#    - master
-#    - /^v.*$/
-#  script:
-#    - 'cd nuget'
-#    - 'dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_ORG_API_KEY'
-#  tags:
-#    - docker-executor
-#  when: manual
+# This task has to be triggered manually and is only allowed 
+# for version tags (v*) and the master branch
+nuget.org:
+  stage: deploy
+  dependencies:
+    - nuget-pack
+  environment:
+    name: NuGet.org
+    url: https://www.nuget.org/
+  only:
+    - master
+    - /^v.*$/
+  script:
+    - 'cd nuget'
+    - 'dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_ORG_API_KEY'
+  tags:
+    - docker-executor
+  when: manual
