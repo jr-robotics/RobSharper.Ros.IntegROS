@@ -150,6 +150,187 @@ namespace RobSharper.Ros.IntegROS.Tests
             namespaces.Should().BeEquivalentTo(expectedNamespaces);
         }
         
+        
+        [Fact]
+        public void Can_select_messages_in_namespace()
+        {
+            var messages = new List<IRecordedMessage>()
+            {
+                CreateMessage("/turtle1/pose"),
+                CreateMessage("/turtle2/pose"),
+                CreateMessage("/turtle10/pose"),
+                CreateMessage("/turtle11/pose"),
+            };
+            messages
+                .InNamespace("/turtle1")
+                .Select(m => m.Topic)
+                .Should()
+                .BeEquivalentTo(new[]
+                {
+                    "/turtle1/pose"
+                });
+        }
+        
+        [Fact]
+        public void Can_select_messages_in_namespace_with_partial_placeholder()
+        {
+            var messages = new List<IRecordedMessage>()
+            {
+                CreateMessage("/turtle1/pose"),
+                CreateMessage("/turtle2/pose"),
+                CreateMessage("/turtle10/pose"),
+                CreateMessage("/turtle11/pose"),
+            };
+
+            messages
+                .InNamespace("/turtle1*")
+                .Select(m => m.Topic)
+                .Should()
+                .BeEquivalentTo(new[]
+                {
+                    "/turtle1/pose",
+                    "/turtle10/pose",
+                    "/turtle11/pose"
+                });
+        }
+        
+        [Fact]
+        public void Can_select_messages_in_namespace_and_sub_namespace()
+        {
+            var messages = new List<IRecordedMessage>()
+            {
+                CreateMessage("/a/pose"),
+                CreateMessage("/b/pose"),
+                CreateMessage("/c/pose"),
+                CreateMessage("/a/a/pose"),
+                CreateMessage("/a/b/pose"),
+                CreateMessage("/a/c/pose"),
+            };
+
+            messages
+                .InNamespace("/a")
+                .Select(m => m.Topic)
+                .Should()
+                .BeEquivalentTo(new[]
+                {
+                    "/a/pose",
+                    "/a/a/pose",
+                    "/a/b/pose",
+                    "/a/c/pose"
+                });
+        }
+        
+        [Fact]
+        public void Can_select_messages_in_namespace_and_sub_namespace_with_partial_placeholder()
+        {
+            var messages = new List<IRecordedMessage>()
+            {
+                CreateMessage("/turtle1/pose"),
+                CreateMessage("/turtle2/pose"),
+                CreateMessage("/turtle10/pose"),
+                CreateMessage("/turtle11/pose"),
+                CreateMessage("/turtle1/a/pose"),
+                CreateMessage("/turtle2/a/pose"),
+                CreateMessage("/turtle10/a/pose"),
+                CreateMessage("/turtle11/a/pose"),
+            };
+
+            messages
+                .InNamespace("/turtle1*")
+                .Select(m => m.Topic)
+                .Should()
+                .BeEquivalentTo(new[]
+                {
+                    "/turtle1/pose",
+                    "/turtle10/pose",
+                    "/turtle11/pose",
+                    "/turtle1/a/pose",
+                    "/turtle10/a/pose",
+                    "/turtle11/a/pose"
+                });
+        }
+
+        [Fact]
+        public void Can_select_messages_in_sub_namespace_with_partial_placeholder()
+        {
+            var messages = new List<IRecordedMessage>()
+            {
+                CreateMessage("/turtle1/pose"),
+                CreateMessage("/turtle2/pose"),
+                CreateMessage("/turtle10/pose"),
+                CreateMessage("/turtle11/pose"),
+                CreateMessage("/turtle1/a/pose"),
+                CreateMessage("/turtle2/a/pose"),
+                CreateMessage("/turtle10/a/pose"),
+                CreateMessage("/turtle11/a/pose"),
+            };
+
+            messages
+                .InNamespace("/turtle1/*")
+                .Select(m => m.Topic)
+                .Should()
+                .BeEquivalentTo(new[]
+                {
+                    "/turtle1/a/pose",
+                });
+        }
+
+        [Fact]
+        public void Can_select_messages_in_namespace_and_sub_namespace_with_any_placeholder()
+        {
+            var messages = new List<IRecordedMessage>()
+            {
+                CreateMessage("/turtle1/pose"),
+                CreateMessage("/turtle2/pose"),
+                CreateMessage("/turtle10/pose"),
+                CreateMessage("/turtle11/pose"),
+                CreateMessage("/turtle1/a/pose"),
+                CreateMessage("/turtle2/a/pose"),
+                CreateMessage("/turtle10/a/pose"),
+                CreateMessage("/turtle11/a/pose"),
+            };
+
+            messages
+                .InNamespace("/turtle1**")
+                .Select(m => m.Topic)
+                .Should()
+                .BeEquivalentTo(new[]
+                {
+                    "/turtle1/pose",
+                    "/turtle10/pose",
+                    "/turtle11/pose",
+                    "/turtle1/a/pose",
+                    "/turtle10/a/pose",
+                    "/turtle11/a/pose"
+                });
+        }
+        
+        [Fact]
+        public void Can_select_messages_in_sub_namespace_with_any_placeholder()
+        {
+            var messages = new List<IRecordedMessage>()
+            {
+                CreateMessage("/turtle1/pose"),
+                CreateMessage("/turtle2/pose"),
+                CreateMessage("/turtle10/pose"),
+                CreateMessage("/turtle11/pose"),
+                CreateMessage("/turtle1/a/pose"),
+                CreateMessage("/turtle2/a/pose"),
+                CreateMessage("/turtle10/a/pose"),
+                CreateMessage("/turtle11/a/pose"),
+            };
+
+            messages
+                .InNamespace("/turtle1/**")
+                .Select(m => m.Topic)
+                .Should()
+                .BeEquivalentTo(new[]
+                {
+                    "/turtle1/pose",
+                    "/turtle1/a/pose",
+                });
+        }
+        
 
         private IRecordedMessage CreateMessage(string globalTopicName)
         {

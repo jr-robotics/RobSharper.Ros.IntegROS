@@ -21,7 +21,8 @@ namespace RobSharper.Ros.IntegROS
         
         public static IEnumerable<IRecordedMessage> InTopic(this IEnumerable<IRecordedMessage> messages, string topicNamePattern)
         {
-            return messages.Where(m => IsInTopic(m, topicNamePattern));
+            var regex = RosNameRegex.Create(topicNamePattern);
+            return messages.Where(m => regex.IsMatch(m.Topic));
         }
         
         public static IEnumerable<IRecordedMessage<TType>> InTopic<TType>(

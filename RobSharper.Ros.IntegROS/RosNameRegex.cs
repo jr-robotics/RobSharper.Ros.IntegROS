@@ -6,8 +6,8 @@ namespace RobSharper.Ros.IntegROS
 {
     public class RosNameRegex
     {
-        private const string PartialPlaceholder = "*";
-        private const string AnyPlaceholder = "**";
+        public const string PartialPlaceholder = "*";
+        public const string AnyPlaceholder = "**";
         
         public static Regex Create(string pattern)
         {
@@ -17,13 +17,13 @@ namespace RobSharper.Ros.IntegROS
                 .Trim();
             
             if (string.Empty.Equals(pattern))
-                throw new InvalidTopicPatternException("Topic name pattern must not be empty", nameof(pattern));
+                throw new InvalidTopicPatternException("ROS name pattern must not be empty", nameof(pattern));
 
             if (!pattern.StartsWith("/") && !pattern.StartsWith(AnyPlaceholder))
-                throw new InvalidTopicPatternException("Topic name pattern must be in global format (start with '/')");
+                throw new InvalidTopicPatternException("ROS name pattern must be in global format (start with '/')");
             
             if (pattern.EndsWith("/"))
-                throw new InvalidTopicPatternException("Topic name pattern must not end with a namespace separator ('/')");
+                throw new InvalidTopicPatternException("ROS name pattern must not end with a namespace separator ('/')");
             
             pattern = pattern
                 .Replace(AnyPlaceholder, "[[ANY]]")

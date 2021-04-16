@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace RobSharper.Ros.IntegROS
 {
@@ -33,6 +34,45 @@ namespace RobSharper.Ros.IntegROS
             }
 
             return namespaces;
+        }
+
+        /// <summary>
+        /// Creates a regex, which can check if a global ros topic name matches the given namespace pattern.
+        /// </summary>
+        /// <param name="namespacePattern"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        private static Regex CreateNamespaceRegex(string namespacePattern)
+        {
+            if (namespacePattern == null) throw new ArgumentNullException(nameof(namespacePattern));
+            
+            if (!namespacePattern.EndsWith(RosNameRegex.AnyPlaceholder))
+            {
+                if (!namespacePattern.EndsWith("/"))
+                {
+                    namespacePattern += "/";
+                }
+
+                namespacePattern += RosNameRegex.AnyPlaceholder;
+            }
+
+            var regex = RosNameRegex.Create(namespacePattern);
+            return regex;
+        }
+        
+        public static bool IsInNamespace(this IRecordedMessage message, string namespacePattern)
+        {
+            if (message == null) throw new ArgumentNullException(nameof(message));
+
+            var regex = CreateNamespaceRegex(namespacePattern);
+            return regex.IsMatch(message.Topic);
+        }
+
+        public static IEnumerable<IRecordedMessage> InNamespace(this IEnumerable<IRecordedMessage> messages,
+            string namespacePattern)
+        {
+            var regex = CreateNamespaceRegex(namespacePattern);
+            return messages.Where(m => regex.IsMatch(m.Topic));
         }
 
         public static IEnumerable<IGrouping<string, IRecordedMessage>> GroupByNamespace(this IEnumerable<IRecordedMessage> messages)

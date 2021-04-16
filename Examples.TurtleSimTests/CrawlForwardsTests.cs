@@ -11,6 +11,18 @@ namespace Examples.TurtleSimTests
     public class CrawlForwardsTests : ForScenario
     {
         [ExpectThat]
+        public void Namespace()
+        {
+            var turtles = Scenario
+                .Messages
+                .InNamespace("/turtle1")
+                .InTopic<Pose>("/turtle1/pose")
+                .Select(message => message.Value.X)
+                .Should()
+                .BeInAscendingOrder();
+        }
+        
+        [ExpectThat]
         public void NamespaceGroup()
         {
             var turtles = Scenario
