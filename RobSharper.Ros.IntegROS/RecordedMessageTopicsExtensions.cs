@@ -23,17 +23,39 @@ namespace RobSharper.Ros.IntegROS
         {
             if (RosNameRegex.IsGlobalPattern(topicNamePattern))
             {
-                var regex = RosNameRegex.Create(topicNamePattern);
-                return messages.Where(m => regex.IsMatch(m.Topic));
+                return InGlobalTopic(messages, topicNamePattern);
             }
             else
             {
-                return messages
-                    .Cast<INamespaceScopedRecordedMessage>()
-                    .Where(m => m.IsInTopic(m.NamespaceScope + "/" + topicNamePattern));
+                return InRelativeTopic(messages, topicNamePattern);
             }
         }
-        
+
+        private static IEnumerable<IRecordedMessage> InGlobalTopic(IEnumerable<IRecordedMessage> messages, string globalTopicPattern)
+        {
+            var regex = RosNameRegex.Create(globalTopicPattern);
+            return messages.Where(m => regex.IsMatch(m.Topic));
+        }
+
+        private static IEnumerable<IRecordedMessage> InRelativeTopic(IEnumerable<IRecordedMessage> messages, string relativeTopicNamePattern)
+        {
+            using (var regexCache = new RosNameRegexCache())
+            {
+                foreach (var message in messages)
+                {
+                    var scopedMessage = message as INamespaceScopedRecordedMessage;
+                    if (scopedMessage == null)
+                        throw new InvalidTopicPatternException(
+                            "Relative topic name patterns are only supported if messages were filtered by namespace before.");
+
+                    var regex = regexCache.GetOrCreate(scopedMessage.NamespaceScope + "/" + relativeTopicNamePattern);
+
+                    if (regex.IsMatch(message.Topic))
+                        yield return message;
+                }
+            }
+        }
+
         public static IEnumerable<IRecordedMessage<TType>> InTopic<TType>(
             this IEnumerable<IRecordedMessage> messages, string topicNamePattern) where TType : class
         {

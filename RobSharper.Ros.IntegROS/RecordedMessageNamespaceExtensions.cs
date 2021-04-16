@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -78,7 +79,7 @@ namespace RobSharper.Ros.IntegROS
             return NamespaceScopedRecordedMessage.Create(message, namespacePattern);
         }
 
-        public static IEnumerable<INamespaceScopedRecordedMessage> InNamespace(this IEnumerable<IRecordedMessage> messages,
+        public static IEnumerable<IRecordedMessage> InNamespace(this IEnumerable<IRecordedMessage> messages,
             string namespacePattern)
         {
             var regex = CreateNamespaceRegex(namespacePattern);

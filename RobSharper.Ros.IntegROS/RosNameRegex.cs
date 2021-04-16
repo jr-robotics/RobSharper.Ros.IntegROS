@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace RobSharper.Ros.IntegROS
 {
-    public class RosNameRegex
+    public static class RosNameRegex
     {
         public const string PartialPlaceholder = "*";
         public const string AnyPlaceholder = "**";
