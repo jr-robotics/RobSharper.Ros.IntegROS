@@ -45,7 +45,7 @@ namespace RobSharper.Ros.IntegROS.Tests
             call.Should().Throw<ArgumentException>();
         }
 
-
+        
         [Fact]
         public void Can_group_messages_by_namespace()
         {
@@ -57,7 +57,7 @@ namespace RobSharper.Ros.IntegROS.Tests
                 CreateMessage("/Topic"),
                 CreateMessage("/A/B/Topic"),
                 CreateMessage("/B/Topic"),
-                CreateMessage("/A/B/CTopic"),
+                CreateMessage("/A/B/C/Topic"),
                 CreateMessage("/Topic")
             };
 
@@ -72,10 +72,11 @@ namespace RobSharper.Ros.IntegROS.Tests
             namespaces.Should().NotBeNullOrEmpty();
             namespaces.Should().BeEquivalentTo(new[]
             {
-                "/A/B",
+                "/",
                 "/A",
-                "/B",
-                "/"
+                "/A/B",
+                "/A/B/C",
+                "/B"
             });
         }
         
@@ -90,7 +91,7 @@ namespace RobSharper.Ros.IntegROS.Tests
                 CreateMessage("/Topic"),
                 CreateMessage("/A/B/Topic"),
                 CreateMessage("/B/Topic"),
-                CreateMessage("/A/B/CTopic"),
+                CreateMessage("/A/B/C/Topic"),
                 CreateMessage("/Topic")
             };
 
@@ -107,6 +108,46 @@ namespace RobSharper.Ros.IntegROS.Tests
 
                 namespaceGrouping.Should().BeEquivalentTo(expectedMessages);
             }
+        }
+        
+        
+        [Theory]
+        [InlineData("/A", new [] { "/A"})]
+        [InlineData("/A/**", new [] { "/A/B", "/A/B/C"})]
+        [InlineData("/A**", new [] { "/A", "/A/B", "/A/B/C"})]
+        [InlineData("/NS*", new [] { "/NS1", "/NS2", "/NS3"})]
+        [InlineData("/NS*/**", new [] { "/NS3/X", "/NS3/Y", "/NS3/X/X"})]
+        [InlineData("/NS*/*", new [] { "/NS3/X", "/NS3/Y"})]
+        [InlineData("/NS*/*/*", new [] { "/NS3/X/X"})]
+        public void Can_group_messages_by_namespace_with_name(string filter, IEnumerable<string> expectedNamespaces)
+        {
+            var messages = new List<IRecordedMessage>()
+            {
+                CreateMessage("/Topic"),
+                CreateMessage("/Topic"),
+                CreateMessage("/A/Topic"),
+                CreateMessage("/Topic"),
+                CreateMessage("/A/B/Topic"),
+                CreateMessage("/B/Topic"),
+                CreateMessage("/A/B/C/Topic"),
+                CreateMessage("/Topic"),
+                CreateMessage("/NS1/Topic"),
+                CreateMessage("/NS1/Topic"),
+                CreateMessage("/NS1/Topic"),
+                CreateMessage("/NS2/Topic"),
+                CreateMessage("/NS3/Topic"),
+                CreateMessage("/NS3/X/Topic"),
+                CreateMessage("/NS3/Y/Topic"),
+                CreateMessage("/NS3/X/X/Topic")
+            };
+
+            var namespaces = messages
+                .GroupByNamespace(filter)
+                .Select(n => n.Key)
+                .ToList();
+
+            namespaces.Should().NotBeNullOrEmpty();
+            namespaces.Should().BeEquivalentTo(expectedNamespaces);
         }
         
 

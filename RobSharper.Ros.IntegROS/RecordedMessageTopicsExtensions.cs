@@ -10,7 +10,7 @@ namespace RobSharper.Ros.IntegROS
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
 
-            var regex = TopicRegx.Create(topicNamePattern);
+            var regex = RosNameRegex.Create(topicNamePattern);
             return regex.IsMatch(message.Topic);
         }
         

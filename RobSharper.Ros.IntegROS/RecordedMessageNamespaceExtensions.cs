@@ -49,5 +49,16 @@ namespace RobSharper.Ros.IntegROS
                 })
                 .GroupBy(x => x.Namespace, x => x.Message);
         }
+
+        public static IEnumerable<IGrouping<string, IRecordedMessage>> GroupByNamespace(this IEnumerable<IRecordedMessage> messages, string namespacePattern)
+        {
+            var regex = RosNameRegex.Create(namespacePattern);
+
+            var filteredNamespaces = messages
+                .GroupByNamespace()
+                .Where(g => regex.IsMatch(g.Key));
+
+            return filteredNamespaces;
+        }
     }
 }

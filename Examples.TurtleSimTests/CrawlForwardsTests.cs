@@ -11,6 +11,23 @@ namespace Examples.TurtleSimTests
     public class CrawlForwardsTests : ForScenario
     {
         [ExpectThat]
+        public void NamespaceGroup()
+        {
+            var turtles = Scenario
+                .Messages
+                .GroupByNamespace("/turtle*");
+
+            foreach (var turtleMessages in turtles)
+            {
+                turtleMessages
+                    .InTopic<Pose>("/turtle*/pose")
+                    .Select(message => message.Value.X)
+                    .Should()
+                    .BeInAscendingOrder();
+            }
+        }
+        
+        [ExpectThat]
         public void Turtle_always_moves_forwards()
         {
             var messages = Scenario.Messages

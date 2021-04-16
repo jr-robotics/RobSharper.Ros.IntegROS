@@ -4,10 +4,10 @@ using System.Text.RegularExpressions;
 
 namespace RobSharper.Ros.IntegROS
 {
-    public class TopicRegx
+    public class RosNameRegex
     {
+        private const string PartialPlaceholder = "*";
         private const string AnyPlaceholder = "**";
-        private static readonly Regex InvalidAnyPlaceholder = new Regex("([A-z0-9_]\\*\\*|\\*\\*[A-z0-9_])");
         
         public static Regex Create(string pattern)
         {
@@ -24,14 +24,10 @@ namespace RobSharper.Ros.IntegROS
             
             if (pattern.EndsWith("/"))
                 throw new InvalidTopicPatternException("Topic name pattern must not end with a namespace separator ('/')");
-
-            if (InvalidAnyPlaceholder.IsMatch(pattern))
-                throw new InvalidTopicPatternException("Topic name pattern is invalid (invalid use of ** placeholder)",
-                    nameof(pattern));
             
             pattern = pattern
                 .Replace(AnyPlaceholder, "[[ANY]]")
-                .Replace("*", "[[PARTIAL]]")
+                .Replace(PartialPlaceholder, "[[PARTIAL]]")
                 .Replace("[[ANY]]", ".*")
                 .Replace("[[PARTIAL]]", "[0-9A-Za-z_]*");
 
