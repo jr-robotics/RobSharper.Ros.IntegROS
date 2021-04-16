@@ -44,7 +44,7 @@ namespace RobSharper.Ros.IntegROS
         /// <param name="namespacePattern"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        private static Regex CreateNamespaceRegex(string namespacePattern)
+        private static Regex CreateNamespaceRegex(this IRecordedMessage message, string namespacePattern)
         {
             if (namespacePattern == null) throw new ArgumentNullException(nameof(namespacePattern));
             
@@ -58,6 +58,19 @@ namespace RobSharper.Ros.IntegROS
                 namespacePattern += RosNameRegex.AnyPlaceholder;
             }
 
+            if (message is INamespaceScopedRecordedMessage namespaceMessage)
+            {
+                if (!RosNameRegex.IsGlobalPattern(namespacePattern))
+                {
+                    namespacePattern = namespaceMessage.NamespaceScope + "/" + namespacePattern;
+                }
+                else
+                {
+                    throw new InvalidTopicPatternException(
+                        "Cannot apply two global namespace patterns to one message.");
+                }
+            }
+
             var regex = RosNameRegex.Create(namespacePattern);
             return regex;
         }
@@ -65,26 +78,16 @@ namespace RobSharper.Ros.IntegROS
         public static bool IsInNamespace(this IRecordedMessage message, string namespacePattern)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
-
-            var regex = CreateNamespaceRegex(namespacePattern);
+            
+            var regex = message.CreateNamespaceRegex(namespacePattern);
             return regex.IsMatch(message.Topic);
-        }
-        
-        public static INamespaceScopedRecordedMessage InNamespace(this IRecordedMessage message,
-            string namespacePattern)
-        {
-            if (!IsInNamespace(message, namespacePattern))
-                throw new InvalidOperationException($"Message is not in namespace {namespacePattern}.");
-
-            return NamespaceScopedRecordedMessage.Create(message, namespacePattern);
         }
 
         public static IEnumerable<IRecordedMessage> InNamespace(this IEnumerable<IRecordedMessage> messages,
             string namespacePattern)
         {
-            var regex = CreateNamespaceRegex(namespacePattern);
             return messages
-                .Where(m => regex.IsMatch(m.Topic))
+                .Where(m => m.IsInNamespace(namespacePattern))
                 .Select(m => NamespaceScopedRecordedMessage.Create(m, namespacePattern));
         }
 
@@ -118,30 +121,50 @@ namespace RobSharper.Ros.IntegROS
     public interface INamespaceScopedRecordedMessage : IRecordedMessage
     {
         string NamespaceScope { get; }
+        
+        IRecordedMessage InnerMessage { get; }
+    }
+
+    public static class INamespaceScopedRecordedMessageExtensions
+    {
+        public static IRecordedMessage Unwrap(this INamespaceScopedRecordedMessage message)
+        {
+            if (message == null)
+                return null;
+
+            var unwrappedMessage = message.InnerMessage;
+
+            while (unwrappedMessage is INamespaceScopedRecordedMessage unwrappedNamespaceMessage)
+            {
+                unwrappedMessage = unwrappedNamespaceMessage.InnerMessage;
+            }
+
+            return unwrappedMessage;
+        }
     }
 
     public class NamespaceScopedRecordedMessage : INamespaceScopedRecordedMessage
     {
         public string NamespaceScope { get; }
-        private readonly IRecordedMessage _recordedMessage;
+        public IRecordedMessage InnerMessage { get; }
 
         private NamespaceScopedRecordedMessage(IRecordedMessage recordedMessage, string namespaceScope)
         {
             NamespaceScope = namespaceScope ?? throw new ArgumentNullException(nameof(namespaceScope));
-            _recordedMessage = recordedMessage ?? throw new ArgumentNullException(nameof(recordedMessage));
+            InnerMessage = recordedMessage ?? throw new ArgumentNullException(nameof(recordedMessage));
         }
 
-        public DateTime TimeStamp => _recordedMessage.TimeStamp;
-        public string Topic => _recordedMessage.Topic;
-        public RosType Type => _recordedMessage.Type;
+        public DateTime TimeStamp => InnerMessage.TimeStamp;
+        public string Topic => InnerMessage.Topic;
+        public RosType Type => InnerMessage.Type;
         public object GetMessage(Type type)
         {
-            return _recordedMessage.GetMessage(type);
+            return InnerMessage.GetMessage(type);
         }
 
         public TType GetMessage<TType>()
         {
-            return _recordedMessage.GetMessage<TType>();
+            return InnerMessage.GetMessage<TType>();
         }
 
         public static NamespaceScopedRecordedMessage Create(IRecordedMessage recordedMessage, string namespaceScope)
@@ -149,7 +172,12 @@ namespace RobSharper.Ros.IntegROS
             if (recordedMessage == null)
                 return null;
 
-            // TODO: check for inner scope
+            if (recordedMessage is INamespaceScopedRecordedMessage namespaceScopedMessage)
+            {
+                namespaceScope = namespaceScopedMessage.NamespaceScope + "/" + namespaceScope;
+                recordedMessage = namespaceScopedMessage.Unwrap();
+            }
+            
             return new NamespaceScopedRecordedMessage(recordedMessage, namespaceScope);
         }
     }
