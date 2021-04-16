@@ -16,7 +16,7 @@ namespace Examples.TurtleSimTests
             var turtles = Scenario
                 .Messages
                 .InNamespace("/turtle1")
-                .InTopic<Pose>("/turtle1/pose")
+                .InTopic<Pose>("pose")
                 .Select(message => message.Value.X)
                 .Should()
                 .BeInAscendingOrder();

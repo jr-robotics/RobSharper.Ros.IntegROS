@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using RobSharper.Ros.MessageEssentials;
 
 namespace RobSharper.Ros.IntegROS
 {
@@ -67,12 +68,23 @@ namespace RobSharper.Ros.IntegROS
             var regex = CreateNamespaceRegex(namespacePattern);
             return regex.IsMatch(message.Topic);
         }
+        
+        public static INamespaceScopedRecordedMessage InNamespace(this IRecordedMessage message,
+            string namespacePattern)
+        {
+            if (!IsInNamespace(message, namespacePattern))
+                throw new InvalidOperationException($"Message is not in namespace {namespacePattern}.");
 
-        public static IEnumerable<IRecordedMessage> InNamespace(this IEnumerable<IRecordedMessage> messages,
+            return NamespaceScopedRecordedMessage.Create(message, namespacePattern);
+        }
+
+        public static IEnumerable<INamespaceScopedRecordedMessage> InNamespace(this IEnumerable<IRecordedMessage> messages,
             string namespacePattern)
         {
             var regex = CreateNamespaceRegex(namespacePattern);
-            return messages.Where(m => regex.IsMatch(m.Topic));
+            return messages
+                .Where(m => regex.IsMatch(m.Topic))
+                .Select(m => NamespaceScopedRecordedMessage.Create(m, namespacePattern));
         }
 
         public static IEnumerable<IGrouping<string, IRecordedMessage>> GroupByNamespace(this IEnumerable<IRecordedMessage> messages)
@@ -99,6 +111,45 @@ namespace RobSharper.Ros.IntegROS
                 .Where(g => regex.IsMatch(g.Key));
 
             return filteredNamespaces;
+        }
+    }
+
+    public interface INamespaceScopedRecordedMessage : IRecordedMessage
+    {
+        string NamespaceScope { get; }
+    }
+
+    public class NamespaceScopedRecordedMessage : INamespaceScopedRecordedMessage
+    {
+        public string NamespaceScope { get; }
+        private readonly IRecordedMessage _recordedMessage;
+
+        private NamespaceScopedRecordedMessage(IRecordedMessage recordedMessage, string namespaceScope)
+        {
+            NamespaceScope = namespaceScope ?? throw new ArgumentNullException(nameof(namespaceScope));
+            _recordedMessage = recordedMessage ?? throw new ArgumentNullException(nameof(recordedMessage));
+        }
+
+        public DateTime TimeStamp => _recordedMessage.TimeStamp;
+        public string Topic => _recordedMessage.Topic;
+        public RosType Type => _recordedMessage.Type;
+        public object GetMessage(Type type)
+        {
+            return _recordedMessage.GetMessage(type);
+        }
+
+        public TType GetMessage<TType>()
+        {
+            return _recordedMessage.GetMessage<TType>();
+        }
+
+        public static NamespaceScopedRecordedMessage Create(IRecordedMessage recordedMessage, string namespaceScope)
+        {
+            if (recordedMessage == null)
+                return null;
+
+            // TODO: check for inner scope
+            return new NamespaceScopedRecordedMessage(recordedMessage, namespaceScope);
         }
     }
 }

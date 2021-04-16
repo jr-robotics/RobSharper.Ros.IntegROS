@@ -19,7 +19,7 @@ namespace RobSharper.Ros.IntegROS
             if (string.Empty.Equals(pattern))
                 throw new InvalidTopicPatternException("ROS name pattern must not be empty", nameof(pattern));
 
-            if (!pattern.StartsWith("/") && !pattern.StartsWith(AnyPlaceholder))
+            if (!IsGlobalPattern(pattern))
                 throw new InvalidTopicPatternException("ROS name pattern must be in global format (start with '/')");
             
             if (pattern.EndsWith("/"))
@@ -38,6 +38,13 @@ namespace RobSharper.Ros.IntegROS
             regex.Append('$');
 
             return new Regex(regex.ToString());
+        }
+
+        public static bool IsGlobalPattern(string pattern)
+        {
+            if (pattern == null) throw new ArgumentNullException(nameof(pattern));
+
+            return pattern.StartsWith("/") || pattern.StartsWith(AnyPlaceholder);
         }
     }
 }
