@@ -18,13 +18,13 @@ namespace RobSharper.Ros.IntegROS
                 .Trim();
             
             if (string.Empty.Equals(pattern))
-                throw new InvalidTopicPatternException("ROS name pattern must not be empty", nameof(pattern));
+                throw new InvalidRosNamePatternException("ROS name pattern must not be empty", nameof(pattern));
 
             if (!IsGlobalPattern(pattern))
-                throw new InvalidTopicPatternException("ROS name pattern must be in global format (start with '/')");
+                throw new InvalidRosNamePatternException("ROS name pattern must be in global format (start with '/')");
             
             if (pattern.EndsWith("/"))
-                throw new InvalidTopicPatternException("ROS name pattern must not end with a namespace separator ('/')");
+                throw new InvalidRosNamePatternException("ROS name pattern must not end with a namespace separator ('/')");
             
             pattern = pattern
                 .Replace(AnyPlaceholder, "[[ANY]]")

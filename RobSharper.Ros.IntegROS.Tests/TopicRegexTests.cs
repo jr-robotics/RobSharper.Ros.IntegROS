@@ -21,7 +21,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             this.Invoking(x => RosNameRegex.Create(String.Empty))
                 .Should()
-                .Throw<InvalidTopicPatternException>();
+                .Throw<InvalidRosNamePatternException>();
         }
         
         [Fact]
@@ -31,7 +31,7 @@ namespace RobSharper.Ros.IntegROS.Tests
 
             this.Invoking(x => RosNameRegex.Create(pattern))
                 .Should()
-                .Throw<InvalidTopicPatternException>();
+                .Throw<InvalidRosNamePatternException>();
         }
         
         [Fact]
@@ -41,7 +41,7 @@ namespace RobSharper.Ros.IntegROS.Tests
 
             this.Invoking(x => RosNameRegex.Create(pattern))
                 .Should()
-                .Throw<InvalidTopicPatternException>();
+                .Throw<InvalidRosNamePatternException>();
         }
         
         [Theory]
@@ -57,7 +57,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             this.Invoking(x => RosNameRegex.Create(pattern))
                 .Should()
-                .Throw<InvalidTopicPatternException>();
+                .Throw<InvalidRosNamePatternException>();
         }
         
         [Theory]

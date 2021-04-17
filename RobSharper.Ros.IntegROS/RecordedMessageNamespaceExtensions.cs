@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using RobSharper.Ros.MessageEssentials;
 
 namespace RobSharper.Ros.IntegROS
 {
@@ -38,49 +37,24 @@ namespace RobSharper.Ros.IntegROS
             return namespaces;
         }
 
-        /// <summary>
-        /// Creates a regex, which can check if a global ros topic name matches the given namespace pattern.
-        /// </summary>
-        /// <param name="namespacePattern"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        private static Regex CreateNamespaceRegex(this IRecordedMessage message, string namespacePattern)
+        private static NamespaceScope CreateNamespaceScope(this IRecordedMessage message, string namespacePattern)
         {
-            if (namespacePattern == null) throw new ArgumentNullException(nameof(namespacePattern));
-            
-            if (!namespacePattern.EndsWith(RosNameRegex.AnyPlaceholder))
-            {
-                if (!namespacePattern.EndsWith("/"))
-                {
-                    namespacePattern += "/";
-                }
-
-                namespacePattern += RosNameRegex.AnyPlaceholder;
-            }
+            var scope = new NamespaceScope(namespacePattern);
 
             if (message is INamespaceScopedRecordedMessage namespaceMessage)
             {
-                if (!RosNameRegex.IsGlobalPattern(namespacePattern))
-                {
-                    namespacePattern = namespaceMessage.NamespaceScope + "/" + namespacePattern;
-                }
-                else
-                {
-                    throw new InvalidTopicPatternException(
-                        "Cannot apply two global namespace patterns to one message.");
-                }
+                scope = namespaceMessage.NamespaceScope.Concat(scope);
             }
 
-            var regex = RosNameRegex.Create(namespacePattern);
-            return regex;
+            return scope;
         }
         
         public static bool IsInNamespace(this IRecordedMessage message, string namespacePattern)
         {
             if (message == null) throw new ArgumentNullException(nameof(message));
-            
-            var regex = message.CreateNamespaceRegex(namespacePattern);
-            return regex.IsMatch(message.Topic);
+
+            var namespaceScope = message.CreateNamespaceScope(namespacePattern);
+            return namespaceScope.IsMatch(message.Topic);
         }
 
         public static IEnumerable<IRecordedMessage> InNamespace(this IEnumerable<IRecordedMessage> messages,
@@ -120,7 +94,7 @@ namespace RobSharper.Ros.IntegROS
 
     public interface INamespaceScopedRecordedMessage : IRecordedMessage
     {
-        string NamespaceScope { get; }
+        NamespaceScope NamespaceScope { get; }
         
         IRecordedMessage InnerMessage { get; }
     }
@@ -143,42 +117,95 @@ namespace RobSharper.Ros.IntegROS
         }
     }
 
-    public class NamespaceScopedRecordedMessage : INamespaceScopedRecordedMessage
+    public class NamespaceScope
     {
-        public string NamespaceScope { get; }
-        public IRecordedMessage InnerMessage { get; }
+        private Regex _regex;
+        
+        public string Pattern { get; }
 
-        private NamespaceScopedRecordedMessage(IRecordedMessage recordedMessage, string namespaceScope)
+        public bool IsGlobalPattern => RosNameRegex.IsGlobalPattern(Pattern);
+
+        private Regex Regex
         {
-            NamespaceScope = namespaceScope ?? throw new ArgumentNullException(nameof(namespaceScope));
-            InnerMessage = recordedMessage ?? throw new ArgumentNullException(nameof(recordedMessage));
-        }
-
-        public DateTime TimeStamp => InnerMessage.TimeStamp;
-        public string Topic => InnerMessage.Topic;
-        public RosType Type => InnerMessage.Type;
-        public object GetMessage(Type type)
-        {
-            return InnerMessage.GetMessage(type);
-        }
-
-        public TType GetMessage<TType>()
-        {
-            return InnerMessage.GetMessage<TType>();
-        }
-
-        public static NamespaceScopedRecordedMessage Create(IRecordedMessage recordedMessage, string namespaceScope)
-        {
-            if (recordedMessage == null)
-                return null;
-
-            if (recordedMessage is INamespaceScopedRecordedMessage namespaceScopedMessage)
+            get
             {
-                namespaceScope = namespaceScopedMessage.NamespaceScope + "/" + namespaceScope;
-                recordedMessage = namespaceScopedMessage.Unwrap();
+                if (_regex == null)
+                {
+                    InitializeRegex();
+                }
+
+                return _regex;
+            }
+        }
+
+        public NamespaceScope(string namespacePattern)
+        {
+            Pattern = namespacePattern ?? throw new ArgumentNullException(nameof(namespacePattern));
+        }
+
+        private void InitializeRegex()
+        {
+            var namespacePattern = Pattern;
+            
+            if (!namespacePattern.EndsWith(RosNameRegex.AnyPlaceholder))
+            {
+                if (!namespacePattern.EndsWith("/"))
+                {
+                    namespacePattern += "/";
+                }
+
+                namespacePattern += RosNameRegex.AnyPlaceholder;
+            }
+
+            _regex = RosNameRegex.Create(namespacePattern);
+        }
+
+        public override string ToString()
+        {
+            return Pattern;
+        }
+
+        public bool Equals(NamespaceScope other)
+        {
+            return Pattern == other.Pattern;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is NamespaceScope other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Pattern != null ? Pattern.GetHashCode() : 0);
+        }
+
+        public NamespaceScope Concat(NamespaceScope other)
+        {
+            return Concat(this, other);
+        }
+
+        public bool IsMatch(string value)
+        {
+            if (!IsGlobalPattern)
+                throw new InvalidOperationException("Cannot match relative namespace pattern");
+            
+            return Regex.IsMatch(value);
+        }
+
+        public static NamespaceScope Concat(NamespaceScope first, NamespaceScope second)
+        {
+            if (first == null) throw new ArgumentNullException(nameof(first));
+            if (second == null) throw new ArgumentNullException(nameof(second));
+            
+            if (second.IsGlobalPattern)
+            {
+                throw new InvalidRosNamePatternException(
+                    "Cannot append a global namespace pattern to another pattern.");
             }
             
-            return new NamespaceScopedRecordedMessage(recordedMessage, namespaceScope);
+            var ns = first.Pattern + "/" + second.Pattern;
+            return new NamespaceScope(ns);
         }
     }
 }

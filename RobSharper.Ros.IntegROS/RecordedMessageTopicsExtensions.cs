@@ -45,7 +45,7 @@ namespace RobSharper.Ros.IntegROS
                 {
                     var scopedMessage = message as INamespaceScopedRecordedMessage;
                     if (scopedMessage == null)
-                        throw new InvalidTopicPatternException(
+                        throw new InvalidRosNamePatternException(
                             "Relative topic name patterns are only supported if messages were filtered by namespace before.");
 
                     var regex = regexCache.GetOrCreate(scopedMessage.NamespaceScope + "/" + relativeTopicNamePattern);
