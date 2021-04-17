@@ -16,7 +16,17 @@ namespace RobSharper.Ros.IntegROS
         
         public static IRecordedMessage<TType> SetMessageType<TType>(this IRecordedMessage message) where TType : class
         {
-            return new RecordedMessage<TType>(message);
+            if (message is INamespaceScopedTopicMessage<IRecordedMessage> namespaceScopedMessage)
+            {
+                var innerMessage = namespaceScopedMessage.InnerMessage;
+                var typedMessage = new RecordedMessage<TType>(innerMessage);
+
+                return NamespaceScopedRecordedMessage.Create(typedMessage, namespaceScopedMessage.NamespacePattern);
+            }
+            else
+            {
+                return new RecordedMessage<TType>(message);
+            }
         }
         
         public static IEnumerable<IRecordedMessage> InTopic(this IEnumerable<IRecordedMessage> messages, string topicNamePattern)
