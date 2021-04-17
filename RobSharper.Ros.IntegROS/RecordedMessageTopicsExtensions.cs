@@ -48,7 +48,7 @@ namespace RobSharper.Ros.IntegROS
                         throw new InvalidRosNamePatternException(
                             "Relative topic name patterns are only supported if messages were filtered by namespace before.");
 
-                    var regex = regexCache.GetOrCreate(scopedMessage.NamespaceScope + "/" + relativeTopicNamePattern);
+                    var regex = regexCache.GetOrCreate(scopedMessage.NamespacePattern + "/" + relativeTopicNamePattern);
 
                     if (regex.IsMatch(message.Topic))
                         yield return message;

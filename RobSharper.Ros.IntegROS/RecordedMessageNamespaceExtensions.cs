@@ -37,13 +37,13 @@ namespace RobSharper.Ros.IntegROS
             return namespaces;
         }
 
-        private static NamespaceScope CreateNamespaceScope(this IRecordedMessage message, string namespacePattern)
+        private static NamespacePattern CreateNamespaceScope(this IRecordedMessage message, string namespacePattern)
         {
-            var scope = new NamespaceScope(namespacePattern);
+            var scope = new NamespacePattern(namespacePattern);
 
             if (message is INamespaceScopedRecordedMessage namespaceMessage)
             {
-                scope = namespaceMessage.NamespaceScope.Concat(scope);
+                scope = namespaceMessage.NamespacePattern.Concat(scope);
             }
 
             return scope;
@@ -94,7 +94,7 @@ namespace RobSharper.Ros.IntegROS
 
     public interface INamespaceScopedRecordedMessage : IRecordedMessage
     {
-        NamespaceScope NamespaceScope { get; }
+        NamespacePattern NamespacePattern { get; }
         
         IRecordedMessage InnerMessage { get; }
     }
@@ -117,7 +117,7 @@ namespace RobSharper.Ros.IntegROS
         }
     }
 
-    public class NamespaceScope
+    public class NamespacePattern
     {
         private Regex _regex;
         
@@ -138,7 +138,7 @@ namespace RobSharper.Ros.IntegROS
             }
         }
 
-        public NamespaceScope(string namespacePattern)
+        public NamespacePattern(string namespacePattern)
         {
             Pattern = namespacePattern ?? throw new ArgumentNullException(nameof(namespacePattern));
         }
@@ -165,14 +165,14 @@ namespace RobSharper.Ros.IntegROS
             return Pattern;
         }
 
-        public bool Equals(NamespaceScope other)
+        public bool Equals(NamespacePattern other)
         {
             return Pattern == other.Pattern;
         }
 
         public override bool Equals(object obj)
         {
-            return obj is NamespaceScope other && Equals(other);
+            return obj is NamespacePattern other && Equals(other);
         }
 
         public override int GetHashCode()
@@ -180,7 +180,7 @@ namespace RobSharper.Ros.IntegROS
             return (Pattern != null ? Pattern.GetHashCode() : 0);
         }
 
-        public NamespaceScope Concat(NamespaceScope other)
+        public NamespacePattern Concat(NamespacePattern other)
         {
             return Concat(this, other);
         }
@@ -193,7 +193,7 @@ namespace RobSharper.Ros.IntegROS
             return Regex.IsMatch(value);
         }
 
-        public static NamespaceScope Concat(NamespaceScope first, NamespaceScope second)
+        public static NamespacePattern Concat(NamespacePattern first, NamespacePattern second)
         {
             if (first == null) throw new ArgumentNullException(nameof(first));
             if (second == null) throw new ArgumentNullException(nameof(second));
@@ -205,7 +205,7 @@ namespace RobSharper.Ros.IntegROS
             }
             
             var ns = first.Pattern + "/" + second.Pattern;
-            return new NamespaceScope(ns);
+            return new NamespacePattern(ns);
         }
     }
 }

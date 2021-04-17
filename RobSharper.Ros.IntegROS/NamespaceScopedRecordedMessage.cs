@@ -5,12 +5,12 @@ namespace RobSharper.Ros.IntegROS
 {
     public class NamespaceScopedRecordedMessage : INamespaceScopedRecordedMessage
     {
-        public NamespaceScope NamespaceScope { get; }
+        public NamespacePattern NamespacePattern { get; }
         public IRecordedMessage InnerMessage { get; }
 
-        private NamespaceScopedRecordedMessage(IRecordedMessage recordedMessage, NamespaceScope namespaceScope)
+        private NamespaceScopedRecordedMessage(IRecordedMessage recordedMessage, NamespacePattern namespacePattern)
         {
-            NamespaceScope = namespaceScope ?? throw new ArgumentNullException(nameof(namespaceScope));
+            NamespacePattern = namespacePattern ?? throw new ArgumentNullException(nameof(namespacePattern));
             InnerMessage = recordedMessage ?? throw new ArgumentNullException(nameof(recordedMessage));
         }
 
@@ -30,21 +30,21 @@ namespace RobSharper.Ros.IntegROS
         public static NamespaceScopedRecordedMessage Create(IRecordedMessage recordedMessage,
             string namespaceScope)
         {
-            return Create(recordedMessage, new NamespaceScope(namespaceScope));
+            return Create(recordedMessage, new NamespacePattern(namespaceScope));
         }
 
-        public static NamespaceScopedRecordedMessage Create(IRecordedMessage recordedMessage, NamespaceScope namespaceScope)
+        public static NamespaceScopedRecordedMessage Create(IRecordedMessage recordedMessage, NamespacePattern namespacePattern)
         {
             if (recordedMessage == null)
                 return null;
 
             if (recordedMessage is INamespaceScopedRecordedMessage namespaceScopedMessage)
             {
-                namespaceScope = namespaceScopedMessage.NamespaceScope.Concat(namespaceScope);
+                namespacePattern = namespaceScopedMessage.NamespacePattern.Concat(namespacePattern);
                 recordedMessage = namespaceScopedMessage.Unwrap();
             }
             
-            return new NamespaceScopedRecordedMessage(recordedMessage, namespaceScope);
+            return new NamespaceScopedRecordedMessage(recordedMessage, namespacePattern);
         }
     }
 }
