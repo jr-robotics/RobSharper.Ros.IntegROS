@@ -74,7 +74,7 @@ namespace RobSharper.Ros.IntegROS
         public bool IsMatch(string value)
         {
             if (!IsGlobalPattern)
-                throw new InvalidOperationException("Cannot match relative namespace pattern");
+                throw new InvalidOperationException("Cannot match relative namespace pattern.");
             
             return Regex.IsMatch(value);
         }

@@ -43,7 +43,7 @@ namespace RobSharper.Ros.IntegROS
             {
                 foreach (var message in messages)
                 {
-                    var scopedMessage = message as INamespaceScopedRecordedMessage;
+                    var scopedMessage = message as INamespaceScopedTopicMessage<IRecordedMessage>;
                     if (scopedMessage == null)
                         throw new InvalidRosNamePatternException(
                             "Relative topic name patterns are only supported if messages were filtered by namespace before.");
