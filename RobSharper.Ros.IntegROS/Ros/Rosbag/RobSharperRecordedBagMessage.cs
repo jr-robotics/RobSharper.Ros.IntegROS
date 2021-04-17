@@ -5,13 +5,13 @@ using RobSharper.Ros.MessageEssentials.Serialization;
 
 namespace RobSharper.Ros.IntegROS.Ros.Rosbag
 {
-    public class RobSharperRecordedMessage : IRecordedMessage
+    public class RobSharperRecordedBagMessage : IRecordedMessage
     {
         private readonly BagMessage _bagMessage;
         private readonly RosMessageSerializer _serializer;
         private object _message;
 
-        public RobSharperRecordedMessage(BagMessage bagMessage, RosMessageSerializer serializer)
+        public RobSharperRecordedBagMessage(BagMessage bagMessage, RosMessageSerializer serializer)
         {
             _bagMessage = bagMessage ?? throw new ArgumentNullException(nameof(bagMessage));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
