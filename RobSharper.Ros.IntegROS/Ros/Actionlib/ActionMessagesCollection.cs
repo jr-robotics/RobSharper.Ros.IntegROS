@@ -9,15 +9,15 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
     {
         private IEnumerable<IRecordedMessage> AllMessages { get; }
         
-        public string ActionName { get; }
+        public string ActionNamePattern { get; }
 
-        public bool Exists => AllMessages.HasAction(ActionName);
+        public bool Exists => AllMessages.HasAction(ActionNamePattern);
 
         public IEnumerable<IRecordedMessage<GoalStatusArray>> StatusMessages
         {
             get
             {
-                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/status")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionNamePattern + "/status")
                     .WithMessageType<GoalStatusArray>();
             }
         }
@@ -26,7 +26,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/goal")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionNamePattern + "/goal")
                     .WithMessageType<ActionGoal>();
             }
         }
@@ -35,7 +35,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/result")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionNamePattern + "/result")
                     .WithMessageType<ActionResult>();
             }
         }
@@ -44,7 +44,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/feedback")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionNamePattern + "/feedback")
                     .WithMessageType<ActionFeedback>();
             }
         }
@@ -53,14 +53,14 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         {
             get
             {
-                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionName + "/cancel")
+                return RecordedMessageTopicsExtensions.InTopic(AllMessages, ActionNamePattern + "/cancel")
                     .WithMessageType<GoalID>();
             }
         }
 
-        public ActionMessagesCollection(string actionName, IEnumerable<IRecordedMessage> messages)
+        public ActionMessagesCollection(string actionNamePattern, IEnumerable<IRecordedMessage> messages)
         {
-            ActionName = actionName ?? throw new ArgumentNullException(nameof(actionName));
+            ActionNamePattern = actionNamePattern ?? throw new ArgumentNullException(nameof(actionNamePattern));
             AllMessages = messages ?? throw new ArgumentNullException(nameof(messages));
         }
 

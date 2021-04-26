@@ -13,7 +13,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         private GoalStatusValue? _finalState;
         private List<Tuple<DateTime,GoalStatusValue>> _statusChanges;
 
-        public string ActionName => _actionMessages.ActionName;
+        public string ActionName => _actionMessages.ActionNamePattern;
         public string GoalId => _goal.Value.GoalId.Id;
 
         public GoalStatusValue FinalState

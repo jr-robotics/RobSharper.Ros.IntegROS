@@ -47,5 +47,12 @@ namespace RobSharper.Ros.IntegROS
 
             return pattern.StartsWith("/") || pattern.StartsWith(AnyPlaceholder);
         }
+
+        public static bool ContainsPlaceholders(string pattern)
+        {
+            if (pattern == null) throw new ArgumentNullException(nameof(pattern));
+
+            return pattern.Contains(AnyPlaceholder) || pattern.Contains(PartialPlaceholder);
+        }
     }
 }

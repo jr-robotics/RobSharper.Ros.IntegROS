@@ -7,12 +7,12 @@ namespace RobSharper.Ros.IntegROS
 {
     public static class RecordedMessageActionExtensions
     {
-        public static ActionMessagesCollection ForAction(this IEnumerable<IRecordedMessage> messages, string actionName)
+        public static ActionMessagesCollection ForAction(this IEnumerable<IRecordedMessage> messages, string actionNamePattern)
         {
-            if (actionName == null) throw new ArgumentNullException(nameof(actionName));
-            var actionMessages = FilterActionMessages(actionName, messages);
+            if (actionNamePattern == null) throw new ArgumentNullException(nameof(actionNamePattern));
+            var actionMessages = FilterActionMessages(actionNamePattern, messages);
             
-            return new ActionMessagesCollection(actionName, actionMessages);
+            return new ActionMessagesCollection(actionNamePattern, actionMessages);
         }
 
         public static ActionCallCollection Calls(this ActionMessagesCollection actionMessages)
@@ -40,6 +40,8 @@ namespace RobSharper.Ros.IntegROS
                 .Distinct()
                 .ToList();
             
+            // TODO: Support action name with patterns
+            //   action name pattern can contain placeholders => topics.Count > 5 && expected topics is not as stated below
             if (topicNames.Count > 5)
                 return false;
 
@@ -54,9 +56,9 @@ namespace RobSharper.Ros.IntegROS
             return topicNames.All(x => expectedTopics.Contains(x));
         }
 
-        private static IEnumerable<IRecordedMessage> FilterActionMessages(string actionName, IEnumerable<IRecordedMessage> messages)
+        private static IEnumerable<IRecordedMessage> FilterActionMessages(string actionNamePattern, IEnumerable<IRecordedMessage> messages)
         {
-            var actionFilter = actionName + "/*";
+            var actionFilter = actionNamePattern + "/*";
             var actionMessages = messages.Where(m => RecordedMessageTopicsExtensions.IsInTopic(m, actionFilter));
             return actionMessages;
         }
