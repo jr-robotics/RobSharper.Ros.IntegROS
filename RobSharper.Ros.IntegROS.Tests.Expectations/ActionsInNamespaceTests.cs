@@ -1,11 +1,10 @@
 using FluentAssertions;
-using RobSharper.Ros.IntegROS;
 
-namespace Examples.FibonacciActionTests
+namespace RobSharper.Ros.IntegROS.Tests.Expectations
 {
     
     [RosbagScenario(FibonacciActionServerBagFiles.FibonacciIn2Namespaces)]
-    public class FibonacciInNamespaceTests : ForScenario
+    public class ActionsInNamespaceTests : ForScenario
     {
         [ExpectThat]
         public void ActionCalls_are_always_global_without_namespace()

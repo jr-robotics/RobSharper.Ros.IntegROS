@@ -11,5 +11,6 @@ namespace RobSharper.Ros.IntegROS.Tests.Expectations
         public const string FibonacciSuccessfulAndPreempted = BasePath + "action_fibonacci_success_and_preempted_2021-02-18-10-07-23.bag";
         public const string FibonacciCancel = BasePath + "action_fibonacci_cancel_2021-02-22-17-24-33.bag";
         public const string FibonacciWithoutCalls = BasePath + "fibonacci_no_calls_2021-02-25-14-48-01.bag";
+        public const string FibonacciIn2Namespaces = BasePath + "fibonacci_namespaces_2021-04-26-09-46-48.bag";
     }
 }
