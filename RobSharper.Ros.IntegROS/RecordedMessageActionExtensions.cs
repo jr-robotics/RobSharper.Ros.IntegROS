@@ -9,9 +9,7 @@ namespace RobSharper.Ros.IntegROS
     {
         public static ActionMessagesCollection ForAction(this IEnumerable<IRecordedMessage> messages, string actionNamePattern)
         {
-            if (actionNamePattern == null) throw new ArgumentNullException(nameof(actionNamePattern));
             var actionMessages = FilterActionMessages(actionNamePattern, messages);
-            
             return new ActionMessagesCollection(actionNamePattern, actionMessages);
         }
 
@@ -28,38 +26,44 @@ namespace RobSharper.Ros.IntegROS
                 .Calls();
         }
 
-        public static bool HasAction(this IEnumerable<IRecordedMessage> messages, string actionName)
+        private static readonly string[] ActionTopicNames = {
+            "/status",
+            "/cancel",
+            "/goal",
+            "/feedback",
+            "/result"
+        };
+        
+        public static bool HasAction(this IEnumerable<IRecordedMessage> messages, string actionNamePattern)
         {
-            var actionMessages = FilterActionMessages(actionName, messages);
+            var actionMessages = FilterActionMessages(actionNamePattern, messages);
             
             if (!actionMessages.Any())
                 return false;
             
             var topicNames = actionMessages
-                .Select(x => x.Topic)
+                .Select(x => x.Topic.Substring(x.Topic.LastIndexOf("/", StringComparison.InvariantCulture)))
                 .Distinct()
                 .ToList();
             
-            // TODO: Support action name with patterns
-            //   action name pattern can contain placeholders => topics.Count > 5 && expected topics is not as stated below
             if (topicNames.Count > 5)
                 return false;
 
-            string[] expectedTopics = {
-                actionName + "/status",
-                actionName + "/cancel",
-                actionName + "/goal",
-                actionName + "/feedback",
-                actionName + "/result"
-            };
-            
-            return topicNames.All(x => expectedTopics.Contains(x));
+            return topicNames.All(x => ActionTopicNames.Contains(x));
         }
 
         private static IEnumerable<IRecordedMessage> FilterActionMessages(string actionNamePattern, IEnumerable<IRecordedMessage> messages)
         {
-            var actionFilter = actionNamePattern + "/*";
-            var actionMessages = messages.Where(m => RecordedMessageTopicsExtensions.IsInTopic(m, actionFilter));
+            if (actionNamePattern == null) throw new ArgumentNullException(nameof(actionNamePattern));
+
+            // TODO: check name
+            // 1) Topic name without namespace must not have a placeholder
+            // 2) Topic name must not end with "/"
+            
+            
+            actionNamePattern += "/*";
+            
+            var actionMessages = messages.Where(m => RecordedMessageTopicsExtensions.IsInTopic(m, actionNamePattern));
             return actionMessages;
         }
     }

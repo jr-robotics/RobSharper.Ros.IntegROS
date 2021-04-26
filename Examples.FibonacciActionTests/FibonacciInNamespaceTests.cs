@@ -50,5 +50,11 @@ namespace Examples.FibonacciActionTests
                 firstNumber.Should().Be(0);
             }
         }
+        
+        [ExpectThat]
+        public void Fibonacci_is_a_valid_action()
+        {
+            Scenario.Messages.HasAction("**/fibonacci").Should().BeTrue();
+        }
     }
 }
