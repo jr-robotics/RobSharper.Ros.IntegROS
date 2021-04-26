@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -13,19 +12,10 @@ namespace RobSharper.Ros.IntegROS
         public static Regex Create(string pattern)
         {
             if (pattern == null) throw new ArgumentNullException(nameof(pattern));
+            pattern = pattern.Trim();
+            
+            AssertValidPattern(pattern);
 
-            pattern = pattern
-                .Trim();
-            
-            if (string.Empty.Equals(pattern))
-                throw new InvalidRosNamePatternException("ROS name pattern must not be empty", nameof(pattern));
-
-            if (!IsGlobalPattern(pattern))
-                throw new InvalidRosNamePatternException("ROS name pattern must be in global format (start with '/')");
-            
-            if (pattern.EndsWith("/"))
-                throw new InvalidRosNamePatternException("ROS name pattern must not end with a namespace separator ('/')");
-            
             pattern = pattern
                 .Replace(AnyPlaceholder, "[[ANY]]")
                 .Replace(PartialPlaceholder, "[[PARTIAL]]")
@@ -39,6 +29,22 @@ namespace RobSharper.Ros.IntegROS
             regex.Append('$');
 
             return new Regex(regex.ToString());
+        }
+
+        internal static void AssertValidPattern(string pattern)
+        {
+            if (pattern == null) 
+                throw new ArgumentNullException(nameof(pattern));
+            
+            if (string.Empty.Equals(pattern))
+                throw new InvalidRosNamePatternException("ROS name pattern must not be empty", nameof(pattern));
+
+            if (!IsGlobalPattern(pattern))
+                throw new InvalidRosNamePatternException("ROS name pattern must be in global format (start with '/')", nameof(pattern));
+
+            if (pattern.EndsWith("/"))
+                throw new InvalidRosNamePatternException(
+                    "ROS name pattern must not end with a namespace separator ('/')", nameof(pattern));
         }
 
         public static bool IsGlobalPattern(string pattern)

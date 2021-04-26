@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using RobSharper.Ros.IntegROS.Ros.Messages;
 
 namespace RobSharper.Ros.IntegROS.Ros.Actionlib
 {
     public class ActionMessagesCollection : IEnumerable<IRecordedMessage>
     {
-        private IEnumerable<IRecordedMessage> AllMessages { get; }
+        private readonly Lazy<bool> _exists;
         
+        private IEnumerable<IRecordedMessage> AllMessages { get; }
         public string ActionNamePattern { get; }
-
-        public bool Exists => AllMessages.HasAction(ActionNamePattern);
+        public bool Exists => _exists.Value;
 
         public IEnumerable<IRecordedMessage<GoalStatusArray>> StatusMessages
         {
@@ -58,10 +59,12 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
             }
         }
 
-        public ActionMessagesCollection(string actionNamePattern, IEnumerable<IRecordedMessage> messages)
+        private ActionMessagesCollection(string actionNamePattern, IEnumerable<IRecordedMessage> messages)
         {
-            ActionNamePattern = actionNamePattern ?? throw new ArgumentNullException(nameof(actionNamePattern));
-            AllMessages = messages ?? throw new ArgumentNullException(nameof(messages));
+            ActionNamePattern = actionNamePattern;
+            AllMessages = messages;
+
+            _exists = new Lazy<bool>(ActionExists);
         }
 
         public IEnumerator<IRecordedMessage> GetEnumerator()
@@ -72,6 +75,51 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+        
+        private static readonly string[] ActionTopicNames = {
+            "/status",
+            "/cancel",
+            "/goal",
+            "/feedback",
+            "/result"
+        };
+        
+        private bool ActionExists()
+        {
+            if (!AllMessages.Any())
+                return false;
+            
+            var topicNames = AllMessages
+                .Select(x => x.Topic.Substring(x.Topic.LastIndexOf("/", StringComparison.InvariantCulture)))
+                .Distinct()
+                .ToList();
+            
+            if (topicNames.Count > 5)
+                return false;
+
+            return topicNames.All(x => ActionTopicNames.Contains(x));
+        }
+        
+        public static ActionMessagesCollection Create(string actionNamePattern, IEnumerable<IRecordedMessage> messages)
+        {
+            if (actionNamePattern == null) throw new ArgumentNullException(nameof(actionNamePattern));
+            if (messages == null) throw new ArgumentNullException(nameof(messages));
+            
+            actionNamePattern = actionNamePattern.Trim();
+            
+            RosNameRegex.AssertValidPattern(actionNamePattern);
+
+            var actionName = actionNamePattern.Substring(actionNamePattern.LastIndexOf("/", StringComparison.InvariantCulture));
+            
+            if (RosNameRegex.ContainsPlaceholders(actionName))
+                throw new InvalidRosNamePatternException("ROS action name must not contain any placeholders", nameof(actionNamePattern));
+
+            var actionTopicsPattern = actionNamePattern + "/*";
+            
+            var actionMessages = messages.Where(m => RecordedMessageTopicsExtensions.IsInTopic(m, actionTopicsPattern));
+            var actionMessagesCollection = new ActionMessagesCollection(actionNamePattern, actionMessages);
+            return actionMessagesCollection;
         }
     }
 }

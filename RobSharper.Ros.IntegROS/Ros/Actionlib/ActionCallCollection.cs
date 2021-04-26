@@ -28,7 +28,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
                 if (PatternContainsPlaceholders)
                 {
                     var globalActionName = goal.Topic.Substring(0, goal.Topic.LastIndexOf("/", StringComparison.InvariantCulture));
-                    actionMessages = new ActionMessagesCollection(globalActionName, ActionMessages);
+                    actionMessages = ActionMessagesCollection.Create(globalActionName, ActionMessages);
                 }
                 else
                 {
