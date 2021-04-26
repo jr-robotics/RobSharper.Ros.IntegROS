@@ -14,7 +14,15 @@ namespace RobSharper.Ros.IntegROS
             if (pattern == null) throw new ArgumentNullException(nameof(pattern));
             pattern = pattern.Trim();
             
-            AssertValidPattern(pattern);
+            if (string.Empty.Equals(pattern))
+                throw new InvalidRosNamePatternException("ROS name pattern must not be empty", nameof(pattern));
+
+            if (pattern.EndsWith("/"))
+                throw new InvalidRosNamePatternException(
+                    "ROS name pattern must not end with a namespace separator ('/')", nameof(pattern));
+
+            if (!IsGlobalPattern(pattern))
+                throw new InvalidRosNamePatternException("ROS name pattern must be in global format (start with '/')", nameof(pattern));
 
             pattern = pattern
                 .Replace(AnyPlaceholder, "[[ANY]]")
@@ -31,22 +39,12 @@ namespace RobSharper.Ros.IntegROS
             return new Regex(regex.ToString());
         }
 
-        internal static void AssertValidPattern(string pattern)
-        {
-            if (pattern == null) 
-                throw new ArgumentNullException(nameof(pattern));
-            
-            if (string.Empty.Equals(pattern))
-                throw new InvalidRosNamePatternException("ROS name pattern must not be empty", nameof(pattern));
-
-            if (!IsGlobalPattern(pattern))
-                throw new InvalidRosNamePatternException("ROS name pattern must be in global format (start with '/')", nameof(pattern));
-
-            if (pattern.EndsWith("/"))
-                throw new InvalidRosNamePatternException(
-                    "ROS name pattern must not end with a namespace separator ('/')", nameof(pattern));
-        }
-
+        /// <summary>
+        /// Determines if a ROS name pattern is in global format (i.e. starts with / or **) 
+        /// </summary>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static bool IsGlobalPattern(string pattern)
         {
             if (pattern == null) throw new ArgumentNullException(nameof(pattern));
@@ -54,11 +52,30 @@ namespace RobSharper.Ros.IntegROS
             return pattern.StartsWith("/") || pattern.StartsWith(AnyPlaceholder);
         }
 
+        /// <summary>
+        /// Determines if a ROS name pattern contains Placeholders (* or **)
+        /// </summary>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static bool ContainsPlaceholders(string pattern)
         {
             if (pattern == null) throw new ArgumentNullException(nameof(pattern));
 
             return pattern.Contains(AnyPlaceholder) || pattern.Contains(PartialPlaceholder);
+        }
+
+        /// <summary>
+        /// Determines if a ROS name pattern is fully qualified.
+        /// </summary>
+        /// <remarks>A name is fully qualified if it is in ROS global format and does not contain any placeholders.</remarks>
+        /// <param name="pattern"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static bool IsFullQualifiedPattern(string pattern)
+        {
+            if (pattern == null) throw new ArgumentNullException(nameof(pattern));
+            return IsGlobalPattern(pattern) && !ContainsPlaceholders(pattern);
         }
     }
 }

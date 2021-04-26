@@ -11,7 +11,11 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
         private readonly Lazy<bool> _exists;
         
         private IEnumerable<IRecordedMessage> AllMessages { get; }
+        
         public string ActionNamePattern { get; }
+
+        public bool IsFullQualifiedActionNamePattern { get; }
+        
         public bool Exists => _exists.Value;
 
         public IEnumerable<IRecordedMessage<GoalStatusArray>> StatusMessages
@@ -64,6 +68,8 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
             ActionNamePattern = actionNamePattern;
             AllMessages = messages;
 
+            IsFullQualifiedActionNamePattern = RosNameRegex.IsFullQualifiedPattern(actionNamePattern);
+            
             _exists = new Lazy<bool>(ActionExists);
         }
 
@@ -108,16 +114,23 @@ namespace RobSharper.Ros.IntegROS.Ros.Actionlib
             
             actionNamePattern = actionNamePattern.Trim();
             
-            RosNameRegex.AssertValidPattern(actionNamePattern);
+            if (string.Empty.Equals(actionNamePattern))
+                throw new InvalidRosNamePatternException("ROS name pattern must not be empty", nameof(actionNamePattern));
+            
+            if (actionNamePattern.EndsWith("/"))
+                throw new InvalidRosNamePatternException(
+                    "ROS name pattern must not end with a namespace separator ('/')", nameof(actionNamePattern));
 
-            var actionName = actionNamePattern.Substring(actionNamePattern.LastIndexOf("/", StringComparison.InvariantCulture));
+            
+            var actionName = actionNamePattern.Substring(actionNamePattern.LastIndexOf("/", StringComparison.InvariantCulture) + 1);
             
             if (RosNameRegex.ContainsPlaceholders(actionName))
                 throw new InvalidRosNamePatternException("ROS action name must not contain any placeholders", nameof(actionNamePattern));
 
             var actionTopicsPattern = actionNamePattern + "/*";
+            var actionMessages = messages
+                .InTopic(actionTopicsPattern);
             
-            var actionMessages = messages.Where(m => RecordedMessageTopicsExtensions.IsInTopic(m, actionTopicsPattern));
             var actionMessagesCollection = new ActionMessagesCollection(actionNamePattern, actionMessages);
             return actionMessagesCollection;
         }
