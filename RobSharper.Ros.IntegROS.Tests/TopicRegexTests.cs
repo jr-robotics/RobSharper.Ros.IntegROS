@@ -11,7 +11,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = null;
 
-            this.Invoking(x => TopicRegx.Create(pattern))
+            this.Invoking(x => RosNameRegex.Create(pattern))
                 .Should()
                 .Throw<ArgumentNullException>();
         }
@@ -19,9 +19,9 @@ namespace RobSharper.Ros.IntegROS.Tests
         [Fact]
         public void Empty_topic_name_is_not_allowed()
         {
-            this.Invoking(x => TopicRegx.Create(String.Empty))
+            this.Invoking(x => RosNameRegex.Create(String.Empty))
                 .Should()
-                .Throw<InvalidTopicPatternException>();
+                .Throw<InvalidRosNamePatternException>();
         }
         
         [Fact]
@@ -29,9 +29,9 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "bar";
 
-            this.Invoking(x => TopicRegx.Create(pattern))
+            this.Invoking(x => RosNameRegex.Create(pattern))
                 .Should()
-                .Throw<InvalidTopicPatternException>();
+                .Throw<InvalidRosNamePatternException>();
         }
         
         [Fact]
@@ -39,9 +39,9 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "fooo/bar";
 
-            this.Invoking(x => TopicRegx.Create(pattern))
+            this.Invoking(x => RosNameRegex.Create(pattern))
                 .Should()
-                .Throw<InvalidTopicPatternException>();
+                .Throw<InvalidRosNamePatternException>();
         }
         
         [Theory]
@@ -55,9 +55,9 @@ namespace RobSharper.Ros.IntegROS.Tests
         [InlineData(" ")]
         public void Invalid_patterns_throw_exception(string pattern)
         {
-            this.Invoking(x => TopicRegx.Create(pattern))
+            this.Invoking(x => RosNameRegex.Create(pattern))
                 .Should()
-                .Throw<InvalidTopicPatternException>();
+                .Throw<InvalidRosNamePatternException>();
         }
         
         [Theory]
@@ -74,7 +74,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/bar";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -93,7 +93,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/fooo/bar";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -112,7 +112,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/*/bar";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -131,7 +131,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/*/*/bar";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -150,7 +150,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/bar*";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -169,7 +169,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/*bar";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -188,7 +188,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/fo*/bar";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -207,7 +207,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "**";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -226,7 +226,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "**/bar";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -245,7 +245,7 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/**";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
@@ -265,34 +265,37 @@ namespace RobSharper.Ros.IntegROS.Tests
         {
             const string pattern = "/fooo/**";
 
-            var regex = TopicRegx.Create(pattern);
+            var regex = RosNameRegex.Create(pattern);
 
             regex.IsMatch(topic).Should().Be(shouldMatch);
         }
-
-        [Theory]
-        [InlineData("**", true)]
-        [InlineData("/**", true)]
-        [InlineData("**/bar", true)]
-        [InlineData("/**/bar", true)]
-        [InlineData("/foo/**/bar", true)]
-        [InlineData("**/foo/bar", true)]
-        [InlineData("/foo/bar/**", true)]
         
-        [InlineData("**bar", false)]
-        [InlineData("/**bar", false)]
-        [InlineData("/foo**/bar", false)]
-        [InlineData("/foo/**bar", false)]
-        [InlineData("**foo/bar", false)]
-        [InlineData("/foo/bar**", false)]
-        public void Any_placeholder_must_be_enclosed_by_slashes(string topic, bool isValid)
+        
+        [Theory]
+        [InlineData("/fooo/bar", "/fooo/**", true)]
+        [InlineData("/fooo/bar2", "/fooo/**", true)]
+        [InlineData("/fooo1/bar", "/fooo/**", false)]
+        [InlineData("/fooo_2/bar", "/fooo/**", false)]
+        [InlineData("/bar", "/fooo/**", false)]
+        [InlineData("/bar1", "/fooo/**", false)]
+        [InlineData("/bar_2", "/fooo/**", false)]
+        [InlineData("/fo/foo/bar", "/fooo/**", false)]
+        [InlineData("/nobar", "/fooo/**", false)]
+        [InlineData("/foo/nobar", "/fooo/**", false)]
+        [InlineData("/foo/bar", "/f**", true)]
+        [InlineData("/foo/bar", "**bar", true)]
+        [InlineData("/foo1/a", "/f*/a", true)]
+        [InlineData("/foo2/a", "/f**/a", true)]
+        [InlineData("/foo3/a/b/c", "/f**/c", true)]
+        [InlineData("/foo3/a/b/c", "/f**/x", false)]
+        [InlineData("/foo/a/b", "/f**/*/b", true)]
+        [InlineData("/foo/b", "/f**/*/b", false)]
+        [InlineData("/foo/a/x/b", "/f**/*/b", true)]
+        public void AnyPlaceholder_match_tests(string topic, string pattern, bool shouldMatch)
         {
-            var action = this.Invoking(a => TopicRegx.Create(topic));
+            var regex = RosNameRegex.Create(pattern);
 
-            if (isValid)
-                action.Should().NotThrow();
-            else
-                action.Should().Throw<InvalidTopicPatternException>();
+            regex.IsMatch(topic).Should().Be(shouldMatch);
         }
         
     }

@@ -29,7 +29,7 @@ namespace RobSharper.Ros.IntegROS.Tests.Expectations
             var actionName = Scenario
                 .Messages
                 .ForAction("/unknownAction")
-                .ActionName;
+                .ActionNamePattern;
 
             actionName.Should().Be("/unknownAction");
         }

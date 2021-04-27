@@ -25,7 +25,7 @@ namespace RobSharper.Ros.IntegROS.Ros.Rosbag
             
             var bag = FileBag.Create(filename);
             return bag.Messages
-                .Select(m => new RobSharperRecordedMessage(m, _serializer));
+                .Select(m => new RobSharperRecordedBagMessage(m, _serializer));
         }
     }
 }

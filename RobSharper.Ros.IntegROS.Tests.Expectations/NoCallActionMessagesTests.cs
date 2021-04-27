@@ -29,7 +29,7 @@ namespace RobSharper.Ros.IntegROS.Tests.Expectations
             var actionName = Scenario
                 .Messages
                 .ForAction("/fibonacci")
-                .ActionName;
+                .ActionNamePattern;
 
             actionName.Should().Be("/fibonacci");
         }
