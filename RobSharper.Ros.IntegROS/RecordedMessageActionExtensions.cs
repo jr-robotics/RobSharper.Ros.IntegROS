@@ -17,10 +17,10 @@ namespace RobSharper.Ros.IntegROS
         }
 
         public static ActionCallCollection ForActionCalls(this IEnumerable<IRecordedMessage> messages,
-            string actionName)
+            string actionNamePattern)
         {
             return messages
-                .ForAction(actionName)
+                .ForAction(actionNamePattern)
                 .Calls();
         }
         
