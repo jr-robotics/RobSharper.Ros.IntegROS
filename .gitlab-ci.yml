@@ -104,6 +104,7 @@ include: '/ProjectTemplates/.gitlab-ci.templates.yml'
   stage: deploy
   dependencies:
     - nuget-pack
+    - templates pack
   environment:
     name: JR BaGet
     url: https://robotics-baget.joanneum.at/
@@ -135,6 +136,7 @@ nuget.org:
   stage: deploy
   dependencies:
     - nuget-pack
+    - templates pack
   environment:
     name: NuGet.org
     url: https://www.nuget.org/
