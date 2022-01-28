@@ -43,7 +43,8 @@ namespace Examples.TurtleSimTests
         {
             var messages = Scenario.Messages
                 .InTopic("/turtle*/pose")
-                .SelectMessages<Pose>();
+                .WithMessageType<Pose>()
+                .SelectMessages();
 
             var first = messages.First();
 
@@ -94,6 +95,66 @@ namespace Examples.TurtleSimTests
                 .Select(pose => pose.AngularVelocity)
                 .Should()
                 .AllBeEquivalentTo(0f, $"{nameof(Pose.AngularVelocity)} should be 0");
+        }
+        
+        
+        [ExpectThat]
+        public void Turtle1_always_moves_forwards()
+        {
+            var turtles = Scenario
+                .Messages
+                .InNamespace("/turtle1")
+                .InTopic<Pose>("pose")
+                .Select(message => message.Value.X)
+                .Should()
+                .BeInAscendingOrder();
+        }
+        
+        
+        [ExpectThat]
+        public void Turtle1_always_moves_forwards_variant2()
+        {
+            var turtles = Scenario
+                .Messages
+                .InTopic<Pose>("/turtle*/pose")
+                .InNamespace("/turtle1")
+                .Select(message => message.Value.X)
+                .Should()
+                .BeInAscendingOrder();
+        }
+        
+        [ExpectThat]
+        public void Each_turtle_always_moves_forwards()
+        {
+            var turtles = Scenario
+                .Messages
+                .GroupByNamespace("/turtle*");
+
+            foreach (var turtleMessages in turtles)
+            {
+                turtleMessages
+                    .InTopic<Pose>("pose")
+                    .Select(message => message.Value.X)
+                    .Should()
+                    .BeInAscendingOrder();
+            }
+        }
+        
+        [ExpectThat]
+        public void Each_turtle_always_moves_forwards_variant2()
+        {
+            var turtles = Scenario
+                .Messages
+                .InTopic<Pose>("/turtle*/pose")
+                .GroupByNamespace();
+
+            foreach (var turtleMessages in turtles)
+            {
+                turtleMessages
+                    .Select(message => message.Value.X)
+                    .Should()
+                    .BeInAscendingOrder();
+            }
         }
     }
 

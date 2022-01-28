@@ -1,64 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using RobSharper.Ros.IntegROS.Ros.Actionlib;
 
 namespace RobSharper.Ros.IntegROS
 {
     public static class RecordedMessageActionExtensions
     {
-        public static ActionMessages ForAction(this IEnumerable<IRecordedMessage> messages, string actionName)
+        public static ActionMessagesCollection ForAction(this IEnumerable<IRecordedMessage> messages, string actionNamePattern)
         {
-            if (actionName == null) throw new ArgumentNullException(nameof(actionName));
-            var actionMessages = FilterActionMessages(actionName, messages);
-            
-            return new ActionMessages(actionName, actionMessages);
+            return ActionMessagesCollection.Create(actionNamePattern, messages);
         }
 
-        public static ActionCallCollection Calls(this ActionMessages actionMessages)
+        public static ActionCallCollection Calls(this ActionMessagesCollection actionMessages)
         {
             return new ActionCallCollection(actionMessages);
         }
 
         public static ActionCallCollection ForActionCalls(this IEnumerable<IRecordedMessage> messages,
-            string actionName)
+            string actionNamePattern)
         {
             return messages
-                .ForAction(actionName)
+                .ForAction(actionNamePattern)
                 .Calls();
         }
-
-        public static bool HasAction(this IEnumerable<IRecordedMessage> messages, string actionName)
+        
+        public static bool HasAction(this IEnumerable<IRecordedMessage> messages, string actionNamePattern)
         {
-            var actionMessages = FilterActionMessages(actionName, messages);
+            if (actionNamePattern == null) throw new ArgumentNullException(nameof(actionNamePattern));
             
-            if (!actionMessages.Any())
-                return false;
-            
-            var topicNames = actionMessages
-                .Select(x => x.Topic)
-                .Distinct()
-                .ToList();
-            
-            if (topicNames.Count > 5)
-                return false;
-
-            string[] expectedTopics = {
-                actionName + "/status",
-                actionName + "/cancel",
-                actionName + "/goal",
-                actionName + "/feedback",
-                actionName + "/result"
-            };
-            
-            return topicNames.All(x => expectedTopics.Contains(x));
-        }
-
-        private static IEnumerable<IRecordedMessage> FilterActionMessages(string actionName, IEnumerable<IRecordedMessage> messages)
-        {
-            var actionFilter = actionName + "/*";
-            var actionMessages = messages.Where(m => RecordedMessageTopicsExtensions.IsInTopic(m, actionFilter));
-            return actionMessages;
+            if (messages is ActionMessagesCollection action && action.ActionNamePattern.Equals(actionNamePattern))
+            {
+                return action.Exists;
+            }
+            else
+            {
+                return ActionMessagesCollection.Create(actionNamePattern, messages).Exists;
+            }
         }
     }
 }

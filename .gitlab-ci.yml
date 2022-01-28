@@ -1,4 +1,4 @@
-image: mcr.microsoft.com/dotnet/sdk:3.1
+image: mcr.microsoft.com/dotnet/sdk:6.0
 
 stages:
   - build
@@ -104,9 +104,10 @@ include: '/ProjectTemplates/.gitlab-ci.templates.yml'
   stage: deploy
   dependencies:
     - nuget-pack
+    - templates pack
   environment:
     name: JR BaGet
-    url: https://robotics-bage.joanneum.at/
+    url: https://robotics-baget.joanneum.at/
   script:
     - 'cd nuget'
     - 'dotnet nuget push *.nupkg -s $JR_BAGET_URL -k $JR_BAGET_API_KEY'
@@ -135,6 +136,7 @@ nuget.org:
   stage: deploy
   dependencies:
     - nuget-pack
+    - templates pack
   environment:
     name: NuGet.org
     url: https://www.nuget.org/
