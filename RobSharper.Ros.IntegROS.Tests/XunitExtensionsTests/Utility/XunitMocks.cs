@@ -25,7 +25,7 @@ namespace RobSharper.Ros.IntegROS.Tests.XunitExtensionsTests.Utility
             if (assembly == null)
                 assembly = typeof(XunitMocks).GetTypeInfo().Assembly;
             if (displayName == null)
-                displayName = "Mock test collection for " + assembly.CodeBase;
+                displayName = "Mock test collection for " + assembly.Location;
 
             return new TestCollection(TestAssembly(assembly), definition, displayName);
         }
