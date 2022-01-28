@@ -106,7 +106,7 @@ include: '/ProjectTemplates/.gitlab-ci.templates.yml'
     - nuget-pack
   environment:
     name: JR BaGet
-    url: https://robotics-bage.joanneum.at/
+    url: https://robotics-baget.joanneum.at/
   script:
     - 'cd nuget'
     - 'dotnet nuget push *.nupkg -s $JR_BAGET_URL -k $JR_BAGET_API_KEY'
