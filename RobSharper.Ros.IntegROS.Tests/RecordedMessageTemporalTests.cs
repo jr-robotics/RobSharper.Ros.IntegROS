@@ -504,12 +504,11 @@ namespace RobSharper.Ros.IntegROS.Tests
             [Fact]
             public void Duration_of_null_list_is_zero()
             {
-                IEnumerable<IRecordedMessage> target = null;
-
-                target
-                    .Invoking(x => x.Duration())
-                    .Should()
-                    .Throw<ArgumentNullException>();
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+                    IEnumerable<IRecordedMessage> target = null;
+                    target.Duration();
+                });
             }
 
             [Fact]
@@ -535,12 +534,11 @@ namespace RobSharper.Ros.IntegROS.Tests
             [Fact]
             public void Duration_of_null_generic_list_throws_exception()
             {
-                IEnumerable<IRecordedMessage<object>> target = null;
-
-                target
-                    .Invoking(x => x.Duration())
-                    .Should()
-                    .Throw<ArgumentNullException>();
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+                    IEnumerable<IRecordedMessage<object>> target = null;
+                    target.Duration();
+                });
             }
 
             [Fact]

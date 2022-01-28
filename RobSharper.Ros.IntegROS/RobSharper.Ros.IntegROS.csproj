@@ -15,7 +15,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="FluentAssertions" Version="5.10.3" />
       <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
       <PackageReference Include="RobSharper.Ros.BagReader" Version="1.0.0" />
       <PackageReference Include="RobSharper.Ros.MessageEssentials" Version="1.2.0" />
