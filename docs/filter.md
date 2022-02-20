@@ -28,17 +28,17 @@ We`ve also added some useful filtering methods tailored to ROS.
 
 In this document, we describe the most common LINQ methods required to filter ROS messages:
 
-* [InTopic - Filter by Topic](#intopic-filter-by-topic)
-* [Where - Filter by message fields or other properties](#where-filter-by-message-fields-or-other-properties)
-* [Before & After - Filter the time beam](#before-after-filter-the-time-beam)
-* [First & Last - Select a single element](#first-last-select-a-single-element)
+* [InTopic - Filter by Topic](#intopic)
+* [Where - Filter by message fields or other properties](#where)
+* [Before & After - Filter the time beam](#before-after)
+* [First & Last - Select a single element](#first-last)
   
 If you don't find what you are looking for, consult the 
 [standard query operators documentation (Microsoft Docs)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/standard-query-operators-overview#related-sections).
 Most likely, there is already a LINQ method which satisfies your needs.
 
 
-## InTopic - Filter by Topic
+## InTopic - Filter by Topic <a name="intopic"></a>
 
 `InTopic(string topicNamePattern)`, `InTopic<TMessageType>(string topicNamePattern)`
 
@@ -70,7 +70,7 @@ var messages = Scenario.Messages
     .InTopic<Log>("/rosout");
 ````
 
-## Where - Filter by message fields or other properties
+## Where - Filter by message fields or other properties <a name="where"></a>
 
 `Where(Predicate p)`
 
@@ -99,7 +99,7 @@ var messages = Scenario.Messages
     .Where(m => m.Value.level >= Log.ERROR);
 ````
 
-## Before & After - Filter the time beam
+## Before & After - Filter the time beam <a name="before-after"></a>
 
 `Before(DateTime)`, `Before(ITimestampMessage)`, `BeforeOrOn(DateTime)`, `BeforeOrOn(ITimestampMessage)`, \
 `After(DateTime)`, `After(ITimestampMessage)`, `AfterOrOn(DateTime)`, `AfterOrOn(ITimestampMessage)`
@@ -157,7 +157,7 @@ var messages = Scenario.Messages
     .Before(new DateTIme(2021, 12, 25);
 ````
 
-## First & Last - Select a single element
+## First & Last - Select a single element <a name="first-last"></a>
 
 `First()`, `First(Predicate)`, `FirstOrDefault(Predicate)`, \
 `Last()`, `Last(Predicate)`, `LastOrDefault(Predicate)`
