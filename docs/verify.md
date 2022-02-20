@@ -27,6 +27,13 @@ In step 1 the ROS message stream is filtered to contain only Log messages from t
 Step 2 is to verify the selected messages.
 IntegROS.NET builds on [Fluent Assertions](https://fluentassertions.com/introduction) to express your expectations.
 
+1) Call `Should()` on your filtered messages or a single message field. 
+   This opens the world of fluent assertions and gives you access to an abundance of verification methods.
+2) Call an assertion method.
+   The assertion method lets your test fail, if the stated assertion does note hold.  
+
+The two steps are discussed in the remainder of this section.
+
 ## Expectations start with Should()
 
 The `Should()` method starts a new expectation (Fluent Assertion).
@@ -43,16 +50,16 @@ We will introduce the most prominent possibilities in the following sections.
 
 ## Verify a stream of ROS messages
 
-### ROS Stream contains items
+### ROS Stream contains messages
 
 `Contain(Predicate p)`, `OnlyContain(Predicate p)`, `NotContain(Predicate p)`
+
+You can check if the ROS message stream contains elements matching the given expression.
 
 `Contain` is satisfied, if *one element* of the stream matches the predicate. \
 `OnlyContain` and `NotContain` are satisfied, if *all elements* of the stream match the predicate.
 
-You can check if the ROS message stream contains elements matching the given expression.
-
-The following two assertions represent the same expectation (should not contain FATAL log messages):
+The following two assertions represent the same expectation "should not contain FATAL log messages":
 
 ```c#
 Scenario.Messages
@@ -99,7 +106,7 @@ Ask your IDE's autocomplete suggestions after calling `Should()` and/or read [Fl
 
 
 
-## Verify a field of a ROS message
+## Verify fields of a ROS message
 
 To verify a field of a ROS message, call `Should()` on a property of the message object followed by a fluent assertion.
 
